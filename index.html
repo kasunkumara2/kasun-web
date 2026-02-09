@@ -3,191 +3,315 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kasun Padma Kumara | Portfolio</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Kasun | Artbook Portfolio</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Cinzel+Decorative:wght@400;700&display=swap');
+
+        :root {
+            --primary-color: #ffffff;
+            --secondary-color: #ff4d4d; /* රතු පාට හයිලයිට් එක */
+            --bg-color: #1a1a1a;
+            --text-color-dark: #cccccc;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Playfair Display', serif;
+            background-color: var(--bg-color);
+            color: var(--primary-color);
+            overflow: hidden; /* Scroll වෙන්න දෙන්නේ නෑ */
+        }
+
+        /* --- BACKGROUND IMAGE --- */
+        .background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* මෙන්න මෙතන ඔයාගේ ෆොටෝ එකේ නම දැම්මා */
+            background: url('images/my-bg.png') no-repeat center center/cover;
+            /* ෆොටෝ එක ටිකක් අඳුරු කරනවා අකුරු පේන්න */
+            filter: brightness(0.6) contrast(1.1);
+            z-index: -1;
+            transition: all 1s ease;
+        }
+
+        /* පොඩි අඳුරු පටලයක් (Overlay) */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(0,0,0,0.7), rgba(0,0,0,0.3), rgba(0,0,0,0.8));
+            z-index: 0;
+        }
+
+        /* --- LAYOUT --- */
+        .container {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* දෙපැත්තට බෙදනවා */
+            height: 100%;
+            padding: 40px;
+            box-sizing: border-box;
+        }
+
+        /* --- HEADER / MENU --- */
+        header {
+            position: absolute;
+            top: 30px;
+            left: 50px;
+            right: 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .menu-icon { cursor: pointer; }
+        .menu-icon span {
+            display: block;
+            width: 30px;
+            height: 2px;
+            background: var(--primary-color);
+            margin: 6px 0;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        nav ul li { margin: 0 25px; }
+        nav ul li a {
+            color: var(--primary-color);
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 14px;
+            letter-spacing: 2px;
+            transition: 0.3s;
+        }
+        nav ul li a:hover { color: var(--secondary-color); }
+
+        .social-links a {
+            color: var(--primary-color);
+            margin-left: 20px;
+            text-decoration: none;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* --- LEFT SIDE --- */
+        .left-panel {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* වම් පැත්තේ තියෙන දිග අකුරු ටික */
+        .vertical-text {
+            position: absolute;
+            top: 50%;
+            left: -80px;
+            transform: translateY(-50%) rotate(-90deg);
+            font-size: 100px;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.05); /* බොඳ වෙලා පේන්න */
+            letter-spacing: 15px;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .date-info {
+            margin-top: auto;
+            margin-bottom: 50px;
+            border-left: 3px solid var(--secondary-color);
+            padding-left: 20px;
+        }
+
+        .date { font-size: 48px; font-weight: bold; line-height: 1; display: block;}
+        .year { font-size: 24px; color: var(--text-color-dark); margin-bottom: 15px; display: block;}
+        .lorem-text {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-color-dark);
+            max-width: 300px;
+        }
+
+        /* --- CENTER FLOATING TEXT --- */
+        .center-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 5;
+        }
+
+        .brush-stroke-title {
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: 90px;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            margin: 0;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .subtitle {
+            font-size: 20px;
+            color: var(--text-color-dark);
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            margin-bottom: 30px;
+            margin-top: 10px;
+        }
+
+        .to-order-btn {
+            padding: 15px 50px;
+            background: transparent;
+            border: 2px solid var(--secondary-color);
+            color: var(--secondary-color);
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .to-order-btn:hover {
+            background: var(--secondary-color);
+            color: var(--primary-color);
+            box-shadow: 0 0 20px rgba(255, 77, 77, 0.6);
+        }
+
+        /* --- RIGHT SIDE --- */
+        .right-panel {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-end;
+            text-align: right;
+            padding-right: 20px;
+        }
+
+        .main-title {
+            font-size: 50px;
+            margin-bottom: 20px;
+            line-height: 1.1;
+        }
+
+        .main-title span { display: block; }
+        .highlight { color: var(--secondary-color); font-weight: bold; }
+
+        .description-text {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--text-color-dark);
+            max-width: 350px;
+            margin-bottom: 40px;
+            position: relative;
+            padding-top: 20px;
+        }
+
+        .description-text::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 80px;
+            height: 2px;
+            background: var(--secondary-color);
+        }
+
+        .price-info { margin-top: auto; margin-bottom: 50px; }
+        .price-label { font-size: 14px; color: var(--text-color-dark); display: block; letter-spacing: 2px; text-transform: uppercase;}
+        .price-large { font-size: 80px; font-weight: bold; color: var(--primary-color); line-height: 1; }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .container { grid-template-columns: 1fr; padding: 20px; }
+            .vertical-text { display: none; }
+            .right-panel { display: none; /* Phone එකේදි වම් පැත්ත විතරක් පෙන්වමු */ }
+            .center-content { position: relative; top: 0; left: 0; transform: none; margin-top: 100px; }
+            .brush-stroke-title { font-size: 50px; }
+            .left-panel { align-items: center; text-align: center; }
+            .date-info { border-left: none; padding-left: 0; border-top: 3px solid var(--secondary-color); padding-top: 20px; }
+        }
+    </style>
 </head>
 <body>
 
-    
-    <div id="loginModal" class="modal">
-        <div class="modal-content glass-card-simple">
-            <span class="close-btn" onclick="closeLogin()">&times;</span>
-            <h2><i class="fas fa-user-circle"></i> Welcome</h2>
-            <p>Enter your name</p>
-            <input type="text" id="usernameInput" placeholder="Your Name">
-            <button class="btn-primary" onclick="userLogin()">Enter</button>
+    <div class="background-image"></div>
+    <div class="overlay"></div>
+
+    <header>
+        <div class="menu-icon">
+            <span></span>
+            <span></span>
         </div>
-    </div>
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Gallery</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="social-links">
+            <a href="#">FB</a>
+            <a href="#">IG</a>
+            <a href="#">YT</a>
+        </div>
+    </header>
 
     <div class="container">
-        <nav class="sidebar">
-            <div class="logo">
-                <i class="fa-solid fa-camera-retro"></i>
-            </div>
+        
+        <div class="left-panel">
+            <div class="vertical-text">PORTFOLIO</div>
             
-            <ul class="nav-links">
-                <li class="nav-item active" onclick="showPage('home', this)"><i class="fas fa-home"></i><span class="tooltip">Home</span></li>
-                <li class="nav-item" onclick="showPage('skills', this)"><i class="fas fa-code"></i><span class="tooltip">Skills</span></li>
-                <li class="nav-item" onclick="showPage('portfolio', this)"><i class="fas fa-briefcase"></i><span class="tooltip">Portfolio</span></li>
-                <li class="nav-item" onclick="showPage('life', this)"><i class="fas fa-globe-asia"></i><span class="tooltip">Life Story</span></li>
-                <li class="nav-item" onclick="toggleTawkChat()"><i class="fas fa-comments"></i><span class="tooltip">Chat Me</span></li>
-                <li class="nav-item" onclick="showPage('community', this)"><i class="fas fa-users"></i><span class="tooltip">Community</span></li>
-            </ul>
-
-            <div class="settings" onclick="openLogin()">
-                <i class="fas fa-cog"></i>
+            <div class="date-info">
+                <span class="date">Kasun</span>
+                <span class="year">Padma Kumara</span>
+                <p class="lorem-text">
+                    Digital Creator & Visual Artist based in Sri Lanka.
+                    Creating memories through lens and pixels.
+                </p>
             </div>
-        </nav>
+        </div>
 
-        <main class="content-area">
-            
-            <section id="home" class="page active-page">
-                <div class="glass-card hero-section centered-content">
-                    <div class="profile-glow">
-                        <img src="images/profile.png" alt="Kasun Profile">
-                    </div>
-                    <h1>Hi, I'm <span class="neon-text">Kasun Padma Kumara</span></h1>
-                    <h2>Digital Creator | Videographer | AI Artist</h2>
-                    <p>"I am a creative soul seeking the perfect balance between technology and art. My mission is to use my skills to bring value to your projects."</p>
-                    
-                    <div class="btn-group">
-                        <a href="https://wa.me/+94717647693" target="_blank" class="btn-primary"><i class="fab fa-whatsapp"></i> WhatsApp Me</a>
-                        <a href="https://www.facebook.com/kasunlks" target="_blank" class="btn-secondary"><i class="fab fa-facebook"></i> Facebook</a>
-                    </div>
-                </div>
-            </section>
+        <div class="center-content">
+            <h1 class="brush-stroke-title">Artbook</h1>
+            <p class="subtitle">Of My Life</p>
+            <a href="#" class="to-order-btn">View My Work</a>
+        </div>
 
-            <section id="skills" class="page">
-                <div class="glass-card">
-                    <h2 class="section-title">My Professional Skills</h2>
-                    <p style="color:#aaa; margin-bottom: 30px;">Technologies and tools I use to create magic.</p>
+        <div class="right-panel">
+            <h2 class="main-title">
+                <span class="highlight">Creative</span>
+                <span>Soul</span>
+            </h2>
+            <p class="description-text">
+                "I am a creative soul seeking the perfect balance between technology and art. My mission is to use my skills to bring value to your projects."
+            </p>
+            <div class="price-info">
+                <span class="price-label">Experience</span>
+                <span class="price-large">05+</span>
+                <span class="price-label">Years</span>
+            </div>
+        </div>
 
-                    <div class="skills-grid-v1">
-                        <div class="skill-item">
-                            <div class="skill-info"><span>Videography</span><span>95%</span></div>
-                            <div class="progress-bar"><div class="fill" style="width: 95%"></div></div>
-                        </div>
-                        <div class="skill-item">
-                            <div class="skill-info"><span>Photography</span><span>90%</span></div>
-                            <div class="progress-bar"><div class="fill" style="width: 90%"></div></div>
-                        </div>
-                        <div class="skill-item">
-                            <div class="skill-info"><span>Video & Photo Editing</span><span>85%</span></div>
-                            <div class="progress-bar"><div class="fill" style="width: 85%"></div></div>
-                        </div>
-                        <div class="skill-item">
-                            <div class="skill-info"><span>AI Image & Video Creation</span><span>80%</span></div>
-                            <div class="progress-bar"><div class="fill" style="width: 80%"></div></div>
-                        </div>
-                         <div class="skill-item">
-                            <div class="skill-info"><span>Social Media Content</span><span>90%</span></div>
-                            <div class="progress-bar"><div class="fill" style="width: 90%"></div></div>
-                        </div>
-                         <div class="skill-item">
-                            <div class="skill-info"><span>DJ Remixing</span><span>75%</span></div>
-                            <div class="progress-bar"><div class="fill" style="width: 75%"></div></div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="portfolio" class="page">
-                <div class="glass-card">
-                    <h2 class="section-title">My Creative Gallery</h2>
-                    <p style="color:#aaa; margin-bottom: 30px;">A collection of my recent projects and captures.</p>
-                    
-                    <div class="gallery-grid">
-                        <div class="gallery-item"><img src="images/work1.jpg" alt="Work 1"><div class="overlay"><h3>Photography</h3></div></div>
-                        <div class="gallery-item"><img src="images/work2.jpg" alt="Work 2"><div class="overlay"><h3>Video Editing</h3></div></div>
-                        <div class="gallery-item"><img src="images/work3.jpg" alt="Work 3"><div class="overlay"><h3>AI Art</h3></div></div>
-                        <div class="gallery-item"><img src="images/work4.jpg" alt="Work 4"><div class="overlay"><h3>DJ Remixes</h3></div></div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="life" class="page">
-                <div class="glass-card">
-                    <h2 class="section-title">Life & Journey</h2>
-                    
-                    <div class="timeline">
-                        <div class="timeline-item glass-box">
-                            <div class="icon-circle"><i class="fas fa-graduation-cap"></i></div>
-                            <h3>Education</h3>
-                            <h4>R/Anura Maha Vidyalaya (13 Years)</h4>
-                            <p>I was the official <strong>School Photographer</strong> and the IT Specialist. I also worked as the Graphic Designer for the school website.</p>
-                        </div>
-
-                        <div class="timeline-item glass-box">
-                            <div class="icon-circle"><i class="fas fa-file-alt"></i></div>
-                            <h3>O/L Examination Results</h3>
-                            <table class="result-table">
-                                <tr><td>ICT</td><td><span class="grade grade-b">B</span></td></tr>
-                                <tr><td>Mathematics</td><td><span class="grade grade-b">B</span></td></tr>
-                                <tr><td>Science</td><td><span class="grade grade-c">C</span></td></tr>
-                                <tr><td>Sinhala</td><td><span class="grade grade-s">S</span></td></tr>
-                                <tr><td>Buddhism</td><td><span class="grade grade-s">S</span></td></tr>
-                                <tr><td>History</td><td><span class="grade grade-w">W</span></td></tr>
-                                <tr><td>Art</td><td><span class="grade grade-b">B</span></td></tr>
-                                <tr><td>Geography</td><td><span class="grade grade-c">C</span></td></tr>
-                                <tr><td>English</td><td><span class="grade grade-s">S</span></td></tr>
-                            </table>
-                        </div>
-                        
-                        <div class="timeline-item glass-box">
-                            <div class="icon-circle"><i class="fas fa-plane"></i></div>
-                            <h3>Travel Diaries</h3>
-                            <p>Exploring beautiful Sri Lanka:</p>
-                            <div class="tags">
-                                <span class="tag">Nuwara Eliya</span><span class="tag">Anuradhapura</span><span class="tag">Polonnaruwa</span>
-                                <span class="tag">Colombo</span><span class="tag">Yapahuwa</span><span class="tag">Kataragama</span>
-                            </div>
-                        </div>
-
-                         <div class="timeline-item glass-box">
-                            <div class="icon-circle"><i class="fas fa-user"></i></div>
-                            <h3>Personal Details</h3>
-                            <p><strong>Name:</strong> Kasun Padma Kumara</p>
-                            <p><strong>City:</strong> Avissawella, Sri Lanka</p>
-                            <p><strong>Email:</strong> Kasunpadmakumara2007@gmail.com</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="community" class="page">
-                <div class="glass-card">
-                    <h2 class="section-title">Community</h2>
-                    <div class="community-board" id="communityBoard">
-                        <div class="post">
-                            <div class="post-header"><strong>Kasun (Admin)</strong> <span>Pinned</span></div>
-                            <p>Welcome to the community! Share your ideas here.</p>
-                        </div>
-                    </div>
-                    <div class="post-input-area">
-                        <textarea id="communityInput" placeholder="Write something..."></textarea>
-                        <button class="btn-primary" onclick="postToCommunity()">Post</button>
-                    </div>
-                </div>
-            </section>
-
-        </main>
     </div>
 
-    <script type="text/javascript">
-    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-    (function(){
-    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-    s1.async=true;
-    s1.src='https://embed.tawk.to/698a0b62e0c66b1c3ad16208/1jh1joutb';
-    s1.charset='UTF-8';
-    s1.setAttribute('crossorigin','*');
-    s0.parentNode.insertBefore(s1,s0);
-    })();
-    </script>
-    <script src="script.js"></script>
 </body>
 </html>
-
-
-
