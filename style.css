@@ -1,231 +1,151 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Artbook Portfolio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    
-    <style>
-        /* --- CSS ආරම්භය --- */
-        :root {
-            --primary-color: #ffffff;
-            --accent-color: #ff3b3b; /* රතු පාට */
-            --text-gray: #b3b3b3;
-        }
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+:root {
+    --bg-dark: #0f172a;
+    --card-bg: rgba(30, 41, 59, 0.75);
+    --primary-color: #0ea5e9; /* Neon Blue */
+    --text-color: #f1f5f9;
+    --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+}
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            height: 100vh;
-            overflow: hidden; /* Scroll වෙන්න දෙන්නේ නෑ */
-            background-color: #000;
-        }
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
 
-        /* පසුබිම් පින්තූරය (Background Image) */
-        .bg-image {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            /* මෙතන ඔයාගේ ෆොටෝ එකේ නම තියෙන්න ඕනේ */
-            background: url('images/my-bg.png') no-repeat center center/cover;
-            z-index: -2;
-        }
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-color);
+    height: 100vh;
+    overflow: hidden;
+    background-image: radial-gradient(circle at 10% 20%, rgba(14, 165, 233, 0.15) 0%, transparent 20%),
+                      radial-gradient(circle at 90% 80%, rgba(14, 165, 233, 0.1) 0%, transparent 20%);
+}
 
-        /* කළු පාට Overlay එක (අකුරු පේන්න) */
-        .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to right, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.8) 100%);
-            z-index: -1;
-        }
+.container { display: flex; height: 100vh; }
 
-        /* Navigation Bar */
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 40px 60px;
-            color: var(--primary-color);
-        }
+/* Sidebar */
+.sidebar {
+    width: 80px;
+    background: rgba(15, 23, 42, 0.95);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 0;
+    border-right: var(--glass-border);
+    justify-content: space-between;
+    z-index: 100;
+}
 
-        .menu-icon { font-size: 24px; cursor: pointer; }
-        .nav-links { list-style: none; display: flex; gap: 40px; }
-        .nav-links a { text-decoration: none; color: var(--primary-color); font-size: 14px; text-transform: uppercase; letter-spacing: 2px; }
-        .socials { font-size: 14px; letter-spacing: 1px; color: var(--text-gray); }
+.logo i { font-size: 1.8rem; color: var(--primary-color); margin-bottom: 2rem; }
+.settings i { font-size: 1.5rem; color: #64748b; cursor: pointer; transition: 0.3s; }
+.settings i:hover { color: var(--primary-color); transform: rotate(90deg); }
 
-        /* Main Grid Layout */
-        .container {
-            display: grid;
-            grid-template-columns: 1fr 2fr 1fr; /* කොටස් 3කට බෙදීම */
-            height: 80vh;
-            padding: 0 60px;
-            align-items: center;
-            color: var(--primary-color);
-        }
+.nav-links { list-style: none; display: flex; flex-direction: column; gap: 1.5rem; }
+.nav-item {
+    width: 50px; height: 50px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 12px; color: #94a3b8; cursor: pointer;
+    transition: 0.3s; position: relative;
+    font-size: 1.2rem;
+}
+.nav-item:hover, .nav-item.active { background: rgba(14, 165, 233, 0.15); color: var(--primary-color); box-shadow: 0 0 15px rgba(14, 165, 233, 0.3); }
 
-        /* වම් පැත්ත (දිනය සහ Vertical Text) */
-        .left-col {
-            position: relative;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
+/* Tooltip */
+.tooltip {
+    position: absolute; left: 70px; background: var(--primary-color);
+    color: #000; padding: 5px 10px; border-radius: 5px;
+    font-size: 0.8rem; font-weight: bold; opacity: 0; pointer-events: none;
+    transition: 0.3s; white-space: nowrap;
+}
+.nav-item:hover .tooltip { opacity: 1; left: 60px; }
 
-        .vertical-text {
-            writing-mode: vertical-rl;
-            transform: rotate(180deg);
-            font-family: 'Playfair Display', serif;
-            font-size: 80px;
-            color: rgba(255, 255, 255, 0.05); /* බොඳ වෙලා පේන ලොකු අකුරු */
-            position: absolute;
-            left: -40px;
-        }
+/* Main Content Area */
+.content-area { flex: 1; padding: 2rem; position: relative; overflow: hidden; }
 
-        .date-box {
-            margin-top: 50px;
-            border-left: 2px solid var(--accent-color);
-            padding-left: 20px;
-        }
-        .date-big { font-size: 40px; font-family: 'Playfair Display', serif; display: block; line-height: 1; }
-        .year { font-size: 20px; color: var(--text-gray); }
+.page { display: none; height: 100%; animation: fadeIn 0.5s ease; }
+.page.active-page { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* මැද කොටස (ප්‍රධාන මාතෘකාව) */
-        .center-col {
-            text-align: center;
-            position: relative;
-        }
+/* Glass Card */
+.glass-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(15px);
+    border: var(--glass-border);
+    border-radius: 20px;
+    padding: 40px; 
+    height: 100%;
+    width: 100%;
+    overflow-y: auto; 
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+}
 
-        .main-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 90px;
-            text-transform: uppercase;
-            line-height: 0.9;
-            margin-bottom: 10px;
-            text-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
+.centered-content { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
 
-        .subtitle {
-            font-size: 18px;
-            letter-spacing: 5px;
-            text-transform: uppercase;
-            color: var(--accent-color);
-            margin-bottom: 40px;
-        }
+/* Titles */
+.section-title {
+    font-size: 2rem; margin-bottom: 10px; color: var(--primary-color);
+    text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid rgba(14, 165, 233, 0.2);
+    display: inline-block; padding-bottom: 5px;
+}
 
-        .cta-btn {
-            text-decoration: none;
-            border: 1px solid rgba(255,255,255,0.3);
-            padding: 15px 40px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--primary-color);
-            transition: 0.3s;
-        }
-        .cta-btn:hover {
-            background: var(--accent-color);
-            border-color: var(--accent-color);
-        }
+/* Hero Section */
+.profile-glow img {
+    width: 160px; height: 160px; border-radius: 50%;
+    border: 4px solid var(--primary-color);
+    box-shadow: 0 0 30px rgba(14, 165, 233, 0.5); margin-bottom: 1.5rem;
+}
+.neon-text { color: var(--primary-color); text-shadow: 0 0 15px var(--primary-color); }
+.btn-group { margin-top: 2rem; display: flex; gap: 15px; }
+.btn-primary { background: var(--primary-color); color: #fff; padding: 12px 30px; border-radius: 30px; text-decoration: none; border:none; cursor: pointer; font-weight: 600; }
+.btn-secondary { border: 2px solid var(--primary-color); color: var(--primary-color); padding: 10px 28px; border-radius: 30px; text-decoration: none; cursor: pointer; font-weight: 600; }
 
-        /* දකුණු පැත්ත (විස්තරය සහ Price) */
-        .right-col {
-            text-align: right;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            height: 100%;
-        }
+/* SKILLS */
+.skills-grid-v1 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+.skill-item { margin-bottom: 15px; }
+.skill-info { display: flex; justify-content: space-between; margin-bottom: 8px; font-weight: 600; }
+.progress-bar { width: 100%; height: 10px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; overflow: hidden; }
+.fill { height: 100%; background: var(--primary-color); border-radius: 10px; box-shadow: 0 0 10px var(--primary-color); }
 
-        .description {
-            font-size: 14px;
-            color: var(--text-gray);
-            line-height: 1.8;
-            margin-bottom: 40px;
-            max-width: 300px;
-            margin-left: auto; /* දකුණට ගන්න */
-        }
+/* GALLERY */
+.gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+.gallery-item { position: relative; height: 200px; border-radius: 15px; overflow: hidden; cursor: pointer; }
+.gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+.gallery-item:hover img { transform: scale(1.1); }
+.overlay { position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(0,0,0,0.7); padding: 10px; color: var(--primary-color); transform: translateY(100%); transition: 0.3s; text-align: center; }
+.gallery-item:hover .overlay { transform: translateY(0); }
 
-        .highlight-text {
-            font-family: 'Playfair Display', serif;
-            font-size: 32px;
-            margin-bottom: 20px;
-        }
-        .highlight-text span { color: var(--accent-color); }
+/* LIFE STORY */
+.timeline { display: flex; flex-direction: column; gap: 20px; padding: 10px; }
+.glass-box {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px; padding: 25px; position: relative;
+    padding-left: 80px; 
+}
+.icon-circle {
+    position: absolute; left: 20px; top: 25px;
+    width: 40px; height: 40px; background: var(--primary-color);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    color: #000; font-size: 1.2rem;
+}
+.tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+.tag { background: rgba(14, 165, 233, 0.2); color: var(--primary-color); padding: 5px 15px; border-radius: 20px; font-size: 0.85rem; }
 
-        .price-tag {
-            font-family: 'Playfair Display', serif;
-        }
-        .price-small { font-size: 20px; color: var(--text-gray); text-decoration: line-through; margin-right: 10px; }
-        .price-big { font-size: 60px; color: var(--accent-color); font-weight: bold; }
+/* O/L Table */
+.result-table { width: 100%; border-collapse: collapse; margin-top: 10px; color: #ccc; }
+.result-table td { padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.grade { font-weight: bold; padding: 2px 8px; border-radius: 5px; color: #000; display: inline-block; min-width: 30px; text-align: center; }
+.grade-a, .grade-b { background: #22c55e; }
+.grade-c, .grade-s { background: #eab308; }
+.grade-w { background: #ef4444; }
 
-        /* --- Mobile Responsive --- */
-        @media (max-width: 768px) {
-            .container { grid-template-columns: 1fr; text-align: center; height: auto; }
-            .left-col, .right-col { align-items: center; text-align: center; margin-bottom: 30px; }
-            .vertical-text { display: none; }
-            .main-title { font-size: 50px; }
-            .description { margin: 0 auto 20px auto; }
-            nav { padding: 20px; flex-direction: column; gap: 20px; }
-            .nav-links { gap: 20px; }
-        }
-    </style>
-</head>
-<body>
+/* COMMUNITY */
+.community-board { height: 300px; overflow-y: auto; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 10px; margin-bottom: 15px; }
+.post { background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px; margin-bottom: 10px; }
+.post-header { display: flex; justify-content: space-between; font-size: 0.8rem; color: #aaa; margin-bottom: 5px; }
+.post-input-area textarea { width: 100%; height: 60px; background: rgba(255,255,255,0.1); border: none; color: #fff; padding: 10px; border-radius: 10px; margin-bottom: 10px; }
 
-    <div class="bg-image"></div>
-    <div class="overlay"></div>
-
-    <nav>
-        <div class="menu-icon">&#9776;</div>
-        <ul class="nav-links">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Gallery</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Contact</a></li>
-        </ul>
-        <div class="socials">IG / FB / TW</div>
-    </nav>
-
-    <div class="container">
-        
-        <div class="left-col">
-            <div class="vertical-text">PORTFOLIO</div>
-            <div class="date-box">
-                <span class="date-big">09 Feb</span>
-                <span class="year">2026</span>
-            </div>
-        </div>
-
-        <div class="center-col">
-            <h1 class="main-title">Artbook</h1>
-            <p class="subtitle">Of Kasun</p>
-            <a href="#" class="cta-btn">View My Work</a>
-        </div>
-
-        <div class="right-col">
-            <h2 class="highlight-text">The <span>Creative</span> <br> Journey</h2>
-            <p class="description">
-                I capture moments and create digital art that tells a story. 
-                Welcome to my personal artbook where technology meets creativity.
-            </p>
-            <div class="price-tag">
-                <span class="price-big">My Life</span>
-            </div>
-        </div>
-
-    </div>
-
-</body>
-</html>
-
+/* MODAL */
+.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 200; align-items: center; justify-content: center; }
+.glass-card-simple { background: #1e293b; padding: 30px; border-radius: 15px; width: 300px; text-align: center; position: relative; border: 1px solid var(--primary-color); }
+.close-btn { position: absolute; top: 10px; right: 15px; font-size: 25px; cursor: pointer; }
+.modal input { width: 100%; padding: 10px; margin: 15px 0; border-radius: 5px; border: none; }
