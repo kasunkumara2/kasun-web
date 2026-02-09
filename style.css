@@ -65,16 +65,16 @@ body {
 .page.active-page { display: block; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-/* Glass Card - The Container for each page */
+/* Glass Card */
 .glass-card {
     background: var(--card-bg);
     backdrop-filter: blur(15px);
     border: var(--glass-border);
     border-radius: 20px;
-    padding: 40px; /* Increased Padding so titles don't cut */
+    padding: 40px; 
     height: 100%;
     width: 100%;
-    overflow-y: auto; /* Scroll inside the card */
+    overflow-y: auto; 
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
 }
 
@@ -98,14 +98,14 @@ body {
 .btn-primary { background: var(--primary-color); color: #fff; padding: 12px 30px; border-radius: 30px; text-decoration: none; border:none; cursor: pointer; font-weight: 600; }
 .btn-secondary { border: 2px solid var(--primary-color); color: var(--primary-color); padding: 10px 28px; border-radius: 30px; text-decoration: none; cursor: pointer; font-weight: 600; }
 
-/* SKILLS (V1 Style Restored) */
+/* SKILLS */
 .skills-grid-v1 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
 .skill-item { margin-bottom: 15px; }
 .skill-info { display: flex; justify-content: space-between; margin-bottom: 8px; font-weight: 600; }
 .progress-bar { width: 100%; height: 10px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; overflow: hidden; }
 .fill { height: 100%; background: var(--primary-color); border-radius: 10px; box-shadow: 0 0 10px var(--primary-color); }
 
-/* GALLERY (Grid) */
+/* GALLERY */
 .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
 .gallery-item { position: relative; height: 200px; border-radius: 15px; overflow: hidden; cursor: pointer; }
 .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
@@ -113,13 +113,13 @@ body {
 .overlay { position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(0,0,0,0.7); padding: 10px; color: var(--primary-color); transform: translateY(100%); transition: 0.3s; text-align: center; }
 .gallery-item:hover .overlay { transform: translateY(0); }
 
-/* LIFE STORY (Glass Boxes Restored) */
+/* LIFE STORY */
 .timeline { display: flex; flex-direction: column; gap: 20px; padding: 10px; }
 .glass-box {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 15px; padding: 25px; position: relative;
-    padding-left: 80px; /* Space for icon */
+    padding-left: 80px; 
 }
 .icon-circle {
     position: absolute; left: 20px; top: 25px;
@@ -137,21 +137,6 @@ body {
 .grade-a, .grade-b { background: #22c55e; }
 .grade-c, .grade-s { background: #eab308; }
 .grade-w { background: #ef4444; }
-
-/* CHAT */
-.chat-layout { display: flex; padding: 0; overflow: hidden; }
-.chat-sidebar { width: 250px; background: rgba(0,0,0,0.2); padding: 20px; border-right: 1px solid rgba(255,255,255,0.1); }
-.chat-main { flex: 1; display: flex; flex-direction: column; }
-.user-list-item { display: flex; align-items: center; gap: 10px; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 10px; margin-top: 15px; }
-.user-list-item img { width: 40px; height: 40px; border-radius: 50%; }
-.chat-header-bar { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); font-weight: bold; }
-.messages-area { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-.message { max-width: 70%; padding: 10px 15px; border-radius: 15px; font-size: 0.9rem; }
-.incoming { align-self: flex-start; background: rgba(255,255,255,0.1); border-radius: 0 15px 15px 15px; }
-.outgoing { align-self: flex-end; background: var(--primary-color); color: #fff; border-radius: 15px 0 15px 15px; }
-.input-area { padding: 15px; display: flex; gap: 10px; background: rgba(0,0,0,0.2); }
-.input-area input { flex: 1; padding: 10px; border-radius: 20px; border: none; outline: none; background: rgba(255,255,255,0.1); color: #fff; }
-.input-area button { width: 40px; height: 40px; border-radius: 50%; border: none; background: var(--primary-color); color: #fff; cursor: pointer; }
 
 /* COMMUNITY */
 .community-board { height: 300px; overflow-y: auto; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 10px; margin-bottom: 15px; }
