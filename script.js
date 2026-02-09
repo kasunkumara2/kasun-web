@@ -4,14 +4,26 @@ function showPage(pageId, element) {
     document.querySelectorAll('.page').forEach(page => {
         page.classList.remove('active-page');
     });
-    // Show selected page
-    document.getElementById(pageId).classList.add('active-page');
+    
+    // Show selected page (If exists)
+    const targetPage = document.getElementById(pageId);
+    if(targetPage) {
+        targetPage.classList.add('active-page');
+    }
     
     // Update Menu Icon Color
     document.querySelectorAll('.nav-item').forEach(item => {
         item.classList.remove('active');
     });
     if(element) element.classList.add('active');
+}
+
+// --- Tawk.to Chat Toggle ---
+// Chat අයිකන් එක එබුවම Chat එක පේන්න ගන්නවා
+function toggleTawkChat() {
+    if(window.Tawk_API){
+        window.Tawk_API.toggle();
+    }
 }
 
 // --- Login Modal ---
@@ -23,51 +35,21 @@ function closeLogin() {
     document.getElementById('loginModal').style.display = 'none';
 }
 
-// --- User Logic & Chat ---
+// --- User Logic (Simulated) ---
 let currentUser = "Guest";
 
 function userLogin() {
     const nameInput = document.getElementById('usernameInput').value;
     if(nameInput.trim() !== "") {
         currentUser = nameInput;
-        alert("Welcome " + currentUser + "! You can now chat.");
+        alert("Welcome " + currentUser + "!");
         closeLogin();
-        // Go to chat page
-        const chatBtn = document.querySelectorAll('.nav-item')[4];
-        showPage('chat', chatBtn);
     } else {
         alert("Please enter a name");
     }
 }
 
-function sendMessage() {
-    const input = document.getElementById('msgInput');
-    const area = document.getElementById('messageArea');
-    const text = input.value;
-
-    if(text.trim() !== "") {
-        // My Message
-        area.innerHTML += `
-            <div class="message outgoing">
-                <p>${text}</p>
-            </div>
-        `;
-        input.value = "";
-        area.scrollTop = area.scrollHeight;
-
-        // Auto Reply
-        setTimeout(() => {
-            area.innerHTML += `
-                <div class="message incoming">
-                    <p>Thanks ${currentUser}! I'm busy right now, but I'll reply soon.</p>
-                </div>
-            `;
-            area.scrollTop = area.scrollHeight;
-        }, 1000);
-    }
-}
-
-// --- Community Post ---
+// --- Community Post (Local Storage Only) ---
 function postToCommunity() {
     const input = document.getElementById('communityInput');
     const board = document.getElementById('communityBoard');
