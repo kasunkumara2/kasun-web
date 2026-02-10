@@ -152,3 +152,18 @@ select option { background: #000; }
 .theme-card:hover { border-color: var(--primary); transform: translateY(-3px); }
 .theme-card.selected { border-color: var(--primary); box-shadow: 0 0 10px var(--primary); font-weight: bold; }
 .color-dot { width: 25px; height: 25px; border-radius: 50%; margin: 0 auto 5px; border: 1px solid #555; }
+
+/* TIMELINE STYLES */
+.timeline { margin-top: 30px; display: flex; flex-direction: column; gap: 30px; }
+.timeline-item { position: relative; padding-left: 40px; border-left: 2px solid var(--primary); }
+.timeline-item .icon { position: absolute; left: -10px; top: 0; background: var(--bg); color: var(--primary); padding: 5px; border-radius: 50%; border: 2px solid var(--primary); font-size: 0.8rem; }
+.timeline-item h3 { color: var(--primary); font-family: 'Rajdhani', sans-serif; margin-bottom: 5px; }
+
+/* O/L TABLE */
+.result-table { width: 100%; max-width: 300px; border-collapse: collapse; margin-top: 10px; color: #ccc; }
+.result-table td { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.grade { text-align: right; color: var(--primary); font-weight: bold; }
+
+/* TRAVEL TAGS */
+.travel-tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+.travel-tags .tag { background: rgba(14, 165, 233, 0.1); color: var(--primary); padding: 5px 15px; border-radius: 20px; border: 1px solid var(--primary); font-size: 0.85rem; font-weight: bold; }
