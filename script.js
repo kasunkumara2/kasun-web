@@ -1,9 +1,7 @@
-// Firebase SDKs Import කිරීම (CDN හරහා)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, limit, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-// ඔයා එවපු හරියටම නිවැරදි Config එක
 const firebaseConfig = {
   apiKey: "AIzaSyAZton7bSKozxi8R3uUN3qZdrNwt09hKHs",
   authDomain: "kasun-portfolio-7553b.firebaseapp.com",
@@ -14,7 +12,6 @@ const firebaseConfig = {
   measurementId: "G-619H45RT8Z"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
@@ -23,132 +20,108 @@ const googleProvider = new GoogleAuthProvider();
 let currentUser = null;
 let userProfile = { name: "Guest", photo: "https://img.icons8.com/color/96/user.png" };
 
-// --- AUTH LOGIC ---
-window.googleLogin = () => signInWithPopup(auth, googleProvider).catch(e => alert("Login Error: " + e.message));
+// --- FUNCTIONS FOR HTML ---
+window.googleLogin = () => signInWithPopup(auth, googleProvider).catch(e => alert("Error: " + e.message));
 window.googleLogout = () => signOut(auth).then(() => location.reload());
 
-// --- LOAD MESSAGES (වැදගත්ම කොටස) ---
-function loadMessages() {
-    console.log("Attempting to load messages...");
-    const board = document.getElementById('commMessages');
-    if(!board) return;
-
-    // සරලම ක්‍රමයට මැසේජ් ගන්නවා (OrderBy නැතිව) එවිට Error ඒම වැළකේ
-    const q = collection(db, "messages");
-    
-    onSnapshot(q, (snapshot) => {
-        board.innerHTML = "";
-        
-        if (snapshot.empty) {
-            board.innerHTML = "<div class='msg received' style='color: #aaa; text-align: center;'>No messages found. Start chatting!</div>";
-            return;
-        }
-
-        let allMsgs = [];
-        snapshot.forEach((doc) => {
-            allMsgs.push({ id: doc.id, ...doc.data() });
-        });
-
-        // අතින් පෝලිම් කරනවා (createdAt තිබේ නම් පමණක්)
-        allMsgs.sort((a, b) => (a.createdAt?.seconds || 0) - (b.createdAt?.seconds || 0));
-
-        allMsgs.forEach((msg) => {
-            const isMe = currentUser && msg.uid === currentUser.uid;
-            const userImg = msg.photo || "https://img.icons8.com/color/96/user.png";
-            
-            const div = document.createElement('div');
-            div.className = `msg-container`;
-            div.style.display = "flex";
-            div.style.flexDirection = "column";
-            div.style.marginBottom = "10px";
-            
-            div.innerHTML = `
-                <div class="msg-info" style="align-self: ${isMe ? 'flex-end' : 'flex-start'}; display: flex; align-items: center; gap: 5px;">
-                    ${isMe ? '' : `<img src="${userImg}" style="width:25px; height:25px; border-radius:50%; object-fit:cover;">`} 
-                    <span style="font-size:0.7rem; color: #888;">${isMe ? 'You' : (msg.name || "User")}</span>
-                </div>
-                <div class="msg" style="padding:10px 15px; border-radius:15px; max-width:75%; word-wrap: break-word; ${isMe ? 'background:var(--primary); align-self:flex-end; color:white;' : 'background:#2a2a2a; align-self:flex-start; color:white;'}">
-                    ${msg.text}
-                </div>
-            `;
-            board.appendChild(div);
-        });
-        board.scrollTop = board.scrollHeight;
-    }, (error) => {
-        console.error("Firebase Snapshot Error:", error);
-        alert("Database Error: " + error.message);
-    });
-}
-
-// --- ON AUTH CHANGE ---
-onAuthStateChanged(auth, async (user) => {
-    const loginView = document.getElementById('profileLoginView');
-    const editView = document.getElementById('profileEditView');
-    const topIcon = document.getElementById('topProfileImg');
-
-    if (user) {
-        currentUser = user;
-        if(loginView) loginView.style.display = "none";
-        if(editView) editView.style.display = "block";
-
-        // Firestore එකෙන් Profile එක ගන්නවා
-        try {
-            const docSnap = await getDoc(doc(db, "users", user.uid));
-            if (docSnap.exists()) {
-                userProfile = docSnap.data();
-            } else {
-                userProfile = { name: user.displayName, photo: user.photoURL };
-            }
-        } catch (e) { console.log(e); }
-
-        if(topIcon) topIcon.src = userProfile.photo || user.photoURL;
-        document.getElementById('editProfilePic').src = userProfile.photo || user.photoURL;
-        document.getElementById('editUsername').value = userProfile.name || user.displayName;
-        
-        loadMessages(); // මැසේජ් Load කරනවා
-    } else {
-        currentUser = null;
-        if(loginView) loginView.style.display = "block";
-        if(editView) editView.style.display = "none";
-        loadMessages(); // Log out වුනත් මැසේජ් පේන්න ඕනේ
-    }
-});
-
-// --- POST MESSAGE ---
-window.postCommunity = async () => {
-    if (!currentUser) {
-        alert("Please login to join the community chat!");
-        window.showPage('profile', document.getElementById('navProfile'));
-        return;
-    }
-    const input = document.getElementById('commInput');
-    const text = input.value.trim();
-    if (text !== "") {
-        try {
-            await addDoc(collection(db, "messages"), {
-                text: text,
-                uid: currentUser.uid,
-                name: userProfile.name || currentUser.displayName,
-                photo: userProfile.photo || currentUser.photoURL,
-                createdAt: new Date()
-            });
-            input.value = "";
-        } catch (e) { alert("Send Error: " + e.message); }
-    }
-}
-window.handleCommEnter = (e) => { if (e.key === 'Enter') window.postCommunity(); }
-
-// --- UI HELPERS ---
 window.showPage = (id, el) => {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
-    document.getElementById(id).classList.add('active-page');
+    const target = document.getElementById(id);
+    if(target) target.classList.add('active-page');
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     if(el) el.classList.add('active');
-}
+};
+
+window.openSettings = () => { document.getElementById('settingsModal').style.display = 'flex'; };
+window.closeSettings = () => { document.getElementById('settingsModal').style.display = 'none'; };
+window.openBooking = () => { document.getElementById('bookingModal').style.display = 'flex'; };
+window.closeBooking = () => { document.getElementById('bookingModal').style.display = 'none'; };
+window.toggleTawkChat = () => { if(window.Tawk_API) window.Tawk_API.toggle(); else alert("Chat loading..."); };
+window.setTheme = (t) => document.body.className = 'theme-'+t;
+
+window.selectAvatar = (url) => {
+    document.getElementById('editProfilePic').src = url;
+    window.selectedAvatarURL = url;
+};
+
+window.saveProfile = async () => {
+    if (!currentUser) return;
+    const newData = {
+        name: document.getElementById('editUsername').value,
+        photo: window.selectedAvatarURL || currentUser.photoURL,
+        phone: document.getElementById('editPhone').value,
+        city: document.getElementById('editCity').value,
+        country: document.getElementById('editCountry').value,
+        address: document.getElementById('editAddress').value,
+        gender: document.getElementById('editGender').value
+    };
+    await setDoc(doc(db, "users", currentUser.uid), newData, { merge: true });
+    alert("Profile Saved!");
+    location.reload();
+};
+
+window.postCommunity = async () => {
+    const input = document.getElementById('commInput');
+    if (!currentUser || !input.value.trim()) return;
+    await addDoc(collection(db, "messages"), {
+        text: input.value.trim(),
+        uid: currentUser.uid,
+        name: userProfile.name || currentUser.displayName,
+        photo: userProfile.photo || currentUser.photoURL,
+        createdAt: new Date()
+    });
+    input.value = "";
+};
+
+window.handleCommEnter = (e) => { if (e.key === 'Enter') window.postCommunity(); };
 window.switchConnect = (tab) => {
     document.getElementById('aiSection').style.display = (tab === 'ai') ? 'flex' : 'none';
     document.getElementById('communitySection').style.display = (tab === 'community') ? 'flex' : 'none';
+};
+
+// --- CORE LOGIC ---
+function loadMessages() {
+    const q = query(collection(db, "messages"), orderBy("createdAt", "asc"), limit(50));
+    onSnapshot(q, (snapshot) => {
+        const board = document.getElementById('commMessages');
+        if(!board) return;
+        board.innerHTML = "";
+        snapshot.forEach((doc) => {
+            const msg = doc.data();
+            const isMe = currentUser && msg.uid === currentUser.uid;
+            const div = document.createElement('div');
+            div.className = `msg-container`;
+            div.style.display = "flex"; div.style.flexDirection = "column";
+            div.innerHTML = `
+                <div class="msg-info" style="align-self: ${isMe ? 'flex-end' : 'flex-start'}; display: flex; align-items: center; gap: 5px;">
+                    ${isMe ? '' : `<img src="${msg.photo || 'https://img.icons8.com/color/96/user.png'}" style="width:25px; height:25px; border-radius:50%;">`}
+                    <span style="font-size:0.7rem; color:#aaa;">${isMe ? 'You' : (msg.name || "User")}</span>
+                </div>
+                <div class="msg" style="padding:8px 12px; border-radius:15px; max-width:70%; margin:2px 0; ${isMe ? 'background:var(--primary); align-self:flex-end;' : 'background:#333; align-self:flex-start;'}">
+                    ${msg.text}
+                </div>`;
+            board.appendChild(div);
+        });
+        board.scrollTop = board.scrollHeight;
+    });
 }
-window.addEventListener("load", () => {
-    if(document.getElementById("preloader")) document.getElementById("preloader").style.display = "none";
+
+onAuthStateChanged(auth, async (user) => {
+    if (user) {
+        currentUser = user;
+        const docSnap = await getDoc(doc(db, "users", user.uid));
+        userProfile = docSnap.exists() ? docSnap.data() : { name: user.displayName, photo: user.photoURL };
+        
+        document.getElementById('profileLoginView').style.display = "none";
+        document.getElementById('profileEditView').style.display = "block";
+        document.getElementById('topProfileImg').src = userProfile.photo || user.photoURL;
+        loadMessages();
+    } else {
+        document.getElementById('profileLoginView').style.display = "block";
+        document.getElementById('profileEditView').style.display = "none";
+    }
+});
+
+window.addEventListener("load", () => { 
+    if(document.getElementById("preloader")) document.getElementById("preloader").style.display = "none"; 
 });
