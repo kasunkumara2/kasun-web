@@ -5,11 +5,12 @@ const API_KEY = "AIzaSyBtLeTafqNFh4hu6RFb78M3pwmChzpd6uc";
 const genAI = new GoogleGenerativeAI(API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
+// AI Chat Initial Session
 let chatSession = model.startChat({
     history: [
         {
             role: "user",
-            parts: [{ text: "You are Kasun AI. You speak Singlish or English. Be helpful and cool. You know Kasun is a Video Editor, Photographer, AI Artist and DJ." }],
+            parts: [{ text: "You are Kasun AI. You speak Singlish or English. Be helpful, friendly and cool." }],
         },
         {
             role: "model",
@@ -18,7 +19,7 @@ let chatSession = model.startChat({
     ]
 });
 
-// --- 1. CLICK OUTSIDE TO CLOSE MODALS (NEW) ---
+// --- 1. CLICK OUTSIDE TO CLOSE MODALS ---
 window.onclick = function(event) {
     const modals = document.querySelectorAll('.modal');
     modals.forEach(modal => {
@@ -78,7 +79,7 @@ if(textElement) {
     typeEffect();
 }
 
-// --- 5. AI CHAT (SDK METHOD) ---
+// --- 5. AI CHAT (FIXED) ---
 window.askGeminiAI = async function() {
     const input = document.getElementById('aiInput');
     const msgArea = document.getElementById('aiMessages');
@@ -100,8 +101,8 @@ window.askGeminiAI = async function() {
         msgArea.innerHTML += `<div class="msg bot-msg">${text}</div>`;
     } catch (error) {
         console.error("AI Error:", error);
-        msgArea.innerHTML += `<div class="msg bot-msg" style="color:red;">Internet check karanna machan.</div>`;
-        chatSession = model.startChat(); // Reset on error
+        msgArea.innerHTML += `<div class="msg bot-msg" style="color:red;">Internet problem or AI busy. Try again.</div>`;
+        chatSession = model.startChat(); 
     }
 
     sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i>'; 
@@ -133,7 +134,7 @@ window.setTheme = function(theme) {
     document.querySelector('.theme-card.' + theme).classList.add('selected');
 }
 
-// --- 7. BOOKING & COMMUNITY ---
+// --- 7. BOOKING & NEWS ---
 window.openBooking = function() { document.getElementById('bookingModal').style.display = 'flex'; }
 window.closeBooking = function() { document.getElementById('bookingModal').style.display = 'none'; }
 
@@ -148,6 +149,35 @@ window.sendBookingToWhatsApp = function() {
     window.open(`https://wa.me/+94717647693?text=${text}`, '_blank');
     closeBooking();
 }
+
+// News Data
+const newsData = [
+    { id: 1, category: 'country', title: 'Sri Lanka Tourism Up', desc: 'More tourists arriving in 2026.', date: 'Today' },
+    { id: 2, category: 'game', title: 'GTA 6 Leaks', desc: 'New map details revealed.', date: 'Yesterday' },
+    { id: 3, category: 'funny', title: 'Cat Wins Election', desc: 'A cat became mayor for a day.', date: '2 days ago' }
+];
+
+window.filterNews = function(filter) {
+    const grid = document.getElementById('newsGrid');
+    grid.innerHTML = '';
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+
+    newsData.forEach(news => {
+        if (filter === 'all' || news.category === filter) {
+            grid.innerHTML += `
+                <div class="news-card">
+                    <div class="news-content">
+                        <span class="news-cat">${news.category}</span>
+                        <h3 class="news-title">${news.title}</h3>
+                        <p>${news.desc}</p>
+                        <span class="news-date">${news.date}</span>
+                    </div>
+                </div>`;
+        }
+    });
+}
+document.addEventListener('DOMContentLoaded', () => filterNews('all'));
 
 window.postToCommunity = function() {
     const input = document.getElementById('communityInput');
@@ -179,7 +209,4 @@ window.toggleAIChat = function() {
 window.toggleTawkChat = function() {
     if(window.Tawk_API) window.Tawk_API.toggle(); else alert("Chat loading...");
 }
-window.openLogin = function() { document.getElementById('loginModal').style.display = 'flex'; }
-window.closeLogin = function() { document.getElementById('loginModal').style.display = 'none'; }
-window.userLogin = function() { if(document.getElementById('usernameInput').value) { closeLogin(); } }
 window.handleEnter = function(e) { if (e.key === 'Enter') window.askGeminiAI(); }
