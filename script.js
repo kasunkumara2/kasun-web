@@ -20,60 +20,77 @@ const googleProvider = new GoogleAuthProvider();
 let currentUser = null;
 let userProfile = { name: "Guest", photo: "https://img.icons8.com/color/96/user.png" };
 
-// --- GLOBAL FUNCTIONS (FOR HTML) ---
-window.googleLogin = () => signInWithPopup(auth, googleProvider).catch(e => alert("Error: " + e.message));
-window.googleLogout = () => signOut(auth).then(() => location.reload());
+// CURSOR MOVEMENT LOGIC
+document.addEventListener('mousemove', (e) => {
+    const dot = document.querySelector('.cursor-dot');
+    const blob = document.querySelector('.cursor-blob');
+    if(dot && blob) {
+        dot.style.left = e.clientX + 'px';
+        dot.style.top = e.clientY + 'px';
+        setTimeout(() => {
+            blob.style.left = e.clientX + 'px';
+            blob.style.top = e.clientY + 'px';
+        }, 80);
+    }
+});
+
+// COUNTER ANIMATION (0 to Target)
+function startCounters() {
+    const counters = document.querySelectorAll('.counter');
+    counters.forEach(counter => {
+        counter.innerText = '0';
+        const target = +counter.getAttribute('data-target');
+        let count = 0;
+        const speed = target / 50;
+        const update = () => {
+            count += speed;
+            if(count < target) {
+                counter.innerText = Math.ceil(count) + "+";
+                setTimeout(update, 30);
+            } else {
+                counter.innerText = target + "+";
+            }
+        };
+        update();
+    });
+}
+
+// GLOBAL UI FUNCTIONS
 window.showPage = (id, el) => {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
     const target = document.getElementById(id);
     if(target) target.classList.add('active-page');
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     if(el) el.classList.add('active');
-};
-window.openSettings = () => { document.getElementById('settingsModal').style.display = 'flex'; };
-window.closeSettings = () => { document.getElementById('settingsModal').style.display = 'none'; };
-window.openBooking = () => { document.getElementById('bookingModal').style.display = 'flex'; };
-window.closeBooking = () => { document.getElementById('bookingModal').style.display = 'none'; };
-window.toggleTawkChat = () => { if(window.Tawk_API) window.Tawk_API.toggle(); else alert("Chat loading..."); };
-window.setTheme = (t) => document.body.className = 'theme-'+t;
-window.selectAvatar = (url) => { document.getElementById('editProfilePic').src = url; window.selectedAvatarURL = url; };
-
-window.saveProfile = async () => {
-    if (!currentUser) return;
-    const newData = {
-        name: document.getElementById('editUsername').value,
-        photo: window.selectedAvatarURL || currentUser.photoURL,
-        phone: document.getElementById('editPhone').value || "",
-        city: document.getElementById('editCity').value || "",
-        country: document.getElementById('editCountry').value || "",
-        address: document.getElementById('editAddress').value || "",
-        gender: document.getElementById('editGender').value || "Male"
-    };
-    await setDoc(doc(db, "users", currentUser.uid), newData, { merge: true });
-    alert("Profile Saved!");
-    location.reload();
+    if(id === 'home') startCounters(); // Restart counters on home
 };
 
+window.openSettings = () => document.getElementById('settingsModal').style.display = 'flex';
+window.closeSettings = () => document.getElementById('settingsModal').style.display = 'none';
+window.setTheme = (t) => document.body.className = 'theme-' + t;
+
+// FIREBASE AUTH
+window.googleLogin = () => signInWithPopup(auth, googleProvider).catch(e => console.log(e));
+window.googleLogout = () => signOut(auth).then(() => location.reload());
+
+// CHAT SYSTEM (REAL-TIME)
 window.postCommunity = async () => {
     const input = document.getElementById('commInput');
     if (!currentUser || !input.value.trim()) return;
-    await addDoc(collection(db, "messages"), {
-        text: input.value.trim(),
-        uid: currentUser.uid,
-        name: userProfile.name || currentUser.displayName,
-        photo: userProfile.photo || currentUser.photoURL,
-        createdAt: new Date()
-    });
-    input.value = "";
+    try {
+        await addDoc(collection(db, "messages"), {
+            text: input.value.trim(),
+            uid: currentUser.uid,
+            name: userProfile.name || currentUser.displayName,
+            photo: userProfile.photo || currentUser.photoURL,
+            createdAt: new Date()
+        });
+        input.value = "";
+    } catch (e) { console.log(e); }
 };
 
 window.handleCommEnter = (e) => { if (e.key === 'Enter') window.postCommunity(); };
-window.switchConnect = (tab) => {
-    document.getElementById('aiSection').style.display = (tab === 'ai') ? 'flex' : 'none';
-    document.getElementById('communitySection').style.display = (tab === 'community') ? 'flex' : 'none';
-};
 
-// --- REAL-TIME CHAT ---
 function loadMessages() {
     const q = query(collection(db, "messages"), orderBy("createdAt", "asc"), limit(50));
     onSnapshot(q, (snapshot) => {
@@ -84,38 +101,56 @@ function loadMessages() {
             const msg = doc.data();
             const isMe = currentUser && msg.uid === currentUser.uid;
             const div = document.createElement('div');
-            div.className = `msg-container`;
-            div.style.display = "flex"; div.style.flexDirection = "column";
-            div.innerHTML = `
-                <div class="msg-info" style="align-self: ${isMe ? 'flex-end' : 'flex-start'}; display: flex; align-items: center; gap: 5px;">
-                    ${isMe ? '' : `<img src="${msg.photo || 'https://img.icons8.com/color/96/user.png'}" style="width:25px; height:25px; border-radius:50%; object-fit:cover;">`}
-                    <span style="font-size:0.7rem; color:#aaa;">${isMe ? 'You' : (msg.name || "User")}</span>
-                </div>
-                <div class="msg" style="padding:8px 12px; border-radius:15px; max-width:70%; margin:2px 0; ${isMe ? 'background:var(--primary); align-self:flex-end; color:white;' : 'background:#333; align-self:flex-start; color:white;'}">
-                    ${msg.text}
-                </div>`;
+            div.style.alignSelf = isMe ? 'flex-end' : 'flex-start';
+            div.style.background = isMe ? 'var(--primary)' : '#222';
+            div.style.padding = '10px 15px';
+            div.style.borderRadius = '15px';
+            div.style.maxWidth = '75%';
+            div.style.color = '#fff';
+            div.innerHTML = `<small style="display:block; font-size:0.6rem; opacity:0.7;">${isMe ? 'You' : msg.name}</small>${msg.text}`;
             board.appendChild(div);
         });
         board.scrollTop = board.scrollHeight;
     });
 }
 
+// PROFILE LOGIC
+window.saveProfile = async () => {
+    if (!currentUser) return;
+    const data = {
+        name: document.getElementById('editUsername').value,
+        photo: userProfile.photo, // Add avatar logic if needed
+    };
+    await setDoc(doc(db, "users", currentUser.uid), data, { merge: true });
+    alert("Saved!");
+    location.reload();
+};
+
+// INITIALIZATION
 onAuthStateChanged(auth, async (user) => {
     if (user) {
         currentUser = user;
         const docSnap = await getDoc(doc(db, "users", user.uid));
-        userProfile = docSnap.exists() ? docSnap.data() : { name: user.displayName, photo: user.photoURL };
+        if (docSnap.exists()) userProfile = docSnap.data();
+        
         document.getElementById('profileLoginView').style.display = "none";
         document.getElementById('profileEditView').style.display = "block";
         document.getElementById('topProfileImg').src = userProfile.photo || user.photoURL;
-        loadMessages();
-    } else {
-        document.getElementById('profileLoginView').style.display = "block";
-        document.getElementById('profileEditView').style.display = "none";
-        loadMessages(); 
+        document.getElementById('editUsername').value = userProfile.name || user.displayName;
     }
+    loadMessages();
+    startCounters();
 });
 
-window.addEventListener("load", () => { 
-    if(document.getElementById("preloader")) document.getElementById("preloader").style.display = "none"; 
+window.addEventListener("load", () => {
+    document.getElementById("preloader").style.display = "none";
 });
+
+// TYPING TEXT EFFECT
+const words = ["Video Editor", "Photographer", "AI Artist", "DJ / Remixer"];
+let i = 0;
+function type() {
+    const el = document.querySelector('.typing-text');
+    if(el) { el.textContent = words[i % words.length]; i++; setTimeout(type, 2000); }
+}
+type();
