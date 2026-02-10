@@ -2,6 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebas
 import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, limit, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+// --- CONFIG ---
 const firebaseConfig = {
   apiKey: "AIzaSyAZton7bSKozxi8R3uUN3qZdrNwt09hKHs",
   authDomain: "kasun-portfolio-7553b.firebaseapp.com",
@@ -24,8 +25,8 @@ let selectedAvatarURL = "";
 let authMode = 'signin';
 
 // --- AUTH FUNCTIONS ---
-window.googleLogin = () => signInWithPopup(auth, googleProvider).catch(e => alert(e.message));
-window.facebookLogin = () => signInWithPopup(auth, facebookProvider).catch(e => alert(e.message));
+window.googleLogin = () => signInWithPopup(auth, googleProvider).catch(e => alert("Auth Error: " + e.message));
+window.facebookLogin = () => signInWithPopup(auth, facebookProvider).catch(e => alert("Auth Error: " + e.message));
 window.googleLogout = () => signOut(auth).then(() => location.reload());
 
 window.toggleProfileAuth = (mode) => {
@@ -45,16 +46,15 @@ window.handleEmailAuth = async () => {
             const cred = await createUserWithEmailAndPassword(auth, email, pass);
             await updateProfile(cred.user, { displayName: email.split('@')[0] });
         }
-    } catch (e) { alert(e.message); }
+    } catch (e) { alert("Login Error: " + e.message); }
 }
 
-// --- AVATAR SELECTION ---
 window.selectAvatar = (url) => {
     selectedAvatarURL = url;
     document.getElementById('editProfilePic').src = url;
 }
 
-// --- LOAD USER DATA ---
+// --- LOAD USER ---
 onAuthStateChanged(auth, async (user) => {
     const loginView = document.getElementById('profileLoginView');
     const editView = document.getElementById('profileEditView');
@@ -76,7 +76,9 @@ onAuthStateChanged(auth, async (user) => {
             if (docSnap.exists()) {
                 data = { ...data, ...docSnap.data() }; 
             }
-        } catch (e) { console.log(e); }
+        } catch (e) { 
+            console.log("Read Error:", e);
+        }
 
         userProfile = data;
         selectedAvatarURL = data.photo;
@@ -103,7 +105,6 @@ onAuthStateChanged(auth, async (user) => {
 // --- SAVE PROFILE ---
 window.saveProfile = async () => {
     if (!currentUser) return;
-    
     const newData = {
         name: document.getElementById('editUsername').value,
         photo: selectedAvatarURL,
@@ -113,15 +114,14 @@ window.saveProfile = async () => {
         address: document.getElementById('editAddress').value,
         gender: document.getElementById('editGender').value
     };
-
     try {
         await setDoc(doc(db, "users", currentUser.uid), newData, { merge: true });
         alert("Profile Saved!");
         location.reload();
-    } catch(e) { alert("Error saving: " + e.message); }
+    } catch(e) { alert("Save Error: " + e.message); }
 }
 
-// --- CHAT ---
+// --- CHAT WITH ERROR ALERT ---
 window.postCommunity = async () => {
     if (!currentUser) {
         alert("Login first!");
@@ -131,12 +131,18 @@ window.postCommunity = async () => {
     const input = document.getElementById('commInput');
     const text = input.value.trim();
     if (text !== "") {
-        await addDoc(collection(db, "messages"), {
-            text: text, uid: currentUser.uid, 
-            name: userProfile.name, photo: userProfile.photo, 
-            createdAt: new Date()
-        });
-        input.value = "";
+        try {
+            await addDoc(collection(db, "messages"), {
+                text: text, uid: currentUser.uid, 
+                name: userProfile.name, photo: userProfile.photo, 
+                createdAt: new Date()
+            });
+            input.value = "";
+        } catch (e) {
+            // මෙන්න මෙතනින් තමයි Error එක එන්නේ
+            alert("Message Failed: " + e.message);
+            console.error(e);
+        }
     }
 }
 window.handleCommEnter = (e) => { if (e.key === 'Enter') window.postCommunity(); }
@@ -162,10 +168,12 @@ function loadMessages() {
             board.appendChild(div);
         });
         board.scrollTop = board.scrollHeight;
+    }, (error) => {
+        console.error("Snapshot Error:", error);
     });
 }
 
-// --- STANDARD UTILS ---
+// --- UTILS ---
 window.askSmartBot = function() {
     const input = document.getElementById('aiInput');
     const area = document.getElementById('aiMessages');
@@ -176,7 +184,7 @@ window.askSmartBot = function() {
     setTimeout(() => {
         let reply = "I can help with Skills, Price, or Contact.";
         if(text.match(/hi|hello/)) reply = "Hello! I am Kasun AI.";
-        else if(text.match(/price|cost/)) reply = "Click 'Hire Me' for pricing.";
+        else if(text.match(/price/)) reply = "Click 'Hire Me'.";
         else if(text.match(/contact/)) reply = "WhatsApp: +94717647693";
         area.innerHTML += `<div class="msg bot">${reply}</div>`;
         area.scrollTop = area.scrollHeight;
