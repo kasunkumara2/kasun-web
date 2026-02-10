@@ -79,13 +79,12 @@
                             <img src="https://img.icons8.com/color/48/cat-profile.png" onclick="selectAvatar(this.src)">
                         </div>
                     </div>
-                    
                     <div class="profile-edit-grid">
                         <div class="input-group">
                             <i class="fas fa-user"></i>
                             <div class="double-input">
                                 <input type="text" id="editName" placeholder="Full Name">
-                                <input type="text" id="editNick" placeholder="Nickname (Sup)" style="font-size: 0.8rem; color: var(--primary);">
+                                <input type="text" id="editNick" placeholder="Nickname" style="font-size: 0.8rem; color: var(--primary);">
                             </div>
                         </div>
                         <div class="input-group"><i class="fas fa-phone"></i><input type="text" id="editPhone" placeholder="Phone"></div>
@@ -98,7 +97,6 @@
                             <select id="editGender"><option value="Male">Male</option><option value="Female">Female</option></select>
                         </div>
                     </div>
-
                     <button class="btn-primary full-width" onclick="saveUserProfile()">Save Profile <i class="fas fa-save"></i></button>
                     <button class="btn-logout full-width" onclick="logoutUser()">Logout</button>
                 </div>
@@ -107,10 +105,15 @@
             <div id="themeTab" class="tab-content" style="display: none;">
                 <h3 style="margin-bottom:15px; color:white; text-align:center;">Choose Style</h3>
                 <div class="theme-grid-new">
-                    <div class="theme-box dark" onclick="setTheme('dark')"><div class="dot" style="background:#000;"></div> Dark Mode</div>
-                    <div class="theme-box blue" onclick="setTheme('blue')"><div class="dot" style="background:#0ea5e9;"></div> Blue Sky</div>
-                    <div class="theme-box pink" onclick="setTheme('pink')"><div class="dot" style="background:#ff007f;"></div> Neon Pink</div>
-                    <div class="theme-box white" onclick="setTheme('white')"><div class="dot" style="background:#fff;"></div> Clean White</div>
+                    <div class="theme-box dark" onclick="setTheme('dark')"><div class="dot" style="background:#000;"></div> Dark</div>
+                    <div class="theme-box blue" onclick="setTheme('blue')"><div class="dot" style="background:#0ea5e9;"></div> Blue</div>
+                    <div class="theme-box pink" onclick="setTheme('pink')"><div class="dot" style="background:#ff007f;"></div> Pink</div>
+                    <div class="theme-box white" onclick="setTheme('white')"><div class="dot" style="background:#fff;"></div> White</div>
+                    <div class="theme-box yellow" onclick="setTheme('yellow')"><div class="dot" style="background:#ffd700;"></div> Yellow</div>
+                    <div class="theme-box green" onclick="setTheme('green')"><div class="dot" style="background:#00ff00;"></div> Green</div>
+                    <div class="theme-box purple" onclick="setTheme('purple')"><div class="dot" style="background:#800080;"></div> Purple</div>
+                    <div class="theme-box red" onclick="setTheme('red')"><div class="dot" style="background:#ff0000;"></div> Red</div>
+                    <div class="theme-box cream" onclick="setTheme('cream')"><div class="dot" style="background:#f5f5dc;"></div> Cream</div>
                 </div>
             </div>
         </div>
@@ -128,6 +131,11 @@
                         <option value="Photography">Photography</option>
                         <option value="Video Editing">Video Editing</option>
                         <option value="AI Art">AI Art</option>
+                        <option value="DJ Remix">DJ Remix</option>
+                        <option value="Video Ad">Video Ad</option>
+                        <option value="Social Media Mgt">Social Media Mgt</option>
+                        <option value="Banner/Poster">Banner / Poster</option>
+                        <option value="Graphic Design">Graphic Design</option>
                     </select>
                 </div>
                 <div class="input-group"><i class="fas fa-coins"></i><input type="text" id="clientBudget" placeholder="Budget (LKR)"></div>
@@ -178,12 +186,13 @@
             <section id="skills" class="page">
                 <div class="glass-card">
                     <h2 class="section-title">Professional Skills</h2>
-                    <div class="skills-wrapper-vertical" style="max-width: 450px; margin: 0 auto;">
-                        <div class="skill-box"><span>Videography</span><div class="bar"><div class="fill" style="width:95%"></div></div><span class="perc">95%</span></div>
-                        <div class="skill-box"><span>Photography</span><div class="bar"><div class="fill" style="width:90%"></div></div><span class="perc">90%</span></div>
-                        <div class="skill-box"><span>Video Editing</span><div class="bar"><div class="fill" style="width:85%"></div></div><span class="perc">85%</span></div>
-                        <div class="skill-box"><span>AI Art</span><div class="bar"><div class="fill" style="width:80%"></div></div><span class="perc">80%</span></div>
-                        <div class="skill-box"><span>Graphic Design</span><div class="bar"><div class="fill" style="width:90%"></div></div><span class="perc">90%</span></div>
+                    <div class="skills-wrapper-vertical">
+                        <div class="skill-box"><span>Videography <small>95%</small></span><div class="bar"><div class="fill" style="width:95%"></div></div></div>
+                        <div class="skill-box"><span>Photography <small>90%</small></span><div class="bar"><div class="fill" style="width:90%"></div></div></div>
+                        <div class="skill-box"><span>Video Editing <small>85%</small></span><div class="bar"><div class="fill" style="width:85%"></div></div></div>
+                        <div class="skill-box"><span>AI Art <small>80%</small></span><div class="bar"><div class="fill" style="width:80%"></div></div></div>
+                        <div class="skill-box"><span>Graphic Design <small>90%</small></span><div class="bar"><div class="fill" style="width:90%"></div></div></div>
+                        <div class="skill-box"><span>DJ Remixing <small>75%</small></span><div class="bar"><div class="fill" style="width:75%"></div></div></div>
                     </div>
                 </div>
             </section>
