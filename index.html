@@ -40,11 +40,12 @@
     </div>
 
     <div id="settingsModal" class="modal">
-        <div class="modal-content glass-card-simple settings-box tilt-element">
+        <div class="modal-content glass-card-simple settings-box">
             <span class="close-btn" onclick="closeSettings()">&times;</span>
+            
             <div class="settings-tabs-container">
-                <button class="tab-btn active" onclick="switchTab('auth')">Profile</button>
-                <button class="tab-btn" onclick="switchTab('theme')">Themes</button>
+                <button class="tab-box-btn active" onclick="switchTab('auth')">Account</button>
+                <button class="tab-box-btn" onclick="switchTab('theme')">Themes</button>
             </div>
 
             <div id="authTab" class="tab-content active">
@@ -53,17 +54,20 @@
                         <div class="auth-toggle-btn active" id="signInBtn" onclick="toggleAuth('signin')">Sign In</div>
                         <div class="auth-toggle-btn" id="signUpBtn" onclick="toggleAuth('signup')">Sign Up</div>
                     </div>
+                    
                     <form id="signInForm" class="auth-form">
                         <div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="loginEmail" placeholder="Email"></div>
                         <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="loginPass" placeholder="Password"></div>
                         <button type="button" class="btn-primary full-width" onclick="emailLogin()">Login</button>
                     </form>
+
                     <form id="signUpForm" class="auth-form" style="display: none;">
                         <div class="input-group"><i class="fas fa-user"></i><input type="text" id="regName" placeholder="Name"></div>
                         <div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="regEmail" placeholder="Email"></div>
                         <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="regPass" placeholder="Password"></div>
                         <button type="button" class="btn-primary full-width" onclick="emailRegister()">Register</button>
                     </form>
+
                     <div class="social-login">
                         <button type="button" class="social-btn google" onclick="googleLogin()"><img src="https://img.icons8.com/color/48/google-logo.png"> Google</button>
                         <button type="button" class="social-btn facebook" onclick="facebookLogin()"><img src="https://img.icons8.com/color/48/facebook-new.png"> Facebook</button>
@@ -73,10 +77,22 @@
                 <div id="loggedInUI" style="display: none;">
                     <div class="profile-header">
                         <img id="userAvatar" src="" class="profile-avatar">
-                        <input type="text" id="customPhotoUrl" placeholder="Paste Image URL to change photo" class="url-input">
+                        <div class="avatar-selector">
+                            <span onclick="selectAvatar('https://img.icons8.com/color/96/user-male-circle--v1.png')">👨</span>
+                            <span onclick="selectAvatar('https://img.icons8.com/color/96/user-female-circle.png')">👩</span>
+                            <span onclick="selectAvatar('https://img.icons8.com/color/96/cat-profile.png')">😺</span>
+                        </div>
+                        <input type="text" id="customPhotoUrl" placeholder="Or paste Image URL" class="url-input">
                     </div>
+                    
                     <div class="profile-edit-grid">
-                        <div class="input-group"><i class="fas fa-user"></i><input type="text" id="editName" placeholder="Full Name"></div>
+                        <div class="input-group">
+                            <i class="fas fa-user"></i>
+                            <div style="display: flex; flex-direction: column; width: 100%;">
+                                <input type="text" id="editName" placeholder="Full Name">
+                                <input type="text" id="editNick" placeholder="Nickname" style="font-size: 0.8rem; color: var(--primary);">
+                            </div>
+                        </div>
                         <div class="input-group"><i class="fas fa-phone"></i><input type="text" id="editPhone" placeholder="Phone"></div>
                         <div style="display:flex; gap:10px;">
                             <div class="input-group"><i class="fas fa-city"></i><input type="text" id="editCity" placeholder="City"></div>
@@ -87,17 +103,19 @@
                             <select id="editGender"><option value="Male">Male</option><option value="Female">Female</option></select>
                         </div>
                     </div>
+
                     <button class="btn-primary full-width" onclick="saveUserProfile()">Save Profile <i class="fas fa-save"></i></button>
                     <button class="btn-logout full-width" onclick="logoutUser()">Logout <i class="fas fa-sign-out-alt"></i></button>
                 </div>
             </div>
 
             <div id="themeTab" class="tab-content" style="display: none;">
-                <div class="theme-grid">
-                    <div class="theme-card dark selected" onclick="setTheme('dark')"><div class="color-dot" style="background:#000;"></div><span>Dark</span></div>
-                    <div class="theme-card blue" onclick="setTheme('blue')"><div class="color-dot" style="background:#0ea5e9;"></div><span>Blue</span></div>
-                    <div class="theme-card pink" onclick="setTheme('pink')"><div class="color-dot" style="background:#ff007f;"></div><span>Pink</span></div>
-                    <div class="theme-card white" onclick="setTheme('white')"><div class="color-dot" style="background:#fff;"></div><span>White</span></div>
+                <h3 style="margin-bottom:15px; color:white; text-align:center;">Choose Style</h3>
+                <div class="theme-grid-new">
+                    <div class="theme-box dark" onclick="setTheme('dark')"><div class="dot" style="background:#000;"></div> Dark</div>
+                    <div class="theme-box blue" onclick="setTheme('blue')"><div class="dot" style="background:#0ea5e9;"></div> Blue</div>
+                    <div class="theme-box pink" onclick="setTheme('pink')"><div class="dot" style="background:#ff007f;"></div> Pink</div>
+                    <div class="theme-box white" onclick="setTheme('white')"><div class="dot" style="background:#fff;"></div> White</div>
                 </div>
             </div>
         </div>
@@ -130,20 +148,20 @@
             <div class="nav-line-container">
                 <div class="nav-line"></div>
                 <ul class="nav-links">
-                    <li class="nav-item active" onclick="showPage('home', this)"><i class="fas fa-home"></i><span class="tooltip">Home</span></li>
-                    <li class="nav-item" onclick="showPage('skills', this)"><i class="fas fa-code"></i><span class="tooltip">Skills</span></li>
-                    <li class="nav-item" onclick="showPage('portfolio', this)"><i class="fas fa-images"></i><span class="tooltip">Gallery</span></li>
-                    <li class="nav-item" onclick="showPage('news', this)"><i class="fas fa-globe"></i><span class="tooltip">News</span></li>
-                    <li class="nav-item" onclick="showPage('life', this)"><i class="fas fa-graduation-cap"></i><span class="tooltip">Journey</span></li>
-                    <li class="nav-item" onclick="toggleTawkChat()"><i class="fas fa-comment-dots"></i><span class="tooltip">Chat</span></li>
+                    <li class="nav-item active magic-hover" onclick="showPage('home', this)"><i class="fas fa-home"></i><span class="tooltip">Home</span></li>
+                    <li class="nav-item magic-hover" onclick="showPage('skills', this)"><i class="fas fa-code"></i><span class="tooltip">Skills</span></li>
+                    <li class="nav-item magic-hover" onclick="showPage('portfolio', this)"><i class="fas fa-images"></i><span class="tooltip">Gallery</span></li>
+                    <li class="nav-item magic-hover" onclick="showPage('news', this)"><i class="fas fa-globe"></i><span class="tooltip">News</span></li>
+                    <li class="nav-item magic-hover" onclick="showPage('life', this)"><i class="fas fa-graduation-cap"></i><span class="tooltip">Journey</span></li>
+                    <li class="nav-item magic-hover" onclick="toggleTawkChat()"><i class="fas fa-comment-dots"></i><span class="tooltip">Chat</span></li>
                 </ul>
             </div>
-            <div class="settings" onclick="openSettings()"><i class="fas fa-cog fa-spin"></i></div>
+            <div class="settings magic-hover" onclick="openSettings()"><i class="fas fa-cog fa-spin"></i></div>
         </nav>
 
         <main class="content-area">
             <section id="home" class="page active-page">
-                <div class="glass-card hero-card tilt-element">
+                <div class="glass-card hero-card">
                     <div class="hero-content">
                         <div class="profile-glow"><img src="images/profile.jpg" alt="Profile"></div>
                         <h1 class="hero-title">I'm <span class="neon-text gradient-text">Kasun</span></h1>
@@ -163,7 +181,7 @@
             </section>
 
             <section id="skills" class="page">
-                <div class="glass-card tilt-element">
+                <div class="glass-card">
                     <h2 class="section-title">Professional Skills</h2>
                     <div class="skills-wrapper-vertical" style="max-width: 450px; margin: 0 auto;">
                         <div class="skill-box"><span>Videography</span><div class="bar"><div class="fill" style="width:95%"></div></div><span class="perc">95%</span></div>
@@ -178,41 +196,51 @@
             <section id="news" class="page">
                 <div class="glass-card">
                     <h2 class="section-title">AI Magazine 📰</h2>
-                    <div class="news-filters">
-                        <button class="filter-btn active" onclick="filterNews('all')">All</button>
-                        <button class="filter-btn" onclick="filterNews('AI')">AI</button>
-                        <button class="filter-btn" onclick="filterNews('Tech')">Tech</button>
-                        <button class="filter-btn" onclick="filterNews('Gaming')">Gaming</button>
-                        <button class="filter-btn" onclick="filterNews('Men')">Men</button>
-                        <button class="filter-btn" onclick="filterNews('Women')">Women</button>
+                    <div class="news-filters-boxed">
+                        <button class="cat-box active" onclick="filterNews('all')">All</button>
+                        <button class="cat-box" onclick="filterNews('AI')">AI</button>
+                        <button class="cat-box" onclick="filterNews('Tech')">Tech</button>
+                        <button class="cat-box" onclick="filterNews('Gaming')">Gaming</button>
+                        <button class="cat-box" onclick="filterNews('Men')">Men</button>
+                        <button class="cat-box" onclick="filterNews('Women')">Women</button>
                     </div>
                     <div class="magazine-grid" id="newsGrid"></div>
                 </div>
             </section>
 
             <section id="life" class="page">
-                <div class="glass-card tilt-element">
+                <div class="glass-card">
                     <h2 class="section-title">My Journey 🚀</h2>
                     <div class="timeline">
                         <div class="timeline-item"><i class="fas fa-map-marker-alt icon"></i><h3>Location</h3><p>Avissawella, Sri Lanka 🇱🇰</p></div>
                         <div class="timeline-item"><i class="fas fa-graduation-cap icon"></i><h3>Education</h3><p>R/Anura Maha Vidyalaya (13 Years)</p></div>
+                        
                         <div class="timeline-item">
-                            <i class="fas fa-file-alt icon"></i><h3>O/L Examination Results (Complete)</h3>
-                            <div class="results-box">
-                                <div class="results-grid">
-                                    <div class="subject-item"><span>ICT</span><span class="grade">B</span></div>
-                                    <div class="subject-item"><span>Mathematics</span><span class="grade">B</span></div>
-                                    <div class="subject-item"><span>Science</span><span class="grade">C</span></div>
-                                    <div class="subject-item"><span>English</span><span class="grade">S</span></div>
-                                    <div class="subject-item"><span>Sinhala Language</span><span class="grade">S</span></div>
-                                    <div class="subject-item"><span>Buddhism</span><span class="grade">S</span></div>
-                                    <div class="subject-item"><span>History</span><span class="grade">W</span></div>
-                                    <div class="subject-item"><span>Art</span><span class="grade">B</span></div>
-                                    <div class="subject-item"><span>Geography</span><span class="grade">C</span></div>
-                                </div>
+                            <i class="fas fa-file-alt icon"></i><h3>O/L Results</h3>
+                            <div class="results-list">
+                                <div class="res-row"><span>ICT</span><span class="res-box b-grade">B</span></div>
+                                <div class="res-row"><span>Mathematics</span><span class="res-box b-grade">B</span></div>
+                                <div class="res-row"><span>Science</span><span class="res-box c-grade">C</span></div>
+                                <div class="res-row"><span>English</span><span class="res-box s-grade">S</span></div>
+                                <div class="res-row"><span>Sinhala</span><span class="res-box s-grade">S</span></div>
+                                <div class="res-row"><span>History</span><span class="res-box w-grade">W</span></div>
+                                <div class="res-row"><span>Art</span><span class="res-box b-grade">B</span></div>
+                                <div class="res-row"><span>Buddhism</span><span class="res-box s-grade">S</span></div>
+                                <div class="res-row"><span>Geography</span><span class="res-box c-grade">C</span></div>
                             </div>
                         </div>
-                        <div class="timeline-item"><i class="fas fa-plane icon"></i><h3>Travel</h3><div class="travel-tags"><span class="tag">Nuwara Eliya</span><span class="tag">Polonnaruwa</span><span class="tag">Kataragama</span><span class="tag">Yapahuwa</span></div></div>
+
+                        <div class="timeline-item">
+                            <i class="fas fa-plane icon"></i><h3>Travel History</h3>
+                            <div class="travel-grid">
+                                <div class="travel-card"><span>Nuwara Eliya</span></div>
+                                <div class="travel-card"><span>Anuradhapura</span></div>
+                                <div class="travel-card"><span>Polonnaruwa</span></div>
+                                <div class="travel-card"><span>Colombo</span></div>
+                                <div class="travel-card"><span>Yapahuwa</span></div>
+                                <div class="travel-card"><span>Kataragama</span></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -221,10 +249,10 @@
                 <div class="glass-card">
                     <h2 class="section-title">Creative Gallery</h2>
                     <div class="gallery-grid">
-                        <div class="gallery-item tilt-element"><img src="images/work1.jpg"><div class="tag">Photo</div></div>
-                        <div class="gallery-item tilt-element"><img src="images/work2.jpg"><div class="tag">Video</div></div>
-                        <div class="gallery-item tilt-element"><img src="images/work3.jpg"><div class="tag">AI Art</div></div>
-                        <div class="gallery-item tilt-element"><img src="images/work4.jpg"><div class="tag">Design</div></div>
+                        <div class="gallery-item"><img src="images/work1.jpg"><div class="tag">Photo</div></div>
+                        <div class="gallery-item"><img src="images/work2.jpg"><div class="tag">Video</div></div>
+                        <div class="gallery-item"><img src="images/work3.jpg"><div class="tag">AI Art</div></div>
+                        <div class="gallery-item"><img src="images/work4.jpg"><div class="tag">Design</div></div>
                     </div>
                 </div>
             </section>
