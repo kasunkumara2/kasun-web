@@ -17,15 +17,13 @@
     <div class="overlay"></div>
 
     <div id="newsModal" class="modal">
-        <div class="modal-content glass-card-simple news-popup tilt-element">
+        <div class="modal-content glass-card-simple news-popup">
             <span class="close-btn" onclick="closeNewsModal()">&times;</span>
             <div class="news-popup-content">
-                <img id="popupImg" src="" alt="News">
+                <img id="popupImg" src="">
                 <div class="news-text-area">
                     <span id="popupTag" class="news-tag-popup"></span>
                     <h2 id="popupTitle"></h2>
-                    <span id="popupDate" class="news-date"></span>
-                    <hr>
                     <p id="popupDesc" class="news-full-text"></p>
                 </div>
             </div>
@@ -46,7 +44,7 @@
                         <div class="auth-toggle-btn" id="signUpBtn" onclick="toggleAuth('signup')">Sign Up</div>
                     </div>
                     <form id="signInForm" class="auth-form">
-                        <div class="input-group"><i class="fas fa-envelope"></i><input type="text" id="loginEmail" placeholder="Email"></div>
+                        <div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="loginEmail" placeholder="Email"></div>
                         <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="loginPass" placeholder="Password"></div>
                         <button type="button" class="btn-primary full-width" onclick="emailLogin()">Login</button>
                     </form>
@@ -56,18 +54,34 @@
                     </div>
                 </div>
                 <div id="loggedInUI" style="display: none; text-align: center;">
-                    <img id="userAvatar" src="" style="width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--primary);">
-                    <h3 id="userNameDisplay" style="color: white; margin-top: 10px;">User Name</h3>
-                    <button class="btn-primary full-width" onclick="logoutUser()" style="margin-top: 20px;">Logout</button>
+                    <img id="userAvatar" src="" style="width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--primary); object-fit:cover;">
+                    <h3 id="userNameDisplay" style="color:white; margin-top:10px;">User</h3>
+                    <p id="userEmailDisplay" style="color:#aaa; font-size:0.8rem;"></p>
+                    <button class="btn-primary full-width" onclick="logoutUser()" style="margin-top:20px;">Logout <i class="fas fa-sign-out-alt"></i></button>
                 </div>
             </div>
             <div id="themeTab" class="tab-content" style="display: none;">
+                <h3 style="margin-bottom:15px; color:white;">Select Theme</h3>
                 <div class="theme-grid">
-                    <div class="theme-card dark" onclick="setTheme('dark')"><span>Dark</span></div>
-                    <div class="theme-card blue" onclick="setTheme('blue')"><span>Blue</span></div>
-                    <div class="theme-card pink" onclick="setTheme('pink')"><span>Pink</span></div>
+                    <div class="theme-card dark selected" onclick="setTheme('dark')"><div class="color-dot" style="background:#000;"></div><span>Dark</span></div>
+                    <div class="theme-card blue" onclick="setTheme('blue')"><div class="color-dot" style="background:#0ea5e9;"></div><span>Blue</span></div>
+                    <div class="theme-card pink" onclick="setTheme('pink')"><div class="color-dot" style="background:#ff007f;"></div><span>Pink</span></div>
+                    <div class="theme-card white" onclick="setTheme('white')"><div class="color-dot" style="background:#fff;"></div><span>White</span></div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div id="bookingModal" class="modal">
+        <div class="modal-content glass-card-simple" style="width: 500px;">
+            <span class="close-btn" onclick="closeBooking()">&times;</span>
+            <h2 style="text-align:center; color:var(--primary);">Start Project 🚀</h2>
+            <div class="booking-grid-layout">
+                <div class="input-group"><i class="fas fa-user"></i><input type="text" id="clientName" placeholder="Your Name"></div>
+                <div class="input-group"><i class="fas fa-coins"></i><input type="text" id="clientBudget" placeholder="Budget (LKR)"></div>
+                <textarea id="clientMessage" placeholder="Your Idea..." rows="3"></textarea>
+            </div>
+            <button class="btn-primary full-width" onclick="sendBookingToWhatsApp()">Send via WhatsApp <i class="fab fa-whatsapp"></i></button>
         </div>
     </div>
 
@@ -81,8 +95,7 @@
                     <li class="nav-item" onclick="showPage('skills', this)"><i class="fas fa-code"></i><span class="tooltip">Skills</span></li>
                     <li class="nav-item" onclick="showPage('portfolio', this)"><i class="fas fa-images"></i><span class="tooltip">Gallery</span></li>
                     <li class="nav-item" onclick="showPage('news', this)"><i class="fas fa-globe"></i><span class="tooltip">News</span></li>
-                    <li class="nav-item" onclick="showPage('life', this)"><i class="fas fa-graduation-cap"></i><span class="tooltip">Journey</span></li>
-                    <li class="nav-item" onclick="showPage('connect', this)"><i class="fas fa-users"></i><span class="tooltip">Connect</span></li>
+                    <li class="nav-item" onclick="showPage('life', this)"><i class="fas fa-graduation-cap"></i><span class="tooltip">Life Journey</span></li>
                     <li class="nav-item" onclick="toggleTawkChat()"><i class="fas fa-comment-dots"></i><span class="tooltip">Live Chat</span></li>
                 </ul>
             </div>
@@ -101,6 +114,10 @@
                             <div class="stat-item"><h3 class="counter" data-target="40">0</h3><p>Clients</p></div>
                             <div class="stat-item"><h3 class="counter" data-target="5">0</h3><p>Years</p></div>
                         </div>
+                        <div class="btn-row">
+                            <button class="btn-primary" onclick="openBooking()">Hire Me</button>
+                            <a href="https://wa.me/+94717647693" target="_blank" class="btn-secondary"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -114,6 +131,7 @@
                         <div class="skill-box"><span>Video Editing</span><div class="bar"><div class="fill" style="width:85%"></div></div><span class="perc">85%</span></div>
                         <div class="skill-box"><span>AI Image & Video Creator</span><div class="bar"><div class="fill" style="width:80%"></div></div><span class="perc">80%</span></div>
                         <div class="skill-box"><span>Graphic Designer</span><div class="bar"><div class="fill" style="width:90%"></div></div><span class="perc">90%</span></div>
+                        <div class="skill-box"><span>DJ Remixing</span><div class="bar"><div class="fill" style="width:75%"></div></div><span class="perc">75%</span></div>
                     </div>
                 </div>
             </section>
@@ -134,19 +152,10 @@
                 <div class="glass-card tilt-element">
                     <h2 class="section-title">My Journey 🚀</h2>
                     <div class="timeline">
+                        <div class="timeline-item"><i class="fas fa-map-marker-alt icon"></i><h3>Location</h3><p>Living in Avissawella, Sri Lanka 🇱🇰</p></div>
+                        <div class="timeline-item"><i class="fas fa-graduation-cap icon"></i><h3>Education</h3><p>Attended <b>R/Anura Maha Vidyalaya</b> for 13 years.</p></div>
                         <div class="timeline-item">
-                            <i class="fas fa-map-marker-alt icon"></i>
-                            <h3>Current Location</h3>
-                            <p>Living in <b>Avissawella, Sri Lanka 🇱🇰</b></p>
-                        </div>
-                        <div class="timeline-item">
-                            <i class="fas fa-graduation-cap icon"></i>
-                            <h3>Education</h3>
-                            <p>Attended <b>R/Anura Maha Vidyalaya</b> for 13 years.</p>
-                        </div>
-                        <div class="timeline-item">
-                            <i class="fas fa-file-alt icon"></i>
-                            <h3>O/L Examination Results</h3>
+                            <i class="fas fa-file-alt icon"></i><h3>O/L Examination Results</h3>
                             <table class="result-table">
                                 <tr><td>ICT</td><td class="grade">B</td></tr><tr><td>Maths</td><td class="grade">B</td></tr>
                                 <tr><td>Science</td><td class="grade">C</td></tr><tr><td>Art</td><td class="grade">B</td></tr>
@@ -155,27 +164,25 @@
                                 <tr><td>History</td><td class="grade">W</td></tr>
                             </table>
                         </div>
-                        <div class="timeline-item">
-                            <i class="fas fa-plane icon"></i>
-                            <h3>Travel History</h3>
-                            <div class="travel-tags">
-                                <span class="tag">Nuwara Eliya</span><span class="tag">Anuradhapura</span>
-                                <span class="tag">Polonnaruwa</span><span class="tag">Colombo</span>
-                                <span class="tag">Yapahuwa</span><span class="tag">Kataragama</span>
-                            </div>
-                        </div>
+                        <div class="timeline-item"><i class="fas fa-plane icon"></i><h3>Travel History</h3><div class="travel-tags"><span class="tag">Nuwara Eliya</span><span class="tag">Anuradhapura</span><span class="tag">Polonnaruwa</span><span class="tag">Colombo</span><span class="tag">Yapahuwa</span><span class="tag">Kataragama</span></div></div>
                     </div>
                 </div>
             </section>
 
             <section id="connect" class="page">
                 <div class="connect-layout">
-                    <div id="aiSection" class="chat-interface">
-                        <div class="chat-header"><i class="fas fa-robot"></i> Kasun AI Chatbot</div>
-                        <div class="chat-messages" id="aiMessages"><div class="msg bot">Hello! Ask me anything.</div></div>
-                        <div class="chat-input-area">
-                            <input type="text" id="aiInput" placeholder="Ask AI..." onkeypress="handleEnter(event)">
-                            <button onclick="askSmartBot()"><i class="fas fa-paper-plane"></i></button>
+                    <div class="connect-sidebar glass-card">
+                        <h3>Connect Hub</h3>
+                        <button class="connect-btn active"><i class="fas fa-robot"></i> AI Chatbot</button>
+                    </div>
+                    <div class="connect-main glass-card">
+                        <div id="aiSection" class="chat-interface">
+                            <div class="chat-header"><i class="fas fa-robot"></i> Kasun AI</div>
+                            <div class="chat-messages" id="aiMessages"><div class="msg bot">Hello! I am Kasun AI. Ask me about Services or Contact.</div></div>
+                            <div class="chat-input-area">
+                                <input type="text" id="aiInput" placeholder="Ask AI..." onkeypress="handleEnter(event)">
+                                <button onclick="askSmartBot()"><i class="fas fa-paper-plane"></i></button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -183,6 +190,15 @@
         </main>
     </div>
 
+    <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true; s1.src='https://embed.tawk.to/698a0b62e0c66b1c3ad16208/1jh1joutb';
+    s1.charset='UTF-8'; s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
     <script type="module" src="script.js"></script>
 </body>
 </html>
