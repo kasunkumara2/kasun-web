@@ -6,7 +6,7 @@ const genAI = new GoogleGenerativeAI(API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 let chatSession = model.startChat();
 
-// --- 1. MOUSE SCULPTING & TILT ---
+// --- 1. MOUSE SCULPTING ---
 const cursorBlob = document.querySelector('.cursor-blob');
 const cursorDot = document.querySelector('.cursor-dot');
 
@@ -34,11 +34,9 @@ document.addEventListener('mousemove', (e) => {
     });
 });
 
-// --- 2. COUNTERS (FIXED - 150, 40, 5) ---
+// --- 2. COUNTERS ---
 window.addEventListener("load", function() {
     document.getElementById("preloader").style.display = "none";
-    
-    // Logic to animate numbers from 0 to target
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -46,25 +44,21 @@ window.addEventListener("load", function() {
                 counters.forEach(counter => {
                     counter.innerText = '0';
                     const target = +counter.getAttribute('data-target');
-                    const duration = 2000; 
-                    const step = target / (duration / 20); 
-                    let current = 0;
-                    
-                    const timer = setInterval(() => {
-                        current += step;
-                        if (current >= target) {
-                            clearInterval(timer);
-                            counter.innerText = target + "+";
-                        } else {
-                            counter.innerText = Math.ceil(current);
-                        }
-                    }, 20);
+                    const inc = target / 50; 
+                    let c = 0;
+                    const updateCount = () => {
+                        if (c < target) {
+                            c += inc;
+                            counter.innerText = Math.ceil(c) + "+";
+                            setTimeout(updateCount, 30);
+                        } else { counter.innerText = target + "+"; }
+                    };
+                    updateCount();
                 });
                 observer.unobserve(entry.target);
             }
         });
     });
-    
     const statsSection = document.querySelector('.stats-row');
     if(statsSection) observer.observe(statsSection);
 });
@@ -80,16 +74,13 @@ function type() {
 }
 type();
 
-// --- 4. NEWS MAGAZINE (40 Items) ---
+// --- 4. NEWS MAGAZINE ---
 const newsData = [];
 const categories = ['Country', 'Game', 'Tech', 'Funny', 'Girl', 'Men'];
 for(let j=1; j<=40; j++) {
     const cat = categories[j % categories.length];
     const imgUrl = `https://picsum.photos/300/200?random=${j}`; 
-    newsData.push({
-        id: j, tag: cat, title: `${cat} News: Major Update #${j} Revealed!`, img: imgUrl,
-        desc: `This is a detailed description for news item #${j}. It contains exciting updates about ${cat} trends in 2026. Click to read more!`, date: 'Today'
-    });
+    newsData.push({ id: j, tag: cat, title: `${cat} News: Major Update #${j} Revealed!`, img: imgUrl, desc: `This is a detailed description for news item #${j}.`, date: 'Today' });
 }
 
 function renderNews(filter) {
@@ -100,13 +91,7 @@ function renderNews(filter) {
             const div = document.createElement('div');
             div.className = 'news-item tilt-element';
             div.onclick = () => openNewsModal(item);
-            div.innerHTML = `
-                <img src="${item.img}" alt="News">
-                <div class="news-info-box">
-                    <span class="news-tag">${item.tag}</span>
-                    <h3 class="news-title">${item.title}</h3>
-                </div>
-            `;
+            div.innerHTML = `<img src="${item.img}"><div class="news-info-box"><span class="news-tag">${item.tag}</span><h3 class="news-title">${item.title}</h3></div>`;
             grid.appendChild(div);
         }
     });
@@ -123,12 +108,12 @@ function openNewsModal(item) {
     document.getElementById('popupTag').innerText = item.tag;
     document.getElementById('popupTitle').innerText = item.title;
     document.getElementById('popupDate').innerText = item.date;
-    document.getElementById('popupDesc').innerText = item.desc + " Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
+    document.getElementById('popupDesc').innerText = item.desc;
     document.getElementById('newsModal').style.display = 'flex';
 }
 window.closeNewsModal = () => document.getElementById('newsModal').style.display = 'none';
 
-// --- 5. CONNECT HUB & AI (AUTO FOCUS) ---
+// --- 5. CONNECT HUB & CHAT LOGIC ---
 window.switchConnect = function(tab) {
     document.getElementById('aiSection').style.display = (tab === 'ai') ? 'flex' : 'none';
     document.getElementById('communitySection').style.display = (tab === 'community') ? 'flex' : 'none';
@@ -138,24 +123,36 @@ window.switchConnect = function(tab) {
     if(tab === 'community') setTimeout(() => document.getElementById('commInput').focus(), 100);
 }
 
+// AI CHAT
 window.askGeminiAI = async function() {
     const input = document.getElementById('aiInput');
     const area = document.getElementById('aiMessages');
     const text = input.value.trim();
     if (!text) return;
-
     area.innerHTML += `<div class="msg user">${text}</div>`;
-    input.value = "";
-    area.scrollTop = area.scrollHeight;
-
+    input.value = ""; area.scrollTop = area.scrollHeight;
     try {
         const result = await chatSession.sendMessage(text);
         const response = await result.response;
         area.innerHTML += `<div class="msg bot">${response.text()}</div>`;
-    } catch (e) {
-        area.innerHTML += `<div class="msg bot" style="color:red">Connecting...</div>`;
-    }
+    } catch (e) { area.innerHTML += `<div class="msg bot" style="color:red">Connecting...</div>`; }
     area.scrollTop = area.scrollHeight;
+}
+
+// COMMUNITY CHAT (FIXED)
+window.postCommunity = function() {
+    const input = document.getElementById('commInput');
+    const board = document.getElementById('commMessages');
+    const text = input.value.trim();
+    if(text !== "") {
+        board.innerHTML += `<div class="msg sent">${text}</div>`;
+        input.value = "";
+        board.scrollTop = board.scrollHeight;
+    }
+}
+// Handle Enter Key for Community Chat
+window.handleCommEnter = function(e) {
+    if (e.key === 'Enter') window.postCommunity();
 }
 
 // --- 6. COMMON ---
@@ -184,7 +181,8 @@ window.toggleAuth = (t) => {
     document.getElementById('signInForm').style.display = (t === 'signin') ? 'block' : 'none';
     document.getElementById('signUpForm').style.display = (t === 'signup') ? 'block' : 'none';
     document.querySelectorAll('.auth-toggle-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(t+'Btn').classList.add('active');
+    if(t === 'signin') document.getElementById('signInBtn').classList.add('active');
+    if(t === 'signup') document.getElementById('signUpBtn').classList.add('active');
 }
 window.toggleTawkChat = function() { if(window.Tawk_API) window.Tawk_API.toggle(); else alert("Chat loading..."); }
 window.handleEnter = function(e) { if (e.key === 'Enter') window.askGeminiAI(); }
