@@ -6,10 +6,21 @@
     --glass: rgba(255, 255, 255, 0.02); 
     --border: rgba(255, 255, 255, 0.1);
     --text: #fff;
+    --input-bg: rgba(255,255,255,0.05); /* Default Input BG */
 }
 
-body.theme-blue { --primary: #3b82f6; --glass: rgba(15, 23, 42, 0.2); }
-body.theme-white { --bg: #f3f4f6; --primary: #2563eb; --text: #111; --glass: rgba(255,255,255,0.7); --border: #ccc; }
+/* --- THEMES (Pink, Yellow, Green Added) --- */
+body.theme-blue { --primary: #3b82f6; --glass: rgba(15, 23, 42, 0.2); --input-bg: rgba(59, 130, 246, 0.15); /* Blue Theme Input Fix */ }
+body.theme-pink { --primary: #ff007f; --glass: rgba(25, 0, 10, 0.2); --input-bg: rgba(255, 0, 127, 0.1); }
+body.theme-yellow { --primary: #ffd700; --glass: rgba(25, 20, 0, 0.2); --input-bg: rgba(255, 215, 0, 0.1); }
+body.theme-green { --primary: #00ff00; --glass: rgba(0, 25, 0, 0.2); --input-bg: rgba(0, 255, 0, 0.1); }
+body.theme-white { --bg: #f3f4f6; --primary: #2563eb; --text: #111; --glass: rgba(255,255,255,0.7); --border: #ccc; --input-bg: #fff; }
+
+/* Apply Blue BG to Inputs specifically in Blue Theme */
+body.theme-blue input, body.theme-blue select, body.theme-blue textarea {
+    background-color: var(--input-bg) !important;
+    border-color: var(--primary) !important;
+}
 
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; cursor: none; }
 
@@ -58,31 +69,13 @@ h1 { font-size: 4rem; line-height: 1; font-family: 'Rajdhani', sans-serif; text-
 .btn-secondary { border: 2px solid var(--primary); color: var(--primary); padding: 10px 28px; border-radius: 30px; text-decoration: none; font-weight: bold; margin-right: 10px; }
 .btn-primary:hover { transform: scale(1.05); }
 
-/* --- SKILLS UPDATES (SHORT BARS & MORE SPACE) --- */
-.skills-wrapper-vertical { 
-    display: flex; 
-    flex-direction: column; 
-    gap: 45px; /* Increased spacing significantly (approx 1cm+) */
-    margin-top: 40px; 
-}
+/* SKILLS */
+.skills-wrapper-vertical { display: flex; flex-direction: column; gap: 45px; margin-top: 40px; }
 .skill-box { display: flex; flex-direction: column; gap: 8px; position: relative; }
 .skill-box span { font-weight: 600; font-size: 1.1rem; color: var(--primary); text-shadow: 0 0 5px var(--primary); }
-.bar { 
-    width: 40%; /* Reduced width to less than half */
-    height: 12px; 
-    background: rgba(255,255,255,0.05); 
-    border-radius: 10px; 
-    overflow: hidden; 
-    border: 1px solid var(--border);
-}
+.bar { width: 40%; height: 12px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
 .fill { height: 100%; background: var(--primary); box-shadow: 0 0 15px var(--primary); border-radius: 10px; }
-.perc { 
-    position: absolute; 
-    left: 42%; /* Position percentage next to the short bar */
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 0.9rem; color: #ccc; font-weight: bold;
-}
+.perc { position: absolute; left: 42%; top: 50%; transform: translateY(-50%); font-size: 0.9rem; color: #ccc; font-weight: bold; }
 
 /* NEWS MAGAZINE */
 .news-filters { display: flex; gap: 15px; margin-bottom: 25px; overflow-x: auto; padding: 5px; }
@@ -125,38 +118,28 @@ h1 { font-size: 4rem; line-height: 1; font-family: 'Rajdhani', sans-serif; text-
 .msg.bot, .msg.received { background: rgba(255,255,255,0.1); align-self: flex-start; }
 .msg.user, .msg.sent { background: var(--primary); align-self: flex-end; color: white; }
 
-/* --- UPDATED SETTINGS & SOCIAL BUTTONS --- */
-.settings-tabs-container { 
-    display: flex; gap: 15px; margin-bottom: 25px; border: none; background: transparent;
-}
-.tab-btn { 
-    flex: 1; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); 
-    color: #aaa; cursor: pointer; border-radius: 12px; font-weight: bold; transition: 0.3s;
-}
+/* MODALS & THEME SELECTOR */
+.modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+.glass-card-simple { background: #0a0a0a; padding: 40px 30px; border-radius: 20px; width: 450px; border: 1px solid var(--primary); position: relative; box-shadow: 0 0 30px rgba(14, 165, 233, 0.2); }
+.close-btn { position: absolute; top: 15px; right: 20px; font-size: 1.8rem; cursor: pointer; color: #ff4d4d; z-index: 10; }
+.settings-tabs-container { display: flex; gap: 15px; margin-bottom: 25px; border: none; background: transparent; }
+.tab-btn { flex: 1; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: #aaa; cursor: pointer; border-radius: 12px; font-weight: bold; transition: 0.3s; }
 .tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 0 10px var(--primary); }
-
 .auth-toggle-box { display: flex; background: rgba(255,255,255,0.05); border-radius: 30px; padding: 5px; margin-bottom: 25px; border: 1px solid var(--border); }
 .auth-toggle-btn { flex: 1; text-align: center; padding: 12px; border-radius: 25px; cursor: pointer; color: #aaa; transition: 0.3s; font-weight: bold; }
 .auth-toggle-btn.active { background: var(--primary); color: white; box-shadow: 0 0 15px var(--primary); }
-
 .social-login { display: flex; gap: 15px; margin-top: 25px; }
-.social-btn { 
-    flex: 1; padding: 15px; border: 1px solid var(--border); border-radius: 12px; 
-    cursor: pointer; background: rgba(255,255,255,0.05); color: white; font-weight: bold; 
-    display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s;
-}
+.social-btn { flex: 1; padding: 15px; border: 1px solid var(--border); border-radius: 12px; cursor: pointer; background: rgba(255,255,255,0.05); color: white; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; }
 .social-btn:hover { transform: translateY(-3px); background: rgba(255,255,255,0.1); }
 .google:hover { border-color: #db4437; box-shadow: 0 0 15px rgba(219, 68, 55, 0.3); }
 .facebook:hover { border-color: #4267B2; box-shadow: 0 0 15px rgba(66, 103, 178, 0.3); }
 .google i { color: #db4437; } .facebook i { color: #4267B2; }
-
-/* MODALS */
-.modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-.glass-card-simple { background: #0a0a0a; padding: 40px 30px; border-radius: 20px; width: 450px; border: 1px solid var(--primary); position: relative; box-shadow: 0 0 30px rgba(14, 165, 233, 0.2); }
-.close-btn { position: absolute; top: 15px; right: 20px; font-size: 1.8rem; cursor: pointer; color: #ff4d4d; z-index: 10; }
-select, textarea { width: 100%; padding: 12px; margin: 10px 0; background: rgba(255,255,255,0.05); border: 1px solid #333; color: white; border-radius: 8px; }
-select option { background: #000; }
-.input-group { display: flex; align-items: center; background: rgba(0,0,0,0.4); border: 1px solid var(--border); padding: 0 20px; border-radius: 12px; margin-bottom: 15px; transition: 0.3s; }
-.input-group:focus-within { border-color: var(--primary); box-shadow: 0 0 10px rgba(14, 165, 233, 0.3); }
+.input-group { display: flex; align-items: center; background: var(--input-bg); border: 1px solid var(--border); padding: 0 20px; border-radius: 12px; margin-bottom: 15px; transition: 0.3s; }
+.input-group:focus-within { border-color: var(--primary); box-shadow: 0 0 10px var(--primary); }
 .input-group i { color: var(--primary); margin-right: 15px; font-size: 1.1rem; }
 .input-group input { border: none; background: transparent; padding: 15px 0; color: white; width: 100%; outline: none; font-size: 1rem; }
+.theme-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
+.theme-card { padding: 15px; border: 1px solid var(--border); border-radius: 10px; text-align: center; background: rgba(255,255,255,0.05); cursor: pointer; transition: 0.3s; }
+.theme-card:hover { border-color: var(--primary); transform: translateY(-3px); }
+.theme-card.selected { border-color: var(--primary); box-shadow: 0 0 10px var(--primary); font-weight: bold; }
+.color-dot { width: 25px; height: 25px; border-radius: 50%; margin: 0 auto 5px; border: 1px solid #555; }
