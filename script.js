@@ -6,7 +6,7 @@ const genAI = new GoogleGenerativeAI(API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 let chatSession = model.startChat();
 
-// --- 1. MOUSE SCULPTING ---
+// --- 1. MOUSE SCULPTING & TILT ---
 const cursorBlob = document.querySelector('.cursor-blob');
 const cursorDot = document.querySelector('.cursor-dot');
 
@@ -34,9 +34,11 @@ document.addEventListener('mousemove', (e) => {
     });
 });
 
-// --- 2. COUNTERS ---
+// --- 2. COUNTERS (FIXED - 150, 40, 5) ---
 window.addEventListener("load", function() {
     document.getElementById("preloader").style.display = "none";
+    
+    // Logic to animate numbers from 0 to target
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -44,21 +46,25 @@ window.addEventListener("load", function() {
                 counters.forEach(counter => {
                     counter.innerText = '0';
                     const target = +counter.getAttribute('data-target');
-                    const inc = target / 50; 
-                    let c = 0;
-                    const updateCount = () => {
-                        if (c < target) {
-                            c += inc;
-                            counter.innerText = Math.ceil(c) + "+";
-                            setTimeout(updateCount, 30);
-                        } else { counter.innerText = target + "+"; }
-                    };
-                    updateCount();
+                    const duration = 2000; 
+                    const step = target / (duration / 20); 
+                    let current = 0;
+                    
+                    const timer = setInterval(() => {
+                        current += step;
+                        if (current >= target) {
+                            clearInterval(timer);
+                            counter.innerText = target + "+";
+                        } else {
+                            counter.innerText = Math.ceil(current);
+                        }
+                    }, 20);
                 });
                 observer.unobserve(entry.target);
             }
         });
     });
+    
     const statsSection = document.querySelector('.stats-row');
     if(statsSection) observer.observe(statsSection);
 });
@@ -80,7 +86,10 @@ const categories = ['Country', 'Game', 'Tech', 'Funny', 'Girl', 'Men'];
 for(let j=1; j<=40; j++) {
     const cat = categories[j % categories.length];
     const imgUrl = `https://picsum.photos/300/200?random=${j}`; 
-    newsData.push({ id: j, tag: cat, title: `${cat} News: Major Update #${j} Revealed!`, img: imgUrl, desc: `This is a detailed description for news item #${j}.`, date: 'Today' });
+    newsData.push({
+        id: j, tag: cat, title: `${cat} News: Major Update #${j} Revealed!`, img: imgUrl,
+        desc: `This is a detailed description for news item #${j}. It contains exciting updates about ${cat} trends in 2026. Click to read more!`, date: 'Today'
+    });
 }
 
 function renderNews(filter) {
@@ -139,7 +148,7 @@ window.askGeminiAI = async function() {
     area.scrollTop = area.scrollHeight;
 }
 
-// COMMUNITY CHAT (FIXED)
+// COMMUNITY CHAT
 window.postCommunity = function() {
     const input = document.getElementById('commInput');
     const board = document.getElementById('commMessages');
@@ -150,10 +159,7 @@ window.postCommunity = function() {
         board.scrollTop = board.scrollHeight;
     }
 }
-// Handle Enter Key for Community Chat
-window.handleCommEnter = function(e) {
-    if (e.key === 'Enter') window.postCommunity();
-}
+window.handleCommEnter = function(e) { if (e.key === 'Enter') window.postCommunity(); }
 
 // --- 6. COMMON ---
 window.onclick = (e) => { if(e.target.classList.contains('modal')) e.target.style.display = 'none'; }
@@ -189,7 +195,7 @@ window.handleEnter = function(e) { if (e.key === 'Enter') window.askGeminiAI(); 
 window.switchTab = (t) => {
     document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
     document.getElementById(t+'Tab').style.display = 'block';
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-box').forEach(b => b.classList.remove('active'));
     event.target.classList.add('active');
 }
 window.setTheme = (t) => document.body.className = 'theme-'+t;
