@@ -3,66 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kasun Padma Kumara | Portfolio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>Kasun Padma Kumara | Creator Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="theme-dark"> <div id="preloader"><div class="loader-circle"></div><div class="loader-text">KASUN...</div></div>
-    <div class="cursor"></div>
-    <div class="cursor2"></div>
+<body class="theme-dark">
+
+    <div class="cursor-blob"></div>
+    <div class="cursor-dot"></div>
 
     <div class="background-image"></div>
     <div class="overlay"></div>
 
     <div id="settingsModal" class="modal">
-        <div class="modal-content glass-card-simple settings-box">
+        <div class="modal-content glass-card-simple settings-box tilt-element">
             <span class="close-btn" onclick="closeSettings()">&times;</span>
-            
             <div class="settings-tabs">
                 <button class="tab-btn active" onclick="switchTab('auth')">Account</button>
                 <button class="tab-btn" onclick="switchTab('theme')">Themes</button>
             </div>
-
+            
             <div id="authTab" class="tab-content active">
                 <div class="auth-toggle">
                     <span id="signInBtn" class="active" onclick="toggleAuth('signin')">Sign In</span>
                     <span id="signUpBtn" onclick="toggleAuth('signup')">Sign Up</span>
                 </div>
-
                 <form id="signInForm" class="auth-form">
-                    <input type="text" placeholder="Username or Email">
+                    <input type="text" placeholder="Email / Username">
                     <input type="password" placeholder="Password">
-                    <button type="button" class="btn-primary full-width" onclick="alert('Logged in!')">Sign In</button>
+                    <button type="button" class="btn-primary full-width">Sign In</button>
                     <div class="social-login">
-                        <button type="button" class="social-btn google"><i class="fab fa-google"></i> Google</button>
-                        <button type="button" class="social-btn facebook"><i class="fab fa-facebook-f"></i> Facebook</button>
+                        <button type="button" class="social-btn google"><i class="fab fa-google"></i></button>
+                        <button type="button" class="social-btn facebook"><i class="fab fa-facebook-f"></i></button>
                     </div>
                 </form>
-
                 <form id="signUpForm" class="auth-form" style="display: none;">
                     <input type="text" placeholder="Full Name">
-                    <input type="email" placeholder="Email Address">
+                    <input type="email" placeholder="Email">
                     <input type="password" placeholder="Password">
-                    <button type="button" class="btn-primary full-width" onclick="alert('Account Created!')">Sign Up</button>
-                    <div class="social-login">
-                        <button type="button" class="social-btn google"><i class="fab fa-google"></i> Google</button>
-                        <button type="button" class="social-btn facebook"><i class="fab fa-facebook-f"></i> Facebook</button>
-                    </div>
+                    <button type="button" class="btn-primary full-width">Sign Up</button>
                 </form>
             </div>
 
             <div id="themeTab" class="tab-content" style="display: none;">
-                <h3 style="color:white; margin-bottom:15px;">Appearance</h3>
+                <h3>Select Theme</h3>
                 <div class="theme-options">
                     <div class="theme-card dark selected" onclick="setTheme('dark')">
-                        <div class="color-preview" style="background: #000;"></div><span>Dark (Default)</span>
+                        <div class="color-preview" style="background:#000;"></div><span>Dark</span>
                     </div>
                     <div class="theme-card blue" onclick="setTheme('blue')">
-                        <div class="color-preview" style="background: #0ea5e9;"></div><span>Blue</span>
+                        <div class="color-preview" style="background:#0ea5e9;"></div><span>Blue</span>
                     </div>
                     <div class="theme-card white" onclick="setTheme('white')">
-                        <div class="color-preview" style="background: #fff;"></div><span>White</span>
+                        <div class="color-preview" style="background:#fff;"></div><span style="color:#333;">White</span>
                     </div>
                 </div>
             </div>
@@ -70,211 +64,169 @@
     </div>
 
     <div id="bookingModal" class="modal">
-        <div class="modal-content glass-card-simple" style="width: 450px; text-align: left;">
+        <div class="modal-content glass-card-simple tilt-element" style="width: 500px;">
             <span class="close-btn" onclick="closeBooking()">&times;</span>
-            <h2 style="text-align: center; color: var(--primary-color);">Start a Project 🚀</h2>
-            
-            <label>Your Name:</label>
-            <input type="text" id="clientName" placeholder="Enter your name">
-            
-            <label>Select Service:</label>
-            <div class="custom-select-wrapper">
+            <h2 style="text-align:center; color:var(--primary-color);">Start Project 🚀</h2>
+            <div class="booking-grid">
+                <input type="text" id="clientName" placeholder="Your Name">
                 <select id="serviceType">
                     <option value="Videography">Videography</option>
                     <option value="Photography">Photography</option>
-                    <option value="Video Editing">Video Editing</option>
-                    <option value="AI Creation">AI Image/Video Creation</option>
-                    <option value="Social Media">Social Media Post</option>
-                    <option value="Video Ad">Video Ad Creation</option>
-                    <option value="DJ Remix">DJ Remix Creation</option>
+                    <option value="Editing">Video Editing</option>
+                    <option value="AI Art">AI Art</option>
+                    <option value="DJ Remix">DJ Remix</option>
                 </select>
+                <input type="text" id="clientBudget" placeholder="Budget (LKR)">
             </div>
-
-            <label>Budget (LKR):</label>
-            <input type="text" id="clientBudget" placeholder="Ex: 5000">
-
-            <label>Details:</label>
-            <textarea id="clientMessage" placeholder="Describe what you want..."></textarea>
-
-            <button class="btn-primary full-width" onclick="sendBookingToWhatsApp()" style="margin-top: 15px;">Send via WhatsApp <i class="fab fa-whatsapp"></i></button>
+            <textarea id="clientMessage" placeholder="Tell me about your idea..." rows="4"></textarea>
+            <button class="btn-primary full-width" onclick="sendBookingToWhatsApp()">Send via WhatsApp <i class="fab fa-whatsapp"></i></button>
         </div>
     </div>
 
     <div class="container">
-        
         <nav class="sidebar">
-            <div class="logo"><i class="fa-solid fa-camera-retro"></i></div>
-            <div class="nav-line-container">
-                <div class="nav-line"></div>
-                <ul class="nav-links">
-                    <li class="nav-item active" onclick="showPage('home', this)"><i class="fas fa-home"></i><span class="tooltip">Home</span></li>
-                    <li class="nav-item" onclick="showPage('skills', this)"><i class="fas fa-code"></i><span class="tooltip">Skills</span></li>
-                    <li class="nav-item" onclick="showPage('portfolio', this)"><i class="fas fa-images"></i><span class="tooltip">Gallery</span></li>
-                    <li class="nav-item" onclick="showPage('life', this)"><i class="fas fa-globe-asia"></i><span class="tooltip">Life</span></li>
-                    <li class="nav-item" onclick="showPage('news', this)"><i class="fas fa-newspaper"></i><span class="tooltip">News</span></li>
-                    <li class="nav-item" onclick="showPage('community', this)"><i class="fas fa-users"></i><span class="tooltip">Community</span></li>
-                    <li class="nav-item" onclick="toggleTawkChat()"><i class="fas fa-comment-dots"></i><span class="tooltip">Chat Me</span></li>
-                </ul>
-            </div>
+            <div class="logo"><i class="fas fa-bolt"></i></div>
+            <ul class="nav-links">
+                <li class="nav-item active" onclick="showPage('home', this)"><i class="fas fa-home"></i><span class="tooltip">Home</span></li>
+                <li class="nav-item" onclick="showPage('skills', this)"><i class="fas fa-magic"></i><span class="tooltip">Skills</span></li>
+                <li class="nav-item" onclick="showPage('portfolio', this)"><i class="fas fa-layer-group"></i><span class="tooltip">Gallery</span></li>
+                <li class="nav-item" onclick="showPage('news', this)"><i class="fas fa-newspaper"></i><span class="tooltip">Magazine</span></li>
+                <li class="nav-item" onclick="showPage('connect', this)"><i class="fas fa-comments"></i><span class="tooltip">Connect Hub</span></li>
+                <li class="nav-item" onclick="showPage('life', this)"><i class="fas fa-user-astronaut"></i><span class="tooltip">Life</span></li>
+            </ul>
             <div class="settings" onclick="openSettings()"><i class="fas fa-cog"></i></div>
         </nav>
 
         <main class="content-area">
             
             <section id="home" class="page active-page">
-                <div class="glass-card centered-content">
-                    <div class="profile-glow"><img src="images/profile.jpg" alt="Profile"></div>
-                    <h1>Hi, I'm <span class="neon-text">Kasun</span></h1>
-                    <h2>I am a <span class="typing-text"></span></h2>
-                    <p>"Creative soul seeking the perfect balance between technology and art."</p>
-                    
-                    <div class="stats-container">
-                        <div class="stat-box"><h3 class="counter" data-target="50">0</h3><p>Projects</p></div>
-                        <div class="stat-box"><h3 class="counter" data-target="100">0</h3><p>Clients</p></div>
-                    </div>
-                    
-                    <div class="btn-group">
-                        <button class="btn-primary" onclick="openBooking()">Hire Me / Booking</button>
-                        <a href="https://wa.me/+94717647693" target="_blank" class="btn-secondary"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-                        <a href="https://www.facebook.com/kasunlks" target="_blank" class="btn-secondary"><i class="fab fa-facebook"></i> Facebook</a>
+                <div class="glass-card hero-card tilt-element">
+                    <div class="hero-content">
+                        <div class="profile-glow"><img src="images/profile.jpg" alt="Profile"></div>
+                        <h1>I'm <span class="neon-text">Kasun</span></h1>
+                        <h2 class="typing-container">I am a <span class="typing-text"></span></h2>
+                        
+                        <div class="stats-row">
+                            <div class="stat-item"><h3>50+</h3><p>Projects</p></div>
+                            <div class="stat-item"><h3>100+</h3><p>Clients</p></div>
+                            <div class="stat-item"><h3>5+</h3><p>Years</p></div>
+                        </div>
+
+                        <div class="btn-row">
+                            <button class="btn-primary" onclick="openBooking()">Hire Me</button>
+                            <a href="https://wa.me/+94717647693" target="_blank" class="btn-secondary">WhatsApp</a>
+                        </div>
                     </div>
                 </div>
             </section>
 
             <section id="skills" class="page">
-                <div class="glass-card">
-                    <h2 class="section-title">My Skills</h2>
-                    <div class="skills-grid-v1">
-                        <div class="skill-item">
-                            <div class="skill-info"><span>Videography</span><span>95%</span></div>
-                            <div class="progress-bar"><div class="fill" style="width: 95%"></div></div>
-                        </div>
-                        <div class="skill-item">
-                            <div class="skill-info"><span>Photography</span><span>90%</span></div>
-                            <div class="progress-bar"><div class="fill" style="width: 90%"></div></div>
-                        </div>
-                        <div class="skill-item">
-                            <div class="skill-info"><span>Video Editing</span><span>85%</span></div>
-                            <div class="progress-bar"><div class="fill" style="width: 85%"></div></div>
-                        </div>
-                        <div class="skill-item">
-                            <div class="skill-info"><span>AI Art</span><span>80%</span></div>
-                            <div class="progress-bar"><div class="fill" style="width: 80%"></div></div>
-                        </div>
-                        <div class="skill-item">
-                            <div class="skill-info"><span>Social Media</span><span>90%</span></div>
-                            <div class="progress-bar"><div class="fill" style="width: 90%"></div></div>
-                        </div>
-                        <div class="skill-item">
-                            <div class="skill-info"><span>DJ Remix</span><span>75%</span></div>
-                            <div class="progress-bar"><div class="fill" style="width: 75%"></div></div>
-                        </div>
+                <div class="glass-card tilt-element">
+                    <h2 class="section-title">Professional Skills</h2>
+                    <div class="skills-wrapper">
+                        <div class="skill-box"><span>Videography</span><div class="bar"><div class="fill" style="width:95%"></div></div><span class="perc">95%</span></div>
+                        <div class="skill-box"><span>Photography</span><div class="bar"><div class="fill" style="width:90%"></div></div><span class="perc">90%</span></div>
+                        <div class="skill-box"><span>Video Editing</span><div class="bar"><div class="fill" style="width:85%"></div></div><span class="perc">85%</span></div>
+                        <div class="skill-box"><span>AI Creation</span><div class="bar"><div class="fill" style="width:80%"></div></div><span class="perc">80%</span></div>
+                        <div class="skill-box"><span>Social Media</span><div class="bar"><div class="fill" style="width:90%"></div></div><span class="perc">90%</span></div>
+                        <div class="skill-box"><span>DJ Remixing</span><div class="bar"><div class="fill" style="width:75%"></div></div><span class="perc">75%</span></div>
                     </div>
                 </div>
             </section>
 
             <section id="portfolio" class="page">
                 <div class="glass-card">
-                    <h2 class="section-title">My Creative Gallery</h2>
+                    <h2 class="section-title">Creative Gallery</h2>
                     <div class="gallery-grid">
-                        <div class="gallery-item"><img src="images/work1.jpg" alt="Work"><div class="category-tag">Photo</div><div class="overlay-card"><h3>Clicks</h3></div></div>
-                        <div class="gallery-item"><img src="images/work2.jpg" alt="Work"><div class="category-tag">Edit</div><div class="overlay-card"><h3>Video</h3></div></div>
-                        <div class="gallery-item"><img src="images/work3.jpg" alt="Work"><div class="category-tag">AI</div><div class="overlay-card"><h3>AI Art</h3></div></div>
-                        <div class="gallery-item"><img src="images/work4.jpg" alt="Work"><div class="category-tag">DJ</div><div class="overlay-card"><h3>Music</h3></div></div>
+                        <div class="gallery-item tilt-element"><img src="images/work1.jpg"><div class="tag">Photo</div></div>
+                        <div class="gallery-item tilt-element"><img src="images/work2.jpg"><div class="tag">Video</div></div>
+                        <div class="gallery-item tilt-element"><img src="images/work3.jpg"><div class="tag">AI Art</div></div>
+                        <div class="gallery-item tilt-element"><img src="images/work4.jpg"><div class="tag">Music</div></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="news" class="page">
+                <div class="glass-card">
+                    <h2 class="section-title">AI Magazine 📰</h2>
+                    <div class="news-filters">
+                        <button class="filter-btn active" onclick="filterNews('all')">All</button>
+                        <button class="filter-btn" onclick="filterNews('tech')">Tech</button>
+                        <button class="filter-btn" onclick="filterNews('game')">Gaming</button>
+                        <button class="filter-btn" onclick="filterNews('lanka')">Sri Lanka</button>
+                    </div>
+                    <div class="magazine-grid" id="newsGrid">
+                        </div>
+                </div>
+            </section>
+
+            <section id="connect" class="page">
+                <div class="connect-layout">
+                    <div class="connect-sidebar glass-card tilt-element">
+                        <h3>Connect Hub</h3>
+                        <button class="connect-btn active" onclick="switchConnect('ai')"><i class="fas fa-robot"></i> AI Chatbot</button>
+                        <button class="connect-btn" onclick="switchConnect('community')"><i class="fas fa-users"></i> Community</button>
+                    </div>
+
+                    <div class="connect-main glass-card tilt-element">
+                        
+                        <div id="aiSection" class="chat-interface">
+                            <div class="chat-header"><i class="fas fa-robot"></i> Kasun AI (Ask me anything!)</div>
+                            <div class="chat-messages" id="aiMessages">
+                                <div class="msg bot">Hello! Mama Kasun AI. Oyaata kohomada udaw karanne?</div>
+                            </div>
+                            <div class="chat-input-area">
+                                <input type="text" id="aiInput" placeholder="Ask AI..." onkeypress="handleEnter(event)">
+                                <button onclick="askGeminiAI()"><i class="fas fa-paper-plane"></i></button>
+                            </div>
+                        </div>
+
+                        <div id="communitySection" class="chat-interface" style="display:none;">
+                            <div class="chat-header" style="background:#075e54;"><i class="fas fa-users"></i> Global Community</div>
+                            <div class="chat-messages" id="commMessages" style="background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');">
+                                <div class="msg received">Welcome to the hub!</div>
+                            </div>
+                            <div class="chat-input-area">
+                                <input type="text" id="commInput" placeholder="Type a message...">
+                                <button onclick="postCommunity()"><i class="fas fa-paper-plane"></i></button>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </section>
 
             <section id="life" class="page">
-                <div class="glass-card">
-                    <h2 class="section-title">Life & Journey</h2>
+                <div class="glass-card tilt-element">
+                    <h2 class="section-title">My Journey</h2>
                     <div class="timeline">
-                        <div class="timeline-item glass-box">
-                            <div class="icon-circle"><i class="fas fa-map-marker-alt"></i></div>
+                        <div class="timeline-item">
+                            <i class="fas fa-map-marker-alt icon"></i>
                             <h3>Location</h3>
-                            <p><strong>Country:</strong> Sri Lanka 🇱🇰</p>
-                            <p><strong>City:</strong> Avissawella</p>
+                            <p>Avissawella, Sri Lanka 🇱🇰</p>
                         </div>
-                        
-                        <div class="timeline-item glass-box">
-                            <div class="icon-circle"><i class="fas fa-plane"></i></div>
-                            <h3>Travel History</h3>
-                            <div class="tags">
-                                <span class="tag">Nuwara Eliya</span><span class="tag">Anuradhapura</span>
-                                <span class="tag">Polonnaruwa</span><span class="tag">Colombo</span>
-                                <span class="tag">Yapahuwa</span><span class="tag">Kataragama</span>
+                        <div class="timeline-item">
+                            <i class="fas fa-graduation-cap icon"></i>
+                            <h3>Education</h3>
+                            <p>R/Anura Maha Vidyalaya</p>
+                        </div>
+                        <div class="timeline-item">
+                            <i class="fas fa-file-alt icon"></i>
+                            <h3>O/L Results</h3>
+                            <div class="results-grid">
+                                <span>ICT: B</span><span>Maths: B</span><span>Science: C</span>
+                                <span>Sinhala: S</span><span>Buddhism: S</span><span>English: S</span>
+                                <span>Art: B</span><span>History: W</span><span>Geo: C</span>
                             </div>
                         </div>
-
-                        <div class="timeline-item glass-box">
-                            <div class="icon-circle"><i class="fas fa-file-alt"></i></div>
-                            <h3>O/L Examination Results</h3>
-                            <table class="result-table">
-                                <tr><td>ICT</td><td><span class="grade grade-b">B</span></td></tr>
-                                <tr><td>Mathematics</td><td><span class="grade grade-b">B</span></td></tr>
-                                <tr><td>Science</td><td><span class="grade grade-c">C</span></td></tr>
-                                <tr><td>Sinhala</td><td><span class="grade grade-s">S</span></td></tr>
-                                <tr><td>Buddhism</td><td><span class="grade grade-s">S</span></td></tr>
-                                <tr><td>History</td><td><span class="grade grade-w">W</span></td></tr>
-                                <tr><td>Art</td><td><span class="grade grade-b">B</span></td></tr>
-                                <tr><td>Geography</td><td><span class="grade grade-c">C</span></td></tr>
-                                <tr><td>English</td><td><span class="grade grade-s">S</span></td></tr>
-                            </table>
-                        </div>
                     </div>
-                </div>
-            </section>
-
-             <section id="news" class="page">
-                <div class="glass-card">
-                    <h2 class="section-title">AI News Feed 📰</h2>
-                    <div class="news-filters">
-                        <button class="filter-btn active" onclick="filterNews('all')">All</button>
-                        <button class="filter-btn" onclick="filterNews('country')">Country</button>
-                        <button class="filter-btn" onclick="filterNews('game')">Gaming</button>
-                        <button class="filter-btn" onclick="filterNews('funny')">Funny</button>
-                    </div>
-                    <div class="news-grid" id="newsGrid">
-                        </div>
-                </div>
-            </section>
-
-            <section id="community" class="page">
-                <div class="glass-card whatsapp-container">
-                    <div class="chat-header-wa"><div class="wa-info"><h3>Community Group</h3><p>Kasun, You...</p></div></div>
-                    <div class="chat-body-wa" id="communityBoard">
-                        <div class="wa-msg received"><div class="sender-name">Kasun (Admin)</div><div class="msg-text">Welcome!</div></div>
-                    </div>
-                    <div class="chat-footer-wa"><input type="text" id="communityInput" placeholder="Type a message..."><button onclick="postToCommunity()"><i class="fas fa-paper-plane"></i></button></div>
                 </div>
             </section>
 
         </main>
     </div>
 
-    <div class="ai-chat-icon" onclick="toggleAIChat()"><i class="fas fa-robot"></i></div>
-    <div class="ai-chat-box" id="aiChatBox">
-        <div class="ai-header">
-            <span>Kasun AI 🧠</span>
-            <span class="close-chat" onclick="toggleAIChat()">&times;</span>
-        </div>
-        <div class="ai-messages" id="aiMessages">
-            <div class="msg bot-msg">Haai! Ona deyak ahanna. (Ask me anything!)</div>
-        </div>
-        <div class="ai-input">
-            <input type="text" id="aiInput" placeholder="Type here..." onkeypress="handleEnter(event)">
-            <button id="sendBtn" onclick="askGeminiAI()"><i class="fas fa-paper-plane"></i></button>
-        </div>
-    </div>
-
-    <script type="importmap">
-      {
-        "imports": {
-          "@google/generative-ai": "https://esm.run/@google/generative-ai"
-        }
-      }
-    </script>
-
+    <script type="importmap">{"imports": {"@google/generative-ai": "https://esm.run/@google/generative-ai"}}</script>
     <script type="module" src="script.js"></script>
 </body>
 </html>
