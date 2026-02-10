@@ -34,31 +34,39 @@ document.addEventListener('mousemove', (e) => {
     });
 });
 
-// --- 2. COUNTERS (FIXED & ANIMATED) ---
+// --- 2. COUNTERS (FIXED - 150, 40, 5) ---
 window.addEventListener("load", function() {
-    // Hide Preloader
-    const preloader = document.getElementById("preloader");
-    preloader.style.opacity = '0';
-    setTimeout(() => preloader.style.display = "none", 500);
+    document.getElementById("preloader").style.display = "none";
     
-    // Start Counters
-    const counters = document.querySelectorAll('.counter');
-    counters.forEach(counter => {
-        counter.innerText = '0';
-        const target = +counter.getAttribute('data-target');
-        const duration = 2000; // Animation time in ms
-        const step = target / (duration / 20); // Calculate step size based on time
-        let current = 0;
-        const timer = setInterval(() => {
-            current += step;
-            if (current >= target) {
-                clearInterval(timer);
-                counter.innerText = target + "+";
-            } else {
-                counter.innerText = Math.ceil(current);
+    // Logic to animate numbers from 0 to target
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const counters = entry.target.querySelectorAll('.counter');
+                counters.forEach(counter => {
+                    counter.innerText = '0';
+                    const target = +counter.getAttribute('data-target');
+                    const duration = 2000; 
+                    const step = target / (duration / 20); 
+                    let current = 0;
+                    
+                    const timer = setInterval(() => {
+                        current += step;
+                        if (current >= target) {
+                            clearInterval(timer);
+                            counter.innerText = target + "+";
+                        } else {
+                            counter.innerText = Math.ceil(current);
+                        }
+                    }, 20);
+                });
+                observer.unobserve(entry.target);
             }
-        }, 20);
+        });
     });
+    
+    const statsSection = document.querySelector('.stats-row');
+    if(statsSection) observer.observe(statsSection);
 });
 
 // --- 3. AUTO TYPE SKILLS ---
@@ -72,12 +80,11 @@ function type() {
 }
 type();
 
-// --- 4. NEWS MAGAZINE (40 Items - Fixed Images) ---
+// --- 4. NEWS MAGAZINE (40 Items) ---
 const newsData = [];
 const categories = ['Country', 'Game', 'Tech', 'Funny', 'Girl', 'Men'];
 for(let j=1; j<=40; j++) {
     const cat = categories[j % categories.length];
-    // Use picsum.photos for reliable random images
     const imgUrl = `https://picsum.photos/300/200?random=${j}`; 
     newsData.push({
         id: j, tag: cat, title: `${cat} News: Major Update #${j} Revealed!`, img: imgUrl,
@@ -116,12 +123,12 @@ function openNewsModal(item) {
     document.getElementById('popupTag').innerText = item.tag;
     document.getElementById('popupTitle').innerText = item.title;
     document.getElementById('popupDate').innerText = item.date;
-    document.getElementById('popupDesc').innerText = item.desc + " Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+    document.getElementById('popupDesc').innerText = item.desc + " Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
     document.getElementById('newsModal').style.display = 'flex';
 }
 window.closeNewsModal = () => document.getElementById('newsModal').style.display = 'none';
 
-// --- 5. CONNECT HUB & AI ---
+// --- 5. CONNECT HUB & AI (AUTO FOCUS) ---
 window.switchConnect = function(tab) {
     document.getElementById('aiSection').style.display = (tab === 'ai') ? 'flex' : 'none';
     document.getElementById('communitySection').style.display = (tab === 'community') ? 'flex' : 'none';
@@ -136,13 +143,18 @@ window.askGeminiAI = async function() {
     const area = document.getElementById('aiMessages');
     const text = input.value.trim();
     if (!text) return;
+
     area.innerHTML += `<div class="msg user">${text}</div>`;
-    input.value = ""; area.scrollTop = area.scrollHeight;
+    input.value = "";
+    area.scrollTop = area.scrollHeight;
+
     try {
         const result = await chatSession.sendMessage(text);
         const response = await result.response;
         area.innerHTML += `<div class="msg bot">${response.text()}</div>`;
-    } catch (e) { area.innerHTML += `<div class="msg bot" style="color:red">Connecting...</div>`; }
+    } catch (e) {
+        area.innerHTML += `<div class="msg bot" style="color:red">Connecting...</div>`;
+    }
     area.scrollTop = area.scrollHeight;
 }
 
