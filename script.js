@@ -1,4 +1,4 @@
-// --- 1. MOUSE SCULPTING & TILT ---
+// --- 1. MOUSE SCULPTING ---
 const cursorBlob = document.querySelector('.cursor-blob');
 const cursorDot = document.querySelector('.cursor-dot');
 
@@ -10,7 +10,6 @@ document.addEventListener('mousemove', (e) => {
         cursorBlob.style.top = e.clientY + 'px';
     }, 100);
 
-    // Tilt Effect
     document.querySelectorAll('.tilt-element').forEach(card => {
         const rect = card.getBoundingClientRect();
         const x = e.clientX - rect.left;
@@ -27,61 +26,57 @@ document.addEventListener('mousemove', (e) => {
     });
 });
 
-// --- 2. COUNTERS (ANIMATED 150+, 40+, 5+) ---
+// --- 2. COUNTERS ---
 window.addEventListener("load", function() {
-    // Hide Preloader
-    const preloader = document.getElementById("preloader");
-    if(preloader) {
-        preloader.style.opacity = '0';
-        setTimeout(() => preloader.style.display = "none", 500);
-    }
-    
-    // Start Counters
-    const counters = document.querySelectorAll('.counter');
-    counters.forEach(counter => {
-        counter.innerText = '0';
-        const target = +counter.getAttribute('data-target');
-        const duration = 2000; 
-        const step = target / (duration / 20); 
-        let current = 0;
-        
-        const timer = setInterval(() => {
-            current += step;
-            if (current >= target) {
-                clearInterval(timer);
-                counter.innerText = target + "+";
-            } else {
-                counter.innerText = Math.ceil(current);
+    document.getElementById("preloader").style.display = "none";
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const counters = entry.target.querySelectorAll('.counter');
+                counters.forEach(counter => {
+                    counter.innerText = '0';
+                    const target = +counter.getAttribute('data-target');
+                    const duration = 2000; 
+                    const step = target / (duration / 20); 
+                    let current = 0;
+                    const timer = setInterval(() => {
+                        current += step;
+                        if (current >= target) {
+                            clearInterval(timer);
+                            counter.innerText = target + "+";
+                        } else {
+                            counter.innerText = Math.ceil(current);
+                        }
+                    }, 20);
+                });
+                observer.unobserve(entry.target);
             }
-        }, 20);
+        });
     });
+    const statsSection = document.querySelector('.stats-row');
+    if(statsSection) observer.observe(statsSection);
 });
 
 // --- 3. AUTO TYPE SKILLS ---
 const words = ["Video Editor", "Photographer", "AI Artist", "DJ / Remixer", "Social Media Manager"];
 let i = 0;
 function type() {
-    const textElement = document.querySelector('.typing-text');
-    if(textElement) {
-        let word = words[i % words.length];
-        textElement.textContent = word;
+    const el = document.querySelector('.typing-text');
+    if(el) {
+        el.textContent = words[i % words.length];
         i++;
         setTimeout(type, 2000);
     }
 }
 type();
 
-// --- 4. NEWS MAGAZINE (40 Items) ---
+// --- 4. NEWS MAGAZINE ---
 const newsData = [];
 const categories = ['Country', 'Game', 'Tech', 'Funny', 'Girl', 'Men'];
 for(let j=1; j<=40; j++) {
     const cat = categories[j % categories.length];
-    // Reliable Image Source
     const imgUrl = `https://picsum.photos/300/200?random=${j}`; 
-    newsData.push({
-        id: j, tag: cat, title: `${cat} Update: Trending Topic #${j}`, img: imgUrl,
-        desc: `This is a major update regarding ${cat}. It involves new trends, viral content, and future predictions for 2026. Stay tuned for more details!`, date: 'Today'
-    });
+    newsData.push({ id: j, tag: cat, title: `${cat} News Update #${j}`, img: imgUrl, desc: `Exclusive updates on ${cat} trends.`, date: 'Today' });
 }
 
 function renderNews(filter) {
@@ -115,7 +110,7 @@ function openNewsModal(item) {
 }
 window.closeNewsModal = () => document.getElementById('newsModal').style.display = 'none';
 
-// --- 5. CONNECT HUB & SMART CHATBOT (NO API KEY NEEDED) ---
+// --- 5. CONNECT HUB & SMART BOT (THE BRAIN) ---
 window.switchConnect = function(tab) {
     document.getElementById('aiSection').style.display = (tab === 'ai') ? 'flex' : 'none';
     document.getElementById('communitySection').style.display = (tab === 'community') ? 'flex' : 'none';
@@ -125,47 +120,50 @@ window.switchConnect = function(tab) {
     if(tab === 'community') setTimeout(() => document.getElementById('commInput').focus(), 100);
 }
 
-// SMART BOT LOGIC (100% Working Free AI)
-window.askGeminiAI = function() {
+// *** SMART BOT LOGIC ***
+window.askSmartBot = function() {
     const input = document.getElementById('aiInput');
     const area = document.getElementById('aiMessages');
     const text = input.value.toLowerCase().trim();
     if (!text) return;
 
-    // Show User Message
     area.innerHTML += `<div class="msg user">${input.value}</div>`;
     input.value = ""; 
     area.scrollTop = area.scrollHeight;
 
-    // Bot Thinking Delay
     setTimeout(() => {
-        let reply = "Mata therune na machan. 'Skills', 'Price', 'Contact' gana ahanna."; // Default
+        let reply = "I didn't quite get that. Try asking about 'Skills', 'Price', 'Services', or 'Contact'.";
 
-        // Smart Answers
-        if(text.includes("hi") || text.includes("hello") || text.includes("kohomada")) {
-            reply = "Haai! Mama Kasun AI. Oyaata monawada dana ganna one?";
-        } else if(text.includes("name") || text.includes("nama")) {
-            reply = "Mage nama Kasun Padma Kumara.";
-        } else if(text.includes("skill") || text.includes("wada") || text.includes("karanna puluwan")) {
-            reply = "Mata Video Editing, Photography, AI Art, saha DJ Remixing supiriyatama puluwan!";
-        } else if(text.includes("price") || text.includes("gana") || text.includes("budget")) {
-            reply = "Gana thiranaya wenne wada anuwa. 'Hire Me' button eka obala budget eka ewanna.";
-        } else if(text.includes("contact") || text.includes("number") || text.includes("phone")) {
-            reply = "WhatsApp: +94717647693";
-        } else if(text.includes("video")) {
-            reply = "Ow, mama Cinematic Video Editing karanawa.";
-        } else if(text.includes("photo")) {
-            reply = "Mama Wedding & Event Photography karanawa.";
-        } else if(text.includes("bye")) {
-            reply = "Ela, Passe set wemu! 👋";
-        }
+        // GREETINGS
+        if(text.match(/hi|hello|hey|ayubowan|good morning|moko|kohomada/)) reply = "Hello! I am Kasun AI. How can I help you? 😊";
+        
+        // IDENTITY
+        else if(text.match(/who|name|nama|kawuda|kasun/)) reply = "I am Kasun Padma Kumara, a Digital Creator, Video Editor & AI Artist.";
+        
+        // SERVICES / SKILLS
+        else if(text.match(/skill|work|do|job|wada|video|photo|edit|design|art|dj|music/)) reply = "I specialize in: \n🎥 Video Editing\n📸 Photography\n🤖 AI Art\n🎨 Graphic Design\n🎧 DJ Remixing";
+        
+        // PRICE / BUDGET
+        else if(text.match(/price|cost|budget|gana|money|salli|keeyada|rate|charge/)) reply = "Prices depend on the project scope. Please use the 'Hire Me' button to send your budget.";
+        
+        // CONTACT
+        else if(text.match(/contact|number|phone|whatsapp|email|call|address|location|koheda/)) reply = "📍 Based in Avissawella, Sri Lanka.\n📞 WhatsApp: +94717647693";
+        
+        // TOOLS
+        else if(text.match(/software|tool|app|pc|spec/)) reply = "I use Adobe Premiere Pro, After Effects, Photoshop, Lightroom, and various AI tools.";
+        
+        // FUN / PERSONAL
+        else if(text.match(/age|old|school|love|gf/)) reply = "That's a secret! 🤫 Let's focus on work.";
+        
+        // THANKS
+        else if(text.match(/thanks|thank|ela|jaya/)) reply = "You're welcome! Happy to help. 🚀";
 
         area.innerHTML += `<div class="msg bot">${reply}</div>`;
         area.scrollTop = area.scrollHeight;
-    }, 600);
+    }, 500);
 }
 
-// COMMUNITY CHAT
+// COMMUNITY
 window.postCommunity = function() {
     const input = document.getElementById('commInput');
     const board = document.getElementById('commMessages');
@@ -197,7 +195,7 @@ window.sendBookingToWhatsApp = () => {
     const srv = document.getElementById('serviceType').value;
     const bud = document.getElementById('clientBudget').value;
     const msg = document.getElementById('clientMessage').value;
-    if(!name) { alert("Please enter your name"); return; }
+    if(!name) { alert("Please enter name"); return; }
     window.open(`https://wa.me/+94717647693?text=Name:${name}%0AService:${srv}%0ABudget:${bud}%0ADetails:${msg}`, '_blank');
 }
 
@@ -209,7 +207,7 @@ window.toggleAuth = (t) => {
     if(t === 'signup') document.getElementById('signUpBtn').classList.add('active');
 }
 window.toggleTawkChat = function() { if(window.Tawk_API) window.Tawk_API.toggle(); else alert("Chat loading..."); }
-window.handleEnter = function(e) { if (e.key === 'Enter') window.askGeminiAI(); }
+window.handleEnter = function(e) { if (e.key === 'Enter') window.askSmartBot(); }
 window.switchTab = (t) => {
     document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
     document.getElementById(t+'Tab').style.display = 'block';
