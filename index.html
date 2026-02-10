@@ -16,56 +16,45 @@
     <div class="background-image"></div>
     <div class="overlay"></div>
 
-    <div id="newsModal" class="modal">
-        <div class="modal-content glass-card-simple news-popup">
-            <span class="close-btn" onclick="closeNewsModal()">&times;</span>
-            <div class="news-popup-content">
-                <img id="popupImg" src="">
-                <div class="news-text-area">
-                    <span id="popupTag" class="news-tag-popup"></span>
-                    <h2 id="popupTitle"></h2>
-                    <p id="popupDesc" class="news-full-text"></p>
-                </div>
-            </div>
-        </div>
+    <div id="topProfileIcon" onclick="showPage('profile', document.getElementById('navProfile'))">
+        <img id="topProfileImg" src="https://img.icons8.com/color/96/user.png" alt="Profile">
     </div>
 
     <div id="settingsModal" class="modal">
-        <div class="modal-content glass-card-simple settings-box">
+        <div class="modal-content glass-card-simple settings-box tilt-element">
             <span class="close-btn" onclick="closeSettings()">&times;</span>
-            <div class="settings-tabs-container">
-                <button class="tab-btn active" onclick="switchTab('auth')">Account</button>
-                <button class="tab-btn" onclick="switchTab('theme')">Themes</button>
-            </div>
-            <div id="authTab" class="tab-content active">
-                <div id="loggedOutUI">
-                    <button type="button" class="social-btn google" onclick="googleLogin()"><img src="https://img.icons8.com/color/48/google-logo.png"> Login with Google</button>
-                </div>
-                <div id="loggedInUI" style="display: none; text-align: center;">
-                    <img id="userAvatar" src="" style="width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--primary); object-fit:cover;">
-                    <h3 id="userNameDisplay" style="color:white; margin-top:10px;">User</h3>
-                    <button class="btn-primary full-width" onclick="logoutUser()" style="margin-top:20px;">Logout</button>
-                </div>
-            </div>
-            <div id="themeTab" class="tab-content" style="display: none;">
-                <div class="theme-grid">
-                    <div class="theme-card dark selected" onclick="setTheme('dark')"><span>Dark</span></div>
-                    <div class="theme-card blue" onclick="setTheme('blue')"><span>Blue</span></div>
-                    <div class="theme-card pink" onclick="setTheme('pink')"><span>Pink</span></div>
-                </div>
+            <h3 style="margin-bottom:15px; color:white; text-align:center;">Select Theme</h3>
+            <div class="theme-grid">
+                <div class="theme-card dark selected" onclick="setTheme('dark')"><div class="color-dot" style="background:#000;"></div><span>Dark</span></div>
+                <div class="theme-card blue" onclick="setTheme('blue')"><div class="color-dot" style="background:#0ea5e9;"></div><span>Blue</span></div>
+                <div class="theme-card white" onclick="setTheme('white')"><div class="color-dot" style="background:#fff;"></div><span style="color:#333;">White</span></div>
+                <div class="theme-card pink" onclick="setTheme('pink')"><div class="color-dot" style="background:#ff007f;"></div><span>Pink</span></div>
+                <div class="theme-card yellow" onclick="setTheme('yellow')"><div class="color-dot" style="background:#ffd700;"></div><span>Yellow</span></div>
+                <div class="theme-card green" onclick="setTheme('green')"><div class="color-dot" style="background:#00ff00;"></div><span>Green</span></div>
             </div>
         </div>
     </div>
 
     <div id="bookingModal" class="modal">
-        <div class="modal-content glass-card-simple" style="width: 500px;">
+        <div class="modal-content glass-card-simple tilt-element" style="width: 500px;">
             <span class="close-btn" onclick="closeBooking()">&times;</span>
             <h2 style="text-align:center; color:var(--primary);">Start Project 🚀</h2>
-            <div class="booking-form">
+            <div class="booking-grid-layout">
                 <div class="input-group"><i class="fas fa-user"></i><input type="text" id="clientName" placeholder="Your Name"></div>
-                <textarea id="clientMessage" placeholder="Project Details..." rows="3"></textarea>
-                <button class="btn-primary full-width" onclick="sendBookingToWhatsApp()">Send via WhatsApp <i class="fab fa-whatsapp"></i></button>
+                <div class="input-group"><i class="fas fa-briefcase"></i>
+                    <select id="serviceType" style="background: transparent; color: white; border: none; width: 100%;">
+                        <option value="Videography">Videography</option>
+                        <option value="Photography">Photography</option>
+                        <option value="Video Editing">Video Editing</option>
+                        <option value="Class Poster">Class Poster</option>
+                        <option value="Banner Design">Banner Design</option>
+                        <option value="AI Art">AI Art</option>
+                    </select>
+                </div>
+                <div class="input-group"><i class="fas fa-coins"></i><input type="text" id="clientBudget" placeholder="Budget (LKR)"></div>
+                <div class="input-group textarea-group"><textarea id="clientMessage" placeholder="Project Idea..." rows="3" style="background: transparent; color: white; border: none; width: 100%;"></textarea></div>
             </div>
+            <button class="btn-primary full-width" onclick="sendBookingToWhatsApp()">Send via WhatsApp <i class="fab fa-whatsapp"></i></button>
         </div>
     </div>
 
@@ -78,67 +67,40 @@
                 <li class="nav-item" onclick="showPage('portfolio', this)"><i class="fas fa-images"></i><span class="tooltip">Gallery</span></li>
                 <li class="nav-item" onclick="showPage('news', this)"><i class="fas fa-globe"></i><span class="tooltip">News</span></li>
                 <li class="nav-item" onclick="showPage('life', this)"><i class="fas fa-graduation-cap"></i><span class="tooltip">Journey</span></li>
-                <li class="nav-item" onclick="toggleTawkChat()"><i class="fas fa-comment-dots"></i><span class="tooltip">Chat</span></li>
+                <li class="nav-item" id="navProfile" onclick="showPage('profile', this)"><i class="fas fa-user-circle"></i><span class="tooltip">Profile</span></li>
+                <li class="nav-item" onclick="toggleTawkChat()"><i class="fas fa-comment-dots"></i><span class="tooltip">Live Chat</span></li>
             </ul>
             <div class="settings" onclick="openSettings()"><i class="fas fa-cog"></i></div>
         </nav>
 
         <main class="content-area">
             <section id="home" class="page active-page">
-                <div class="glass-card hero-card tilt-element">
-                    <div class="hero-content">
-                        <div class="profile-glow"><img src="images/profile.jpg" alt="Profile"></div>
-                        <h1>I'm <span class="neon-text">Kasun</span></h1>
-                        <h2 class="typing-container">I am a <span class="typing-text"></span></h2>
-                        <div class="stats-row" id="counterSection">
-                            <div class="stat-item"><h3 class="counter" data-target="150">0</h3><p>Projects</p></div>
-                            <div class="stat-item"><h3 class="counter" data-target="40">0</h3><p>Clients</p></div>
-                            <div class="stat-item"><h3 class="counter" data-target="5">0</h3><p>Years</p></div>
-                        </div>
-                        <div class="btn-row">
-                            <button class="btn-primary" onclick="openBooking()">Hire Me</button>
-                            <a href="https://wa.me/+94717647693" target="_blank" class="btn-secondary"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-                            <a href="https://facebook.com/kasunlks" target="_blank" class="btn-secondary"><i class="fab fa-facebook-f"></i> Facebook</a>
-                        </div>
+                <div class="hero-content">
+                    <div class="profile-glow"><img src="images/profile.jpg" alt="Profile"></div>
+                    <h1>I'm <span class="neon-text">Kasun</span></h1>
+                    <h2 class="typing-container">I am a <span class="typing-text"></span></h2>
+                    <div class="stats-row" id="counterSection">
+                        <div class="stat-item"><h3 class="counter" data-target="150">0</h3><p>Projects</p></div>
+                        <div class="stat-item"><h3 class="counter" data-target="40">0</h3><p>Clients</p></div>
+                        <div class="stat-item"><h3 class="counter" data-target="5">0</h3><p>Years</p></div>
+                    </div>
+                    <div class="btn-row">
+                        <button class="btn-primary" onclick="openBooking()">Hire Me</button>
+                        <a href="https://wa.me/+94717647693" target="_blank" class="btn-secondary"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                        <a href="https://facebook.com/kasunlks" target="_blank" class="btn-secondary"><i class="fab fa-facebook-f"></i> Facebook</a>
                     </div>
                 </div>
             </section>
 
             <section id="skills" class="page">
-                <div class="glass-card tilt-element">
+                <div class="glass-card">
                     <h2 class="section-title">Professional Skills</h2>
                     <div class="skills-wrapper-vertical">
                         <div class="skill-box"><span>Videography</span><div class="bar"><div class="fill" style="width:95%"></div></div><span class="perc">95%</span></div>
                         <div class="skill-box"><span>Photography</span><div class="bar"><div class="fill" style="width:90%"></div></div><span class="perc">90%</span></div>
                         <div class="skill-box"><span>Video Editing</span><div class="bar"><div class="fill" style="width:85%"></div></div><span class="perc">85%</span></div>
-                        <div class="skill-box"><span>AI Image & Video Creator</span><div class="bar"><div class="fill" style="width:80%"></div></div><span class="perc">80%</span></div>
-                        <div class="skill-box"><span>Graphic Designer</span><div class="bar"><div class="fill" style="width:90%"></div></div><span class="perc">90%</span></div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="news" class="page">
-                <div class="glass-card">
-                    <h2 class="section-title">AI Magazine 📰</h2>
-                    <div class="magazine-grid" id="newsGrid"></div>
-                </div>
-            </section>
-
-            <section id="life" class="page">
-                <div class="glass-card tilt-element">
-                    <h2 class="section-title">My Journey 🚀</h2>
-                    <div class="timeline">
-                        <div class="timeline-item"><i class="fas fa-map-marker-alt icon"></i><h3>Location</h3><p>Living in Avissawella, Sri Lanka 🇱🇰</p></div>
-                        <div class="timeline-item"><i class="fas fa-graduation-cap icon"></i><h3>Education</h3><p>Attended <b>R/Anura Maha Vidyalaya</b> for 13 years.</p></div>
-                        <div class="timeline-item">
-                            <i class="fas fa-file-alt icon"></i><h3>O/L Results</h3>
-                            <table class="result-table">
-                                <tr><td>ICT</td><td class="grade">B</td></tr><tr><td>Maths</td><td class="grade">B</td></tr>
-                                <tr><td>Science</td><td class="grade">C</td></tr><tr><td>Art</td><td class="grade">B</td></tr>
-                                <tr><td>History</td><td class="grade">W</td></tr>
-                            </table>
-                        </div>
-                        <div class="timeline-item"><i class="fas fa-plane icon"></i><h3>Travel History</h3><div class="travel-tags"><span class="tag">Nuwara Eliya</span><span class="tag">Anuradhapura</span><span class="tag">Polonnaruwa</span><span class="tag">Colombo</span><span class="tag">Yapahuwa</span><span class="tag">Kataragama</span></div></div>
+                        <div class="skill-box"><span>AI Creation</span><div class="bar"><div class="fill" style="width:80%"></div></div><span class="perc">80%</span></div>
+                        <div class="skill-box"><span>Designing</span><div class="bar"><div class="fill" style="width:90%"></div></div><span class="perc">90%</span></div>
                     </div>
                 </div>
             </section>
@@ -147,8 +109,78 @@
                 <div class="glass-card">
                     <h2 class="section-title">Creative Gallery</h2>
                     <div class="gallery-grid">
-                        <div class="gallery-item tilt-element"><img src="images/work1.jpg"><div class="tag">Photography</div></div>
-                        <div class="gallery-item tilt-element"><img src="images/work2.jpg"><div class="tag">Videography</div></div>
+                        <div class="gallery-item"><img src="images/work1.jpg"><div class="tag">Photography</div></div>
+                        <div class="gallery-item"><img src="images/work2.jpg"><div class="tag">Videography</div></div>
+                        <div class="gallery-item"><img src="images/work3.jpg"><div class="tag">AI Creation</div></div>
+                        <div class="gallery-item"><img src="images/work4.jpg"><div class="tag">Graphic Design</div></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="life" class="page">
+                <div class="glass-card tilt-element">
+                    <h2 class="section-title">My Journey 🚀</h2>
+                    <div class="timeline">
+                        <div class="timeline-item"><i class="fas fa-graduation-cap icon"></i><h3>R/Anura Maha Vidyalaya</h3><p>Studied for 13 years.</p></div>
+                        <div class="timeline-item">
+                            <i class="fas fa-file-alt icon"></i><h3>O/L Results</h3>
+                            <div class="results-mini-box">
+                                <table class="result-table">
+                                    <tr><td>ICT</td><td class="grade">B</td></tr><tr><td>Maths</td><td class="grade">B</td></tr><tr><td>Science</td><td class="grade">C</td></tr>
+                                    <tr><td>Sinhala</td><td class="grade">S</td></tr><tr><td>Art</td><td class="grade">B</td></tr><tr><td>English</td><td class="grade">S</td></tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="timeline-item"><i class="fas fa-plane icon"></i><h3>Travels</h3><div class="travel-tags"><span class="tag">Nuwara Eliya</span><span class="tag">Colombo</span><span class="tag">Anuradhapura</span><span class="tag">Kataragama</span></div></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="profile" class="page">
+                <div class="glass-card" style="max-width: 600px; margin: 0 auto;">
+                    <h2 class="section-title">User Account</h2>
+                    <div id="profileLoggedOut" style="text-align: center;">
+                        <div class="auth-toggle-box" style="display:flex; margin-bottom: 20px; background: rgba(255,255,255,0.05); border-radius: 25px; padding: 5px;">
+                            <div class="auth-btn active" id="btnSignIn" onclick="toggleAuthPage('signin')" style="flex:1; cursor:pointer; padding: 10px; border-radius: 20px;">Sign In</div>
+                            <div class="auth-btn" id="btnSignUp" onclick="toggleAuthPage('signup')" style="flex:1; cursor:pointer; padding: 10px; border-radius: 20px;">Sign Up</div>
+                        </div>
+                        <div id="emailForm">
+                            <div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="authEmail" placeholder="Email Address"></div>
+                            <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="authPass" placeholder="Password"></div>
+                            <button class="btn-primary full-width" onclick="handleEmailAuth()">Confirm</button>
+                        </div>
+                        <p style="margin: 15px 0;">OR Login with</p>
+                        <div class="social-login" style="display:flex; gap:10px;">
+                            <button class="social-btn google" onclick="googleLogin()" style="flex:1;"><img src="https://img.icons8.com/color/48/google-logo.png" style="width:20px;"> Google</button>
+                            <button class="social-btn facebook" onclick="facebookLogin()" style="flex:1;"><img src="https://img.icons8.com/color/48/facebook-new.png" style="width:20px;"> Facebook</button>
+                        </div>
+                    </div>
+
+                    <div id="profileLoggedIn" style="display:none;">
+                        <div style="text-align:center; margin-bottom: 20px;">
+                            <img id="editProfilePic" src="" style="width:100px; height:100px; border-radius:50%; border:3px solid var(--primary); object-fit:cover;">
+                            <p style="font-size:0.8rem; color:#aaa; margin-top:5px;">Select Avatar Below</p>
+                            <div class="avatar-list" style="display:flex; gap:10px; justify-content:center;">
+                                <img src="https://img.icons8.com/color/96/user-male-circle.png" onclick="setAvatar(this.src)" style="width:35px; cursor:pointer;">
+                                <img src="https://img.icons8.com/color/96/user-female-circle.png" onclick="setAvatar(this.src)" style="width:35px; cursor:pointer;">
+                                <img src="https://img.icons8.com/fluency/96/hacker.png" onclick="setAvatar(this.src)" style="width:35px; cursor:pointer;">
+                            </div>
+                        </div>
+                        <div class="input-grid">
+                            <div class="input-group"><i class="fas fa-user"></i><input type="text" id="profName" placeholder="Full Name"></div>
+                            <div class="input-group"><i class="fas fa-phone"></i><input type="text" id="profPhone" placeholder="Phone Number"></div>
+                            <div class="input-group"><i class="fas fa-city"></i><input type="text" id="profCity" placeholder="City"></div>
+                            <div class="input-group"><i class="fas fa-globe"></i><input type="text" id="profCountry" placeholder="Country"></div>
+                            <div class="input-group">
+                                <i class="fas fa-venus-mars"></i>
+                                <select id="profGender" style="background:transparent; border:none; color:white; width:100%;">
+                                    <option value="Male" style="color:black;">Male</option>
+                                    <option value="Female" style="color:black;">Female</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button class="btn-primary full-width" onclick="saveUserProfile()">Save Details <i class="fas fa-save"></i></button>
+                        <button class="btn-secondary full-width" onclick="logoutUser()" style="margin-top:10px; color:red; border-color:red;">Logout</button>
                     </div>
                 </div>
             </section>
