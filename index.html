@@ -8,43 +8,98 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-
-    <div id="preloader"><div class="loader-circle"></div><div class="loader-text">KASUN...</div></div>
+<body class="theme-blue"> <div id="preloader"><div class="loader-circle"></div><div class="loader-text">KASUN...</div></div>
     <div class="cursor"></div>
     <div class="cursor2"></div>
 
     <div class="background-image"></div>
     <div class="overlay"></div>
 
-    <div id="loginModal" class="modal">
-        <div class="modal-content glass-card-simple">
-            <span class="close-btn" onclick="closeLogin()">&times;</span>
-            <h2>Welcome</h2>
-            <input type="text" id="usernameInput" placeholder="Your Name">
-            <button class="btn-primary" onclick="userLogin()">Enter</button>
+    <div id="settingsModal" class="modal">
+        <div class="modal-content glass-card-simple settings-box">
+            <span class="close-btn" onclick="closeSettings()">&times;</span>
+            
+            <div class="settings-tabs">
+                <button class="tab-btn active" onclick="switchTab('auth')">Account</button>
+                <button class="tab-btn" onclick="switchTab('theme')">Themes</button>
+            </div>
+
+            <div id="authTab" class="tab-content active">
+                <div class="auth-toggle">
+                    <span id="signInBtn" class="active" onclick="toggleAuth('signin')">Sign In</span>
+                    <span id="signUpBtn" onclick="toggleAuth('signup')">Sign Up</span>
+                </div>
+
+                <form id="signInForm" class="auth-form">
+                    <input type="text" placeholder="Username or Email">
+                    <input type="password" placeholder="Password">
+                    <button type="button" class="btn-primary full-width" onclick="alert('Logged in!')">Sign In</button>
+                    <div class="social-login">
+                        <button type="button" class="social-btn google"><i class="fab fa-google"></i> Google</button>
+                        <button type="button" class="social-btn facebook"><i class="fab fa-facebook-f"></i> Facebook</button>
+                    </div>
+                </form>
+
+                <form id="signUpForm" class="auth-form" style="display: none;">
+                    <input type="text" placeholder="Full Name">
+                    <input type="email" placeholder="Email Address">
+                    <input type="password" placeholder="Password">
+                    <input type="password" placeholder="Confirm Password">
+                    <button type="button" class="btn-primary full-width" onclick="alert('Account Created!')">Sign Up</button>
+                    <div class="social-login">
+                        <button type="button" class="social-btn google"><i class="fab fa-google"></i> Google</button>
+                        <button type="button" class="social-btn facebook"><i class="fab fa-facebook-f"></i> Facebook</button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="themeTab" class="tab-content" style="display: none;">
+                <h3>Choose Appearance</h3>
+                <div class="theme-options">
+                    <div class="theme-card blue selected" onclick="setTheme('blue')">
+                        <div class="color-preview" style="background: #0ea5e9;"></div>
+                        <span>Blue (Default)</span>
+                    </div>
+                    <div class="theme-card dark" onclick="setTheme('dark')">
+                        <div class="color-preview" style="background: #000;"></div>
+                        <span>Dark Mode</span>
+                    </div>
+                    <div class="theme-card white" onclick="setTheme('white')">
+                        <div class="color-preview" style="background: #fff;"></div>
+                        <span>White Mode</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-     <div id="bookingModal" class="modal">
-        <div class="modal-content glass-card-simple" style="width: 400px; text-align: left;">
+    <div id="bookingModal" class="modal">
+        <div class="modal-content glass-card-simple" style="width: 450px; text-align: left;">
             <span class="close-btn" onclick="closeBooking()">&times;</span>
-            <h2 style="text-align: center; color: #0ea5e9;">Start a Project 🚀</h2>
-            <p style="text-align: center; margin-bottom: 20px; color: #ccc;">Tell me about your project.</p>
+            <h2 style="text-align: center; color: var(--primary-color);">Start a Project 🚀</h2>
+            <p style="text-align: center; margin-bottom: 20px; color: var(--text-color);">Tell me about your project.</p>
+            
             <label>Your Name:</label>
             <input type="text" id="clientName" placeholder="Enter your name">
+            
             <label>Service Type:</label>
             <select id="serviceType">
-                <option value="Video Editing">Video Editing</option>
+                <option value="Videography">Videography</option>
                 <option value="Photography">Photography</option>
-                <option value="AI Art">AI Art Generation</option>
-                <option value="DJ Remix">DJ Remixing</option>
+                <option value="Video Editing">Video Editing</option>
+                <option value="AI Creation">AI Image/Video Creation</option>
+                <option value="Social Media">Social Media Post</option>
+                <option value="Video Ad">Video Ad Creation</option>
+                <option value="DJ Remix">DJ Remix Creation</option>
             </select>
+
             <label>Your Budget (LKR):</label>
             <input type="text" id="clientBudget" placeholder="Ex: 5000">
+
             <label>Details:</label>
             <textarea id="clientMessage" placeholder="Describe what you want..."></textarea>
-            <button class="btn-primary" onclick="sendBookingToWhatsApp()" style="width: 100%; margin-top: 20px; background: #22c55e;">Send via WhatsApp <i class="fab fa-whatsapp"></i></button>
+
+            <button class="btn-primary" onclick="sendBookingToWhatsApp()" style="width: 100%; margin-top: 20px;">Send via WhatsApp <i class="fab fa-whatsapp"></i></button>
         </div>
     </div>
 
@@ -63,7 +118,7 @@
                     <li class="nav-item" onclick="toggleTawkChat()"><i class="fas fa-comment-dots"></i><span class="tooltip">Chat Me</span></li>
                 </ul>
             </div>
-            <div class="settings" onclick="openLogin()"><i class="fas fa-cog"></i></div>
+            <div class="settings" onclick="openSettings()"><i class="fas fa-cog"></i></div>
         </nav>
 
         <main class="content-area">
@@ -81,7 +136,7 @@
                     </div>
                     
                     <div class="btn-group">
-                        <button class="btn-primary" onclick="openBooking()" style="background: #22c55e; border: none;">Hire Me / Booking</button>
+                        <button class="btn-primary" onclick="openBooking()" style="background: #22c55e;">Hire Me / Booking</button>
                         <a href="https://wa.me/+94717647693" target="_blank" class="btn-secondary"><i class="fab fa-whatsapp"></i> WhatsApp</a>
                         <a href="https://www.facebook.com/kasunlks" target="_blank" class="btn-secondary"><i class="fab fa-facebook"></i> Facebook</a>
                     </div>
@@ -101,12 +156,24 @@
                             <div class="progress-bar"><div class="fill" style="width: 90%"></div></div>
                         </div>
                         <div class="skill-item">
-                            <div class="skill-info"><span>Video Editing</span><span>85%</span></div>
+                            <div class="skill-info"><span>Video & Photo Editing</span><span>85%</span></div>
                             <div class="progress-bar"><div class="fill" style="width: 85%"></div></div>
                         </div>
                         <div class="skill-item">
-                            <div class="skill-info"><span>AI Art</span><span>80%</span></div>
+                            <div class="skill-info"><span>AI Image/Video Create</span><span>80%</span></div>
                             <div class="progress-bar"><div class="fill" style="width: 80%"></div></div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info"><span>Social Media Post Create</span><span>90%</span></div>
+                            <div class="progress-bar"><div class="fill" style="width: 90%"></div></div>
+                        </div>
+                         <div class="skill-item">
+                            <div class="skill-info"><span>Video Ad Create</span><span>85%</span></div>
+                            <div class="progress-bar"><div class="fill" style="width: 85%"></div></div>
+                        </div>
+                         <div class="skill-item">
+                            <div class="skill-info"><span>DJ Remix Create</span><span>75%</span></div>
+                            <div class="progress-bar"><div class="fill" style="width: 75%"></div></div>
                         </div>
                     </div>
                 </div>
@@ -116,26 +183,10 @@
                 <div class="glass-card">
                     <h2 class="section-title">My Creative Gallery</h2>
                     <div class="gallery-grid">
-                        <div class="gallery-item">
-                            <img src="images/work1.jpg" alt="Work 1">
-                            <div class="category-tag">Photography</div>
-                            <div class="overlay-card"><h3>Nature Clicks</h3></div>
-                        </div>
-                        <div class="gallery-item">
-                            <img src="images/work2.jpg" alt="Work 2">
-                            <div class="category-tag">Video Edit</div>
-                            <div class="overlay-card"><h3>Cinematic</h3></div>
-                        </div>
-                        <div class="gallery-item">
-                            <img src="images/work3.jpg" alt="Work 3">
-                            <div class="category-tag">AI Art</div>
-                            <div class="overlay-card"><h3>Future Tech</h3></div>
-                        </div>
-                        <div class="gallery-item">
-                            <img src="images/work4.jpg" alt="Work 4">
-                            <div class="category-tag">DJ Remix</div>
-                            <div class="overlay-card"><h3>Party Mix</h3></div>
-                        </div>
+                        <div class="gallery-item"><img src="images/work1.jpg" alt="Work"><div class="category-tag">Photography</div></div>
+                        <div class="gallery-item"><img src="images/work2.jpg" alt="Work"><div class="category-tag">Video Edit</div></div>
+                        <div class="gallery-item"><img src="images/work3.jpg" alt="Work"><div class="category-tag">AI Art</div></div>
+                        <div class="gallery-item"><img src="images/work4.jpg" alt="Work"><div class="category-tag">DJ Remix</div></div>
                     </div>
                 </div>
             </section>
@@ -146,15 +197,9 @@
                     <div class="timeline">
                         <div class="timeline-item glass-box">
                             <div class="icon-circle"><i class="fas fa-map-marker-alt"></i></div>
-                            <h3>Location Details</h3>
+                            <h3>Location</h3>
                             <p><strong>Country:</strong> Sri Lanka 🇱🇰</p>
                             <p><strong>City:</strong> Avissawella</p>
-                        </div>
-
-                        <div class="timeline-item glass-box">
-                            <div class="icon-circle"><i class="fas fa-graduation-cap"></i></div>
-                            <h3>Education</h3>
-                            <h4>R/Anura Maha Vidyalaya (13 Years)</h4>
                         </div>
                         
                         <div class="timeline-item glass-box">
@@ -172,19 +217,6 @@
                                 <tr><td>English</td><td><span class="grade grade-s">S</span></td></tr>
                             </table>
                         </div>
-
-                        <div class="timeline-item glass-box">
-                            <div class="icon-circle"><i class="fas fa-plane"></i></div>
-                            <h3>Travel History</h3>
-                            <div class="tags">
-                                <span class="tag">Nuwara Eliya</span>
-                                <span class="tag">Anuradhapura</span>
-                                <span class="tag">Polonnaruwa</span>
-                                <span class="tag">Colombo</span>
-                                <span class="tag">Yapahuwa</span>
-                                <span class="tag">Kataragama</span>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </section>
@@ -192,13 +224,12 @@
             <section id="community" class="page">
                 <div class="glass-card whatsapp-container">
                     <div class="chat-header-wa">
-                        <div class="wa-profile"><i class="fas fa-users"></i></div>
                         <div class="wa-info"><h3>Community Group</h3><p>Kasun, You, +50 others...</p></div>
                     </div>
                     <div class="chat-body-wa" id="communityBoard">
                         <div class="wa-msg received">
                             <div class="sender-name">Kasun (Admin)</div>
-                            <div class="msg-text">Welcome to our community! Share your ideas here.</div>
+                            <div class="msg-text">Welcome to the community!</div>
                             <div class="msg-time">10:00 AM</div>
                         </div>
                     </div>
@@ -219,7 +250,7 @@
             <span class="close-chat" onclick="toggleAIChat()">&times;</span>
         </div>
         <div class="ai-messages" id="aiMessages">
-            <div class="msg bot-msg">Haai! Mama Kasun AI. Oyaata ona deyak Singlish walin ahanna.</div>
+            <div class="msg bot-msg">Haai! Mama Kasun AI. Ona deyak ahanna.</div>
         </div>
         <div class="ai-input">
             <input type="text" id="aiInput" placeholder="Type here..." onkeypress="handleEnter(event)">
@@ -237,14 +268,6 @@
     s1.setAttribute('crossorigin','*');
     s0.parentNode.insertBefore(s1,s0);
     })();
-    </script>
-
-    <script type="importmap">
-      {
-        "imports": {
-          "@google/generative-ai": "https://esm.run/@google/generative-ai"
-        }
-      }
     </script>
 
     <script type="module" src="script.js"></script>
