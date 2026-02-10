@@ -169,7 +169,8 @@
                                 <span><i class="fas fa-users"></i> Global Community</span>
                             </div>
                             <div class="chat-messages" id="commMessages" style="background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');">
-                                </div>
+                                <div class="msg received">Welcome! Please login to chat.</div>
+                            </div>
                             <div class="chat-input-area">
                                 <input type="text" id="commInput" placeholder="Type a message..." onkeypress="handleCommEnter(event)">
                                 <button id="commSendBtn" onclick="postCommunity()"><i class="fas fa-paper-plane"></i></button>
@@ -180,17 +181,41 @@
             </section>
 
             <section id="profile" class="page">
-                <div class="glass-card" style="display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                <div class="glass-card" style="display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative;">
+                    
+                    <span class="close-btn" onclick="showPage('home', document.querySelector('.nav-item.active'))" style="position:absolute; top:20px; right:20px;">&times;</span>
+
                     <h2 class="section-title">My Profile</h2>
                     
                     <div id="profileLoginView" style="text-align:center; width:100%; max-width:400px;">
-                        <p style="margin-bottom:20px; color:#ccc;">Login to manage your profile and join the chat.</p>
-                        <button class="social-btn google" onclick="googleLogin()" style="width:100%; justify-content:center; margin-bottom:10px; background:white; color:black;">
-                            <img src="https://img.icons8.com/color/48/google-logo.png" style="width:20px;"> Login with Google
-                        </button>
-                        <button class="social-btn facebook" onclick="facebookLogin()" style="width:100%; justify-content:center; background:#4267B2; color:white;">
-                            <img src="https://img.icons8.com/color/48/facebook-new.png" style="width:20px;"> Login with Facebook
-                        </button>
+                        
+                        <div class="auth-toggle-box" style="margin-bottom:20px;">
+                            <div class="auth-toggle-btn active" id="btnSignIn" onclick="toggleProfileAuth('signin')">Sign In</div>
+                            <div class="auth-toggle-btn" id="btnSignUp" onclick="toggleProfileAuth('signup')">Sign Up</div>
+                        </div>
+
+                        <div id="emailAuthForm">
+                            <div class="input-group">
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" id="emailInput" placeholder="Email Address">
+                            </div>
+                            <div class="input-group">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="passInput" placeholder="Password">
+                            </div>
+                            <button class="btn-primary full-width" id="actionBtn" onclick="handleEmailAuth()">Login</button>
+                        </div>
+
+                        <p style="margin:20px 0; color:#aaa;">OR Login with</p>
+
+                        <div class="social-login" style="margin-top:0;">
+                            <button class="social-btn google" onclick="googleLogin()">
+                                <img src="https://img.icons8.com/color/48/google-logo.png" style="width:20px;"> Google
+                            </button>
+                            <button class="social-btn facebook" onclick="facebookLogin()">
+                                <img src="https://img.icons8.com/color/48/facebook-new.png" style="width:20px;"> Facebook
+                            </button>
+                        </div>
                     </div>
 
                     <div id="profileEditView" style="display:none; width:100%; max-width:500px; text-align:center;">
