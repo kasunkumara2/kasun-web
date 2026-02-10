@@ -10,6 +10,11 @@
 </head>
 <body class="theme-dark">
 
+    <div id="preloader">
+        <div class="loader-circle"></div>
+        <div class="loader-text" style="margin-top: 20px; color: var(--primary); font-weight: bold;">LOADING...</div>
+    </div>
+
     <div class="cursor-blob"></div>
     <div class="cursor-dot"></div>
 
@@ -47,18 +52,12 @@
                 </div>
                 
                 <form id="signInForm" class="auth-form">
-                    <div class="input-group">
-                        <i class="fas fa-envelope"></i>
-                        <input type="text" placeholder="Email or Username">
-                    </div>
-                    <div class="input-group">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" placeholder="Password">
-                    </div>
+                    <div class="input-group"><i class="fas fa-envelope"></i><input type="text" placeholder="Email or Username"></div>
+                    <div class="input-group"><i class="fas fa-lock"></i><input type="password" placeholder="Password"></div>
                     <button type="button" class="btn-primary full-width">Login</button>
                     <div class="social-login">
-                        <button type="button" class="social-btn google"><i class="fab fa-google"></i> Google</button>
-                        <button type="button" class="social-btn facebook"><i class="fab fa-facebook-f"></i> Facebook</button>
+                        <button type="button" class="social-btn google"><i class="fab fa-google"></i></button>
+                        <button type="button" class="social-btn facebook"><i class="fab fa-facebook-f"></i></button>
                     </div>
                 </form>
 
@@ -73,15 +72,9 @@
             <div id="themeTab" class="tab-content" style="display: none;">
                 <h3>Interface Theme</h3>
                 <div class="theme-options">
-                    <div class="theme-card dark selected" onclick="setTheme('dark')">
-                        <div class="color-preview" style="background:#000;"></div><span>Dark</span>
-                    </div>
-                    <div class="theme-card blue" onclick="setTheme('blue')">
-                        <div class="color-preview" style="background:#0ea5e9;"></div><span>Blue</span>
-                    </div>
-                    <div class="theme-card white" onclick="setTheme('white')">
-                        <div class="color-preview" style="background:#fff;"></div><span style="color:#333;">White</span>
-                    </div>
+                    <div class="theme-card dark selected" onclick="setTheme('dark')"><div class="color-preview" style="background:#000;"></div><span>Dark</span></div>
+                    <div class="theme-card blue" onclick="setTheme('blue')"><div class="color-preview" style="background:#0ea5e9;"></div><span>Blue</span></div>
+                    <div class="theme-card white" onclick="setTheme('white')"><div class="color-preview" style="background:#fff;"></div><span style="color:#333;">White</span></div>
                 </div>
             </div>
         </div>
@@ -113,7 +106,6 @@
     <div class="container">
         <nav class="sidebar">
             <div class="logo"><i class="fas fa-camera"></i></div>
-            
             <div class="nav-line-container">
                 <div class="nav-line"></div>
                 <ul class="nav-links">
@@ -125,7 +117,6 @@
                     <li class="nav-item" onclick="toggleTawkChat()"><i class="fas fa-comment-dots"></i><span class="tooltip">Live Chat</span></li>
                 </ul>
             </div>
-
             <div class="settings" onclick="openSettings()"><i class="fas fa-cog"></i></div>
         </nav>
 
@@ -138,7 +129,7 @@
                         <h1>I'm <span class="neon-text">Kasun</span></h1>
                         <h2 class="typing-container">I am a <span class="typing-text"></span></h2>
                         
-                        <div class="stats-row" id="counterSection">
+                        <div class="stats-row">
                             <div class="stat-item"><h3 class="counter" data-target="50">0</h3><p>Projects</p></div>
                             <div class="stat-item"><h3 class="counter" data-target="100">0</h3><p>Clients</p></div>
                             <div class="stat-item"><h3 class="counter" data-target="5">0</h3><p>Years</p></div>
@@ -219,10 +210,10 @@
                     <h2 class="section-title">Creative Gallery</h2>
                     <div class="gallery-grid">
                         <div class="gallery-item tilt-element"><img src="images/work1.jpg"><div class="tag">Photo</div></div>
-                        <div class="gallery-item tilt-element"><img src="images/work2.jpg"><div class="tag">Video</div></div>
+                        <div class="gallery-item tilt-element"><img src="images/work2.jpg"><div class="tag">Video Editing</div></div>
                         <div class="gallery-item tilt-element"><img src="images/work3.jpg"><div class="tag">AI Art</div></div>
-                        <div class="gallery-item tilt-element"><img src="images/work4.jpg"><div class="tag">Music</div></div>
-                    </div>
+                        <div class="gallery-item tilt-element"><img src="images/work4.jpg"><div class="tag">DJ Remix</div></div>
+                        </div>
                 </div>
             </section>
 
@@ -230,12 +221,8 @@
                 <div class="glass-card tilt-element">
                     <h2 class="section-title">My Journey</h2>
                     <div class="timeline">
-                        <div class="timeline-item">
-                            <i class="fas fa-map-marker-alt icon"></i><h3>Location</h3><p>Avissawella, Sri Lanka 🇱🇰</p>
-                        </div>
-                        <div class="timeline-item">
-                            <i class="fas fa-graduation-cap icon"></i><h3>Education</h3><p>R/Anura Maha Vidyalaya</p>
-                        </div>
+                        <div class="timeline-item"><i class="fas fa-map-marker-alt icon"></i><h3>Location</h3><p>Avissawella, Sri Lanka 🇱🇰</p></div>
+                        <div class="timeline-item"><i class="fas fa-graduation-cap icon"></i><h3>Education</h3><p>R/Anura Maha Vidyalaya</p></div>
                         <div class="timeline-item">
                             <i class="fas fa-file-alt icon"></i><h3>O/L Examination Results</h3>
                             <table class="result-table">
@@ -244,10 +231,7 @@
                                 <tr><td>History</td><td>W</td></tr><tr><td>Art</td><td>B</td></tr><tr><td>Geo</td><td>C</td></tr>
                             </table>
                         </div>
-                        <div class="timeline-item">
-                            <i class="fas fa-plane icon"></i><h3>Travel History</h3>
-                            <div class="tags"><span class="tag">Nuwara Eliya</span><span class="tag">Kataragama</span><span class="tag">Colombo</span><span class="tag">Anuradhapura</span></div>
-                        </div>
+                        <div class="timeline-item"><i class="fas fa-plane icon"></i><h3>Travel History</h3><div class="tags"><span class="tag">Nuwara Eliya</span><span class="tag">Kataragama</span><span class="tag">Colombo</span><span class="tag">Anuradhapura</span></div></div>
                     </div>
                 </div>
             </section>
