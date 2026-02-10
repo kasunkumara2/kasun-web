@@ -16,6 +16,16 @@
     <div class="background-image"></div>
     <div class="overlay"></div>
 
+    <div id="newsModal" class="modal">
+        <div class="modal-content glass-card-simple news-popup tilt-element">
+            <span class="close-btn" onclick="closeNewsModal()">&times;</span>
+            <img id="popupImg" src="" alt="News">
+            <h2 id="popupTitle"></h2>
+            <span id="popupDate" class="news-date"></span>
+            <p id="popupDesc" class="news-full-text"></p>
+        </div>
+    </div>
+
     <div id="settingsModal" class="modal">
         <div class="modal-content glass-card-simple settings-box tilt-element">
             <span class="close-btn" onclick="closeSettings()">&times;</span>
@@ -29,25 +39,31 @@
                     <span id="signInBtn" class="active" onclick="toggleAuth('signin')">Sign In</span>
                     <span id="signUpBtn" onclick="toggleAuth('signup')">Sign Up</span>
                 </div>
+                
                 <form id="signInForm" class="auth-form">
                     <input type="text" placeholder="Email / Username">
                     <input type="password" placeholder="Password">
                     <button type="button" class="btn-primary full-width">Sign In</button>
                     <div class="social-login">
-                        <button type="button" class="social-btn google"><i class="fab fa-google"></i></button>
-                        <button type="button" class="social-btn facebook"><i class="fab fa-facebook-f"></i></button>
+                        <button type="button" class="social-btn google"><i class="fab fa-google"></i> Google</button>
+                        <button type="button" class="social-btn facebook"><i class="fab fa-facebook-f"></i> Facebook</button>
                     </div>
                 </form>
+
                 <form id="signUpForm" class="auth-form" style="display: none;">
                     <input type="text" placeholder="Full Name">
-                    <input type="email" placeholder="Email">
-                    <input type="password" placeholder="Password">
+                    <input type="email" placeholder="Email Address">
+                    <input type="password" placeholder="Create Password">
                     <button type="button" class="btn-primary full-width">Sign Up</button>
+                    <div class="social-login">
+                        <button type="button" class="social-btn google"><i class="fab fa-google"></i> Google</button>
+                        <button type="button" class="social-btn facebook"><i class="fab fa-facebook-f"></i> Facebook</button>
+                    </div>
                 </form>
             </div>
 
             <div id="themeTab" class="tab-content" style="display: none;">
-                <h3>Select Theme</h3>
+                <h3>Select Interface Theme</h3>
                 <div class="theme-options">
                     <div class="theme-card dark selected" onclick="setTheme('dark')">
                         <div class="color-preview" style="background:#000;"></div><span>Dark</span>
@@ -66,7 +82,7 @@
     <div id="bookingModal" class="modal">
         <div class="modal-content glass-card-simple tilt-element" style="width: 500px;">
             <span class="close-btn" onclick="closeBooking()">&times;</span>
-            <h2 style="text-align:center; color:var(--primary-color);">Start Project 🚀</h2>
+            <h2 style="text-align:center; color:var(--primary);">Start Project 🚀</h2>
             <div class="booking-grid">
                 <input type="text" id="clientName" placeholder="Your Name">
                 <select id="serviceType">
@@ -85,13 +101,13 @@
 
     <div class="container">
         <nav class="sidebar">
-            <div class="logo"><i class="fas fa-bolt"></i></div>
+            <div class="logo"><i class="fa-solid fa-camera-retro"></i></div>
             <ul class="nav-links">
                 <li class="nav-item active" onclick="showPage('home', this)"><i class="fas fa-home"></i><span class="tooltip">Home</span></li>
                 <li class="nav-item" onclick="showPage('skills', this)"><i class="fas fa-magic"></i><span class="tooltip">Skills</span></li>
                 <li class="nav-item" onclick="showPage('portfolio', this)"><i class="fas fa-layer-group"></i><span class="tooltip">Gallery</span></li>
                 <li class="nav-item" onclick="showPage('news', this)"><i class="fas fa-newspaper"></i><span class="tooltip">Magazine</span></li>
-                <li class="nav-item" onclick="showPage('connect', this)"><i class="fas fa-comments"></i><span class="tooltip">Connect Hub</span></li>
+                <li class="nav-item" onclick="showPage('connect', this)"><i class="fas fa-comments"></i><span class="tooltip">Connect</span></li>
                 <li class="nav-item" onclick="showPage('life', this)"><i class="fas fa-user-astronaut"></i><span class="tooltip">Life</span></li>
             </ul>
             <div class="settings" onclick="openSettings()"><i class="fas fa-cog"></i></div>
@@ -107,14 +123,15 @@
                         <h2 class="typing-container">I am a <span class="typing-text"></span></h2>
                         
                         <div class="stats-row">
-                            <div class="stat-item"><h3>50+</h3><p>Projects</p></div>
-                            <div class="stat-item"><h3>100+</h3><p>Clients</p></div>
-                            <div class="stat-item"><h3>5+</h3><p>Years</p></div>
+                            <div class="stat-item"><h3 class="counter" data-target="50">0</h3><p>Projects</p></div>
+                            <div class="stat-item"><h3 class="counter" data-target="100">0</h3><p>Clients</p></div>
+                            <div class="stat-item"><h3 class="counter" data-target="5">0</h3><p>Years</p></div>
                         </div>
 
                         <div class="btn-row">
                             <button class="btn-primary" onclick="openBooking()">Hire Me</button>
-                            <a href="https://wa.me/+94717647693" target="_blank" class="btn-secondary">WhatsApp</a>
+                            <a href="https://wa.me/+94717647693" target="_blank" class="btn-secondary"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                            <a href="https://www.facebook.com/kasunlks" target="_blank" class="btn-secondary"><i class="fab fa-facebook"></i> Facebook</a>
                         </div>
                     </div>
                 </div>
@@ -127,10 +144,26 @@
                         <div class="skill-box"><span>Videography</span><div class="bar"><div class="fill" style="width:95%"></div></div><span class="perc">95%</span></div>
                         <div class="skill-box"><span>Photography</span><div class="bar"><div class="fill" style="width:90%"></div></div><span class="perc">90%</span></div>
                         <div class="skill-box"><span>Video Editing</span><div class="bar"><div class="fill" style="width:85%"></div></div><span class="perc">85%</span></div>
-                        <div class="skill-box"><span>AI Creation</span><div class="bar"><div class="fill" style="width:80%"></div></div><span class="perc">80%</span></div>
+                        <div class="skill-box"><span>AI Image/Video</span><div class="bar"><div class="fill" style="width:80%"></div></div><span class="perc">80%</span></div>
                         <div class="skill-box"><span>Social Media</span><div class="bar"><div class="fill" style="width:90%"></div></div><span class="perc">90%</span></div>
                         <div class="skill-box"><span>DJ Remixing</span><div class="bar"><div class="fill" style="width:75%"></div></div><span class="perc">75%</span></div>
                     </div>
+                </div>
+            </section>
+
+            <section id="news" class="page">
+                <div class="glass-card">
+                    <h2 class="section-title">AI Magazine 📰</h2>
+                    <div class="news-filters">
+                        <button class="filter-btn active" onclick="filterNews('all')">All</button>
+                        <button class="filter-btn" onclick="filterNews('country')">Country 🇱🇰</button>
+                        <button class="filter-btn" onclick="filterNews('game')">Gaming 🎮</button>
+                        <button class="filter-btn" onclick="filterNews('funny')">Funny 😂</button>
+                        <button class="filter-btn" onclick="filterNews('girl')">Girls 🎀</button>
+                        <button class="filter-btn" onclick="filterNews('men')">Men 🕶️</button>
+                    </div>
+                    <div class="magazine-grid" id="newsGrid">
+                        </div>
                 </div>
             </section>
 
@@ -146,20 +179,6 @@
                 </div>
             </section>
 
-            <section id="news" class="page">
-                <div class="glass-card">
-                    <h2 class="section-title">AI Magazine 📰</h2>
-                    <div class="news-filters">
-                        <button class="filter-btn active" onclick="filterNews('all')">All</button>
-                        <button class="filter-btn" onclick="filterNews('tech')">Tech</button>
-                        <button class="filter-btn" onclick="filterNews('game')">Gaming</button>
-                        <button class="filter-btn" onclick="filterNews('lanka')">Sri Lanka</button>
-                    </div>
-                    <div class="magazine-grid" id="newsGrid">
-                        </div>
-                </div>
-            </section>
-
             <section id="connect" class="page">
                 <div class="connect-layout">
                     <div class="connect-sidebar glass-card tilt-element">
@@ -167,20 +186,15 @@
                         <button class="connect-btn active" onclick="switchConnect('ai')"><i class="fas fa-robot"></i> AI Chatbot</button>
                         <button class="connect-btn" onclick="switchConnect('community')"><i class="fas fa-users"></i> Community</button>
                     </div>
-
                     <div class="connect-main glass-card tilt-element">
-                        
                         <div id="aiSection" class="chat-interface">
-                            <div class="chat-header"><i class="fas fa-robot"></i> Kasun AI (Ask me anything!)</div>
-                            <div class="chat-messages" id="aiMessages">
-                                <div class="msg bot">Hello! Mama Kasun AI. Oyaata kohomada udaw karanne?</div>
-                            </div>
+                            <div class="chat-header"><i class="fas fa-robot"></i> Kasun AI (Ask anything!)</div>
+                            <div class="chat-messages" id="aiMessages"><div class="msg bot">Hello! Mama Kasun AI.</div></div>
                             <div class="chat-input-area">
                                 <input type="text" id="aiInput" placeholder="Ask AI..." onkeypress="handleEnter(event)">
                                 <button onclick="askGeminiAI()"><i class="fas fa-paper-plane"></i></button>
                             </div>
                         </div>
-
                         <div id="communitySection" class="chat-interface" style="display:none;">
                             <div class="chat-header" style="background:#075e54;"><i class="fas fa-users"></i> Global Community</div>
                             <div class="chat-messages" id="commMessages" style="background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');">
@@ -191,7 +205,6 @@
                                 <button onclick="postCommunity()"><i class="fas fa-paper-plane"></i></button>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </section>
@@ -212,11 +225,25 @@
                         </div>
                         <div class="timeline-item">
                             <i class="fas fa-file-alt icon"></i>
-                            <h3>O/L Results</h3>
-                            <div class="results-grid">
-                                <span>ICT: B</span><span>Maths: B</span><span>Science: C</span>
-                                <span>Sinhala: S</span><span>Buddhism: S</span><span>English: S</span>
-                                <span>Art: B</span><span>History: W</span><span>Geo: C</span>
+                            <h3>O/L Examination Results</h3>
+                            <table class="result-table">
+                                <tr><td>ICT</td><td><span class="grade grade-b">B</span></td></tr>
+                                <tr><td>Mathematics</td><td><span class="grade grade-b">B</span></td></tr>
+                                <tr><td>Science</td><td><span class="grade grade-c">C</span></td></tr>
+                                <tr><td>Sinhala</td><td><span class="grade grade-s">S</span></td></tr>
+                                <tr><td>Buddhism</td><td><span class="grade grade-s">S</span></td></tr>
+                                <tr><td>History</td><td><span class="grade grade-w">W</span></td></tr>
+                                <tr><td>Art</td><td><span class="grade grade-b">B</span></td></tr>
+                                <tr><td>Geography</td><td><span class="grade grade-c">C</span></td></tr>
+                                <tr><td>English</td><td><span class="grade grade-s">S</span></td></tr>
+                            </table>
+                        </div>
+                        <div class="timeline-item">
+                            <i class="fas fa-plane icon"></i>
+                            <h3>Travel History</h3>
+                            <div class="tags">
+                                <span class="tag">Nuwara Eliya</span><span class="tag">Kataragama</span>
+                                <span class="tag">Colombo</span><span class="tag">Anuradhapura</span>
                             </div>
                         </div>
                     </div>
