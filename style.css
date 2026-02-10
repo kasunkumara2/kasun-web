@@ -177,3 +177,12 @@ h1 { font-size: 4rem; line-height: 1; font-family: 'Rajdhani', sans-serif; text-
 .theme-card:hover { border-color: var(--primary); transform: translateY(-3px); }
 .theme-card.selected { border-color: var(--primary); box-shadow: 0 0 10px var(--primary); font-weight: bold; }
 .color-dot { width: 25px; height: 25px; border-radius: 50%; margin: 0 auto 5px; border: 1px solid #555; }
+
+
+/* AVATAR SELECTOR */
+.avatar-selector { display: flex; gap: 10px; justify-content: center; margin-top: 10px; }
+.avatar-selector img { width: 40px; height: 40px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: 0.3s; }
+.avatar-selector img:hover { transform: scale(1.2); border-color: var(--primary); }
+
+/* PROFILE FORM GRID */
+.profile-form-grid { display: flex; flex-direction: column; gap: 5px; }
