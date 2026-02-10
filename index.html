@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kasun Padma Kumara | Creator Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://picsum.photos">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Rajdhani:wght@500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
@@ -17,12 +20,11 @@
 
     <div class="cursor-dot"></div>
     <div class="cursor-outline"></div>
-
     <div class="background-image"></div>
     <div class="overlay"></div>
 
     <div id="topProfileIcon" onclick="openSettings()">
-        <img id="topProfileImg" src="https://img.icons8.com/color/96/user.png">
+        <img id="topProfileImg" src="https://img.icons8.com/color/96/user.png" fetchpriority="high">
     </div>
 
     <div id="newsModal" class="modal">
@@ -33,43 +35,41 @@
                 <div class="news-text-area">
                     <span id="popupTag" class="news-tag-popup"></span>
                     <h2 id="popupTitle"></h2>
-                    <p id="popupDesc" class="news-full-text"></p>
+                    <div id="popupDesc" class="news-full-text"></div>
                 </div>
             </div>
         </div>
     </div>
 
     <div id="settingsModal" class="modal">
-        <div class="modal-content glass-card-simple settings-box">
+        <div class="modal-content glass-card-simple settings-box tilt-element modern-auth-container">
             <span class="close-btn" onclick="closeSettings()">&times;</span>
-            
             <div class="settings-tabs-container">
                 <button class="tab-box-btn active" onclick="switchTab('auth')">Account</button>
                 <button class="tab-box-btn" onclick="switchTab('theme')">Themes</button>
             </div>
-
             <div id="authTab" class="tab-content active">
                 <div id="loggedOutUI">
+                    <h2 class="auth-title">Welcome</h2>
                     <div class="auth-toggle-box">
-                        <div class="auth-toggle-btn active" id="signInBtn" onclick="toggleAuth('signin')">Sign In</div>
+                        <div class="auth-toggle-btn active" id="signInBtn" onclick="toggleAuth('signin')">Login</div>
                         <div class="auth-toggle-btn" id="signUpBtn" onclick="toggleAuth('signup')">Sign Up</div>
                     </div>
                     <form id="signInForm" class="auth-form">
-                        <div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="loginEmail" placeholder="Email"></div>
-                        <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="loginPass" placeholder="Password"></div>
-                        <button type="button" class="btn-primary full-width" onclick="emailLogin()">Login</button>
+                        <div class="modern-input"><i class="fas fa-envelope"></i><input type="email" id="loginEmail" placeholder="Email Address"></div>
+                        <div class="modern-input"><i class="fas fa-lock"></i><input type="password" id="loginPass" placeholder="Password"></div>
+                        <button type="button" class="btn-modern-primary" onclick="emailLogin()">Login Now</button>
                     </form>
                     <form id="signUpForm" class="auth-form" style="display: none;">
-                        <div class="input-group"><i class="fas fa-user"></i><input type="text" id="regName" placeholder="Name"></div>
-                        <div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="regEmail" placeholder="Email"></div>
-                        <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="regPass" placeholder="Password"></div>
-                        <button type="button" class="btn-primary full-width" onclick="emailRegister()">Register</button>
+                        <div class="modern-input"><i class="fas fa-user"></i><input type="text" id="regName" placeholder="Full Name"></div>
+                        <div class="modern-input"><i class="fas fa-envelope"></i><input type="email" id="regEmail" placeholder="Email Address"></div>
+                        <div class="modern-input"><i class="fas fa-lock"></i><input type="password" id="regPass" placeholder="Password"></div>
+                        <button type="button" class="btn-modern-primary" onclick="emailRegister()">Create Account</button>
                     </form>
                     <div class="social-login">
                         <button type="button" class="social-btn google" onclick="googleLogin()"><img src="https://img.icons8.com/color/48/google-logo.png"> Google</button>
                     </div>
                 </div>
-
                 <div id="loggedInUI" style="display: none;">
                     <div class="profile-header">
                         <img id="userAvatar" src="" class="profile-avatar">
@@ -80,30 +80,20 @@
                         </div>
                     </div>
                     <div class="profile-edit-grid">
-                        <div class="input-group">
-                            <i class="fas fa-user"></i>
-                            <div class="double-input">
-                                <input type="text" id="editName" placeholder="Full Name">
-                                <input type="text" id="editNick" placeholder="Nickname" style="font-size: 0.8rem; color: var(--primary);">
-                            </div>
-                        </div>
-                        <div class="input-group"><i class="fas fa-phone"></i><input type="text" id="editPhone" placeholder="Phone"></div>
+                        <div class="modern-input"><i class="fas fa-user"></i><input type="text" id="editName" placeholder="Full Name"></div>
+                        <div class="modern-input"><i class="fas fa-tag"></i><input type="text" id="editNick" placeholder="Nickname"></div>
+                        <div class="modern-input"><i class="fas fa-phone"></i><input type="text" id="editPhone" placeholder="Phone"></div>
                         <div style="display:flex; gap:10px;">
-                            <div class="input-group"><i class="fas fa-city"></i><input type="text" id="editCity" placeholder="City"></div>
-                            <div class="input-group"><i class="fas fa-globe"></i><input type="text" id="editCountry" placeholder="Country"></div>
+                            <div class="modern-input"><input type="text" id="editCity" placeholder="City"></div>
+                            <div class="modern-input"><input type="text" id="editCountry" placeholder="Country"></div>
                         </div>
-                        <div class="input-group">
-                            <i class="fas fa-venus-mars"></i>
-                            <select id="editGender"><option value="Male">Male</option><option value="Female">Female</option></select>
-                        </div>
+                        <div class="modern-input"><i class="fas fa-venus-mars"></i><select id="editGender"><option value="Male">Male</option><option value="Female">Female</option></select></div>
                     </div>
-                    <button class="btn-primary full-width" onclick="saveUserProfile()">Save Profile <i class="fas fa-save"></i></button>
-                    <button class="btn-logout full-width" onclick="logoutUser()">Logout</button>
+                    <button class="btn-modern-primary" onclick="saveUserProfile()">Save Changes</button>
+                    <button class="btn-logout" onclick="logoutUser()">Log Out</button>
                 </div>
             </div>
-
             <div id="themeTab" class="tab-content" style="display: none;">
-                <h3 style="margin-bottom:15px; color:white; text-align:center;">Select Theme</h3>
                 <div class="theme-grid-new">
                     <div class="theme-box dark" onclick="setTheme('dark')"><div class="dot" style="background:#000;"></div> Dark</div>
                     <div class="theme-box blue" onclick="setTheme('blue')"><div class="dot" style="background:#0ea5e9;"></div> Blue</div>
@@ -124,8 +114,8 @@
             <span class="close-btn" onclick="closeBooking()">&times;</span>
             <h2 style="text-align:center; color:var(--primary);">Start Project 🚀</h2>
             <div class="booking-grid-layout">
-                <div class="input-group"><i class="fas fa-user"></i><input type="text" id="clientName" placeholder="Your Name"></div>
-                <div class="input-group"><i class="fas fa-briefcase"></i>
+                <div class="modern-input"><i class="fas fa-user"></i><input type="text" id="clientName" placeholder="Your Name"></div>
+                <div class="modern-input"><i class="fas fa-briefcase"></i>
                     <select id="serviceType">
                         <option value="Videography">Videography</option>
                         <option value="Photography">Photography</option>
@@ -133,16 +123,14 @@
                         <option value="AI Art">AI Art</option>
                         <option value="DJ Remix">DJ Remix</option>
                         <option value="Video Ad">Video Ad</option>
-                        <option value="Social Media Mgt">Social Media Mgt</option>
-                        <option value="Banner">Banner / Poster</option>
-                        <option value="Graphic Design">Graphic Design</option>
-                        <option value="Post Creation">Post Creation</option>
+                        <option value="Social Media">Social Media</option>
+                        <option value="Banner">Banner Design</option>
                     </select>
                 </div>
-                <div class="input-group"><i class="fas fa-coins"></i><input type="text" id="clientBudget" placeholder="Budget (LKR)"></div>
-                <div class="input-group textarea-group"><textarea id="clientMessage" placeholder="Describe your project here..." rows="4"></textarea></div>
+                <div class="modern-input"><i class="fas fa-coins"></i><input type="text" id="clientBudget" placeholder="Budget (LKR)"></div>
+                <div class="modern-input"><textarea id="clientMessage" placeholder="Project Details..." rows="4"></textarea></div>
             </div>
-            <button class="btn-primary full-width" onclick="sendBookingToWhatsApp()">Send via WhatsApp <i class="fab fa-whatsapp"></i></button>
+            <button class="btn-modern-primary" onclick="sendBookingToWhatsApp()">Send via WhatsApp <i class="fab fa-whatsapp"></i></button>
         </div>
     </div>
 
@@ -167,7 +155,7 @@
             <section id="home" class="page active-page">
                 <div class="glass-card hero-card tilt-element">
                     <div class="hero-content">
-                        <div class="profile-glow"><img src="images/profile.jpg" alt="Profile"></div>
+                        <div class="profile-glow"><img src="images/profile.jpg" alt="Profile" fetchpriority="high"></div>
                         <h1 class="hero-title">I'm <span class="neon-text gradient-text">Kasun</span></h1>
                         <h2 class="typing-container">I am a <span class="typing-text highlight-text"></span></h2>
                         <div class="stats-row" id="counterSection">
@@ -187,7 +175,7 @@
             <section id="skills" class="page">
                 <div class="glass-card">
                     <h2 class="section-title">Professional Skills</h2>
-                    <div class="skills-wrapper-vertical">
+                    <div class="skills-wrapper-vertical" style="max-width: 450px; margin: 0 auto;">
                         <div class="skill-box"><span>Videography <small>95%</small></span><div class="bar"><div class="fill" style="width:95%"></div></div></div>
                         <div class="skill-box"><span>Photography <small>90%</small></span><div class="bar"><div class="fill" style="width:90%"></div></div></div>
                         <div class="skill-box"><span>Video Editing <small>85%</small></span><div class="bar"><div class="fill" style="width:85%"></div></div></div>
@@ -218,15 +206,33 @@
                     <div class="chat-sidebar-area">
                         <div class="chat-sidebar-header"><h3>Messages</h3></div>
                         <div class="chat-list">
-                            <div class="chat-contact active" onclick="openChat('kasun')"><div class="chat-avatar"><img src="images/profile.jpg"></div><div class="chat-info"><h4>Chat with Kasun</h4><p>Contact Admin</p></div></div>
-                            <div class="chat-contact" onclick="openChat('ai')"><div class="chat-avatar"><img src="https://img.icons8.com/color/96/bot.png"></div><div class="chat-info"><h4>AI Assistant</h4><p>Auto Helper Bot</p></div></div>
-                            <div class="chat-contact" onclick="openChat('community')"><div class="chat-avatar"><img src="https://img.icons8.com/color/96/group.png"></div><div class="chat-info"><h4>Global Community</h4><p>Public Room</p></div></div>
+                            <div class="chat-contact active" onclick="openChat('kasun')">
+                                <div class="chat-avatar"><img src="images/profile.jpg"></div>
+                                <div class="chat-info"><h4>Chat with Kasun</h4><p>Contact Admin</p></div>
+                                <div class="chat-icon"><i class="fas fa-user-shield"></i></div>
+                            </div>
+                            <div class="chat-contact" onclick="openChat('ai')">
+                                <div class="chat-avatar"><img src="https://img.icons8.com/color/96/bot.png"></div>
+                                <div class="chat-info"><h4>AI Assistant</h4><p>Auto Helper Bot</p></div>
+                                <div class="chat-icon"><i class="fas fa-robot"></i></div>
+                            </div>
+                            <div class="chat-contact" onclick="openChat('community')">
+                                <div class="chat-avatar"><img src="https://img.icons8.com/color/96/group.png"></div>
+                                <div class="chat-info"><h4>Global Community</h4><p>Public Room</p></div>
+                                <div class="chat-icon"><i class="fas fa-users"></i></div>
+                            </div>
                         </div>
                     </div>
                     <div class="chat-main-window">
-                        <div class="chat-header-top"><img id="chatHeaderImg" src="images/profile.jpg"><div class="chat-header-info"><h3 id="chatHeaderName">Chat with Kasun</h3><span id="chatHeaderStatus" style="color:#0f0;">● Online</span></div></div>
+                        <div class="chat-header-top">
+                            <img id="chatHeaderImg" src="images/profile.jpg">
+                            <div class="chat-header-info"><h3 id="chatHeaderName">Chat with Kasun</h3><span id="chatHeaderStatus" style="color:#0f0;">● Online</span></div>
+                        </div>
                         <div class="chat-messages-area" id="chatMessagesArea"></div>
-                        <div class="chat-input-bar"><input type="text" id="chatInput" placeholder="Type a message..." onkeypress="handleChatEnter(event)"><button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button></div>
+                        <div class="chat-input-bar">
+                            <input type="text" id="chatInput" placeholder="Type a message..." onkeypress="handleChatEnter(event)">
+                            <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -237,8 +243,21 @@
                     <div class="timeline">
                         <div class="timeline-item"><i class="fas fa-map-marker-alt icon"></i><h3>Location</h3><p>Avissawella, Sri Lanka 🇱🇰</p></div>
                         <div class="timeline-item"><i class="fas fa-graduation-cap icon"></i><h3>Education</h3><p>R/Anura Maha Vidyalaya (13 Years)</p></div>
-                        <div class="timeline-item"><i class="fas fa-file-alt icon"></i><h3>O/L Results</h3><div class="results-list"><div class="res-row"><span>ICT</span><span class="res-box b-grade">B</span></div><div class="res-row"><span>Mathematics</span><span class="res-box b-grade">B</span></div><div class="res-row"><span>Science</span><span class="res-box c-grade">C</span></div><div class="res-row"><span>English</span><span class="res-box s-grade">S</span></div><div class="res-row"><span>Sinhala</span><span class="res-box s-grade">S</span></div></div></div>
-                        <div class="timeline-item"><i class="fas fa-plane icon"></i><h3>Travel</h3><div class="travel-grid"><div class="travel-card">Nuwara Eliya</div><div class="travel-card">Anuradhapura</div><div class="travel-card">Polonnaruwa</div><div class="travel-card">Colombo</div></div></div>
+                        <div class="timeline-item">
+                            <i class="fas fa-file-alt icon"></i><h3>O/L Results</h3>
+                            <div class="results-list">
+                                <div class="res-row"><span>ICT</span><span class="res-box b-grade">B</span></div>
+                                <div class="res-row"><span>Mathematics</span><span class="res-box b-grade">B</span></div>
+                                <div class="res-row"><span>Science</span><span class="res-box c-grade">C</span></div>
+                                <div class="res-row"><span>English</span><span class="res-box s-grade">S</span></div>
+                                <div class="res-row"><span>Sinhala</span><span class="res-box s-grade">S</span></div>
+                                <div class="res-row"><span>History</span><span class="res-box w-grade">W</span></div>
+                                <div class="res-row"><span>Art</span><span class="res-box b-grade">B</span></div>
+                                <div class="res-row"><span>Buddhism</span><span class="res-box s-grade">S</span></div>
+                                <div class="res-row"><span>Geography</span><span class="res-box c-grade">C</span></div>
+                            </div>
+                        </div>
+                        <div class="timeline-item"><i class="fas fa-plane icon"></i><h3>Travel</h3><div class="travel-grid"><div class="travel-card">Nuwara Eliya</div><div class="travel-card">Anuradhapura</div><div class="travel-card">Polonnaruwa</div><div class="travel-card">Colombo</div><div class="travel-card">Yapahuwa</div><div class="travel-card">Kataragama</div></div></div>
                     </div>
                 </div>
             </section>
@@ -249,6 +268,8 @@
                     <div class="gallery-grid">
                         <div class="gallery-item"><img src="images/work1.jpg" loading="lazy"><div class="tag">Photo</div></div>
                         <div class="gallery-item"><img src="images/work2.jpg" loading="lazy"><div class="tag">Video</div></div>
+                        <div class="gallery-item"><img src="images/work3.jpg" loading="lazy"><div class="tag">AI Art</div></div>
+                        <div class="gallery-item"><img src="images/work4.jpg" loading="lazy"><div class="tag">Design</div></div>
                     </div>
                 </div>
             </section>
