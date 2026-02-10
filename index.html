@@ -9,6 +9,19 @@
 </head>
 <body>
 
+    <div id="preloader">
+        <div class="loader-circle"></div>
+        <div class="loader-text">KASUN...</div>
+    </div>
+
+    <div class="cursor"></div>
+    <div class="cursor2"></div>
+
+    <video autoplay muted loop id="bgVideo">
+        <source src="bg-video.mp4" type="video/mp4">
+    </video>
+    <div class="overlay"></div>
+
     <div id="loginModal" class="modal">
         <div class="modal-content glass-card-simple">
             <span class="close-btn" onclick="closeLogin()">&times;</span>
@@ -16,6 +29,33 @@
             <p>Enter your name</p>
             <input type="text" id="usernameInput" placeholder="Your Name">
             <button class="btn-primary" onclick="userLogin()">Enter</button>
+        </div>
+    </div>
+
+    <div id="bookingModal" class="modal">
+        <div class="modal-content glass-card-simple" style="width: 400px; text-align: left;">
+            <span class="close-btn" onclick="closeBooking()">&times;</span>
+            <h2 style="text-align: center; color: #0ea5e9;">Start a Project 🚀</h2>
+            <p style="text-align: center; margin-bottom: 20px; color: #ccc;">Tell me about your project.</p>
+            
+            <label>Your Name:</label>
+            <input type="text" id="clientName" placeholder="Enter your name">
+            
+            <label>Service Type:</label>
+            <select id="serviceType">
+                <option value="Video Editing">Video Editing</option>
+                <option value="Photography">Photography</option>
+                <option value="AI Art">AI Art Generation</option>
+                <option value="DJ Remix">DJ Remixing</option>
+            </select>
+
+            <label>Your Budget (LKR):</label>
+            <input type="text" id="clientBudget" placeholder="Ex: 5000">
+
+            <label>Details:</label>
+            <textarea id="clientMessage" placeholder="Describe what you want..."></textarea>
+
+            <button class="btn-primary" onclick="sendBookingToWhatsApp()" style="width: 100%; margin-top: 20px;">Send via WhatsApp <i class="fab fa-whatsapp"></i></button>
         </div>
     </div>
 
@@ -44,14 +84,23 @@
             <section id="home" class="page active-page">
                 <div class="glass-card hero-section centered-content">
                     <div class="profile-glow">
-                        <img src="images/profile.png" alt="Kasun Profile">
+                        <img src="images/profile.jpg" alt="Kasun Profile">
                     </div>
-                    <h1>Hi, I'm <span class="neon-text">Kasun</span></h1>
-                    <h2>Digital Creator | Videographer | AI Artist</h2>
+                    <h1>Hi, I'm <span class="neon-text">Kasun Padma Kumara</span></h1>
+                    
+                    <h2>I am a <span class="typing-text"></span></h2>
+                    
                     <p>"I am a creative soul seeking the perfect balance between technology and art. My mission is to use my skills to bring value to your projects."</p>
                     
+                    <div class="stats-container">
+                        <div class="stat-box"><h3 class="counter" data-target="50">0</h3><p>Projects</p></div>
+                        <div class="stat-box"><h3 class="counter" data-target="100">0</h3><p>Clients</p></div>
+                        <div class="stat-box"><h3 class="counter" data-target="5">0</h3><p>Years</p></div>
+                    </div>
+
                     <div class="btn-group">
-                        <a href="https://wa.me/+94717647693" target="_blank" class="btn-primary"><i class="fab fa-whatsapp"></i> WhatsApp Me</a>
+                        <button class="btn-primary" onclick="openBooking()" style="background: #22c55e;">Hire Me / Booking</button>
+                        <a href="https://wa.me/+94717647693" target="_blank" class="btn-secondary"><i class="fab fa-whatsapp"></i> WhatsApp</a>
                         <a href="https://www.facebook.com/kasunlks" target="_blank" class="btn-secondary"><i class="fab fa-facebook"></i> Facebook</a>
                     </div>
                 </div>
@@ -60,33 +109,12 @@
             <section id="skills" class="page">
                 <div class="glass-card">
                     <h2 class="section-title">My Professional Skills</h2>
-                    <p style="color:#aaa; margin-bottom: 30px;">Technologies and tools I use to create magic.</p>
-
                     <div class="skills-grid-v1">
-                        <div class="skill-item">
-                            <div class="skill-info"><span>Videography</span><span>95%</span></div>
-                            <div class="progress-bar"><div class="fill" style="width: 95%"></div></div>
-                        </div>
-                        <div class="skill-item">
-                            <div class="skill-info"><span>Photography</span><span>90%</span></div>
-                            <div class="progress-bar"><div class="fill" style="width: 90%"></div></div>
-                        </div>
-                        <div class="skill-item">
-                            <div class="skill-info"><span>Video & Photo Editing</span><span>85%</span></div>
-                            <div class="progress-bar"><div class="fill" style="width: 85%"></div></div>
-                        </div>
-                        <div class="skill-item">
-                            <div class="skill-info"><span>AI Image & Video Creation</span><span>80%</span></div>
-                            <div class="progress-bar"><div class="fill" style="width: 80%"></div></div>
-                        </div>
-                         <div class="skill-item">
-                            <div class="skill-info"><span>Social Media Content</span><span>90%</span></div>
-                            <div class="progress-bar"><div class="fill" style="width: 90%"></div></div>
-                        </div>
-                         <div class="skill-item">
-                            <div class="skill-info"><span>DJ Remixing</span><span>75%</span></div>
-                            <div class="progress-bar"><div class="fill" style="width: 75%"></div></div>
-                        </div>
+                        <div class="skill-item"><div class="skill-info"><span>Videography</span><span>95%</span></div><div class="progress-bar"><div class="fill" style="width: 95%"></div></div></div>
+                        <div class="skill-item"><div class="skill-info"><span>Photography</span><span>90%</span></div><div class="progress-bar"><div class="fill" style="width: 90%"></div></div></div>
+                        <div class="skill-item"><div class="skill-info"><span>Video Editing</span><span>85%</span></div><div class="progress-bar"><div class="fill" style="width: 85%"></div></div></div>
+                        <div class="skill-item"><div class="skill-info"><span>AI Art</span><span>80%</span></div><div class="progress-bar"><div class="fill" style="width: 80%"></div></div></div>
+                        <div class="skill-item"><div class="skill-info"><span>DJ Remixing</span><span>75%</span></div><div class="progress-bar"><div class="fill" style="width: 75%"></div></div></div>
                     </div>
                 </div>
             </section>
@@ -94,8 +122,6 @@
             <section id="portfolio" class="page">
                 <div class="glass-card">
                     <h2 class="section-title">My Creative Gallery</h2>
-                    <p style="color:#aaa; margin-bottom: 30px;">A collection of my recent projects and captures.</p>
-                    
                     <div class="gallery-grid">
                         <div class="gallery-item"><img src="images/work1.jpg" alt="Work 1"><div class="overlay"><h3>Photography</h3></div></div>
                         <div class="gallery-item"><img src="images/work2.jpg" alt="Work 2"><div class="overlay"><h3>Video Editing</h3></div></div>
@@ -108,15 +134,13 @@
             <section id="life" class="page">
                 <div class="glass-card">
                     <h2 class="section-title">Life & Journey</h2>
-                    
                     <div class="timeline">
                         <div class="timeline-item glass-box">
                             <div class="icon-circle"><i class="fas fa-graduation-cap"></i></div>
                             <h3>Education</h3>
                             <h4>R/Anura Maha Vidyalaya (13 Years)</h4>
-                            <p>I was the official <strong>School Photographer</strong> and the IT Specialist. I also worked as the Graphic Designer for the school website.</p>
+                            <p>Official School Photographer & IT Specialist.</p>
                         </div>
-
                         <div class="timeline-item glass-box">
                             <div class="icon-circle"><i class="fas fa-file-alt"></i></div>
                             <h3>O/L Examination Results</h3>
@@ -125,30 +149,8 @@
                                 <tr><td>Mathematics</td><td><span class="grade grade-b">B</span></td></tr>
                                 <tr><td>Science</td><td><span class="grade grade-c">C</span></td></tr>
                                 <tr><td>Sinhala</td><td><span class="grade grade-s">S</span></td></tr>
-                                <tr><td>Buddhism</td><td><span class="grade grade-s">S</span></td></tr>
-                                <tr><td>History</td><td><span class="grade grade-w">W</span></td></tr>
-                                <tr><td>Art</td><td><span class="grade grade-b">B</span></td></tr>
-                                <tr><td>Geography</td><td><span class="grade grade-c">C</span></td></tr>
                                 <tr><td>English</td><td><span class="grade grade-s">S</span></td></tr>
                             </table>
-                        </div>
-                        
-                        <div class="timeline-item glass-box">
-                            <div class="icon-circle"><i class="fas fa-plane"></i></div>
-                            <h3>Travel Diaries</h3>
-                            <p>Exploring beautiful Sri Lanka:</p>
-                            <div class="tags">
-                                <span class="tag">Nuwara Eliya</span><span class="tag">Anuradhapura</span><span class="tag">Polonnaruwa</span>
-                                <span class="tag">Colombo</span><span class="tag">Yapahuwa</span><span class="tag">Kataragama</span>
-                            </div>
-                        </div>
-
-                         <div class="timeline-item glass-box">
-                            <div class="icon-circle"><i class="fas fa-user"></i></div>
-                            <h3>Personal Details</h3>
-                            <p><strong>Name:</strong> Kasun Padma Kumara</p>
-                            <p><strong>City:</strong> Avissawella, Sri Lanka</p>
-                            <p><strong>Email:</strong> Kasunpadmakumara2007@gmail.com</p>
                         </div>
                     </div>
                 </div>
@@ -158,10 +160,7 @@
                 <div class="glass-card">
                     <h2 class="section-title">Community</h2>
                     <div class="community-board" id="communityBoard">
-                        <div class="post">
-                            <div class="post-header"><strong>Kasun (Admin)</strong> <span>Pinned</span></div>
-                            <p>Welcome to the community! Share your ideas here.</p>
-                        </div>
+                        <div class="post"><div class="post-header"><strong>Kasun (Admin)</strong> <span>Pinned</span></div><p>Welcome to the community! Share your ideas here.</p></div>
                     </div>
                     <div class="post-input-area">
                         <textarea id="communityInput" placeholder="Write something..."></textarea>
@@ -171,6 +170,24 @@
             </section>
 
         </main>
+    </div>
+
+    <div class="ai-chat-icon" onclick="toggleAIChat()">
+        <i class="fas fa-robot"></i>
+    </div>
+
+    <div class="ai-chat-box" id="aiChatBox">
+        <div class="ai-header">
+            <span>Kasun AI (Singlish) 🤖</span>
+            <span class="close-chat" onclick="toggleAIChat()">&times;</span>
+        </div>
+        <div class="ai-messages" id="aiMessages">
+            <div class="msg bot-msg">Haai! Mama Kasun AI. Oyaata ona deyak Singlish walin ahanna.</div>
+        </div>
+        <div class="ai-input">
+            <input type="text" id="aiInput" placeholder="Type here..." onkeypress="handleEnter(event)">
+            <button id="sendBtn" onclick="askGeminiAI()"><i class="fas fa-paper-plane"></i></button>
+        </div>
     </div>
 
     <script type="text/javascript">
@@ -184,7 +201,15 @@
     s0.parentNode.insertBefore(s1,s0);
     })();
     </script>
-    <script src="script.js"></script>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "@google/generative-ai": "https://esm.run/@google/generative-ai"
+        }
+      }
+    </script>
+
+    <script type="module" src="script.js"></script>
 </body>
 </html>
-
