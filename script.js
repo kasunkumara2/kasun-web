@@ -20,10 +20,9 @@ const googleProvider = new GoogleAuthProvider();
 let currentUser = null;
 let userProfile = { name: "Guest", photo: "https://img.icons8.com/color/96/user.png" };
 
-// --- FUNCTIONS FOR HTML ---
+// --- GLOBAL FUNCTIONS (FOR HTML) ---
 window.googleLogin = () => signInWithPopup(auth, googleProvider).catch(e => alert("Error: " + e.message));
 window.googleLogout = () => signOut(auth).then(() => location.reload());
-
 window.showPage = (id, el) => {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
     const target = document.getElementById(id);
@@ -31,29 +30,24 @@ window.showPage = (id, el) => {
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     if(el) el.classList.add('active');
 };
-
 window.openSettings = () => { document.getElementById('settingsModal').style.display = 'flex'; };
 window.closeSettings = () => { document.getElementById('settingsModal').style.display = 'none'; };
 window.openBooking = () => { document.getElementById('bookingModal').style.display = 'flex'; };
 window.closeBooking = () => { document.getElementById('bookingModal').style.display = 'none'; };
 window.toggleTawkChat = () => { if(window.Tawk_API) window.Tawk_API.toggle(); else alert("Chat loading..."); };
 window.setTheme = (t) => document.body.className = 'theme-'+t;
-
-window.selectAvatar = (url) => {
-    document.getElementById('editProfilePic').src = url;
-    window.selectedAvatarURL = url;
-};
+window.selectAvatar = (url) => { document.getElementById('editProfilePic').src = url; window.selectedAvatarURL = url; };
 
 window.saveProfile = async () => {
     if (!currentUser) return;
     const newData = {
         name: document.getElementById('editUsername').value,
         photo: window.selectedAvatarURL || currentUser.photoURL,
-        phone: document.getElementById('editPhone').value,
-        city: document.getElementById('editCity').value,
-        country: document.getElementById('editCountry').value,
-        address: document.getElementById('editAddress').value,
-        gender: document.getElementById('editGender').value
+        phone: document.getElementById('editPhone').value || "",
+        city: document.getElementById('editCity').value || "",
+        country: document.getElementById('editCountry').value || "",
+        address: document.getElementById('editAddress').value || "",
+        gender: document.getElementById('editGender').value || "Male"
     };
     await setDoc(doc(db, "users", currentUser.uid), newData, { merge: true });
     alert("Profile Saved!");
@@ -79,7 +73,7 @@ window.switchConnect = (tab) => {
     document.getElementById('communitySection').style.display = (tab === 'community') ? 'flex' : 'none';
 };
 
-// --- CORE LOGIC ---
+// --- REAL-TIME CHAT ---
 function loadMessages() {
     const q = query(collection(db, "messages"), orderBy("createdAt", "asc"), limit(50));
     onSnapshot(q, (snapshot) => {
@@ -94,10 +88,10 @@ function loadMessages() {
             div.style.display = "flex"; div.style.flexDirection = "column";
             div.innerHTML = `
                 <div class="msg-info" style="align-self: ${isMe ? 'flex-end' : 'flex-start'}; display: flex; align-items: center; gap: 5px;">
-                    ${isMe ? '' : `<img src="${msg.photo || 'https://img.icons8.com/color/96/user.png'}" style="width:25px; height:25px; border-radius:50%;">`}
+                    ${isMe ? '' : `<img src="${msg.photo || 'https://img.icons8.com/color/96/user.png'}" style="width:25px; height:25px; border-radius:50%; object-fit:cover;">`}
                     <span style="font-size:0.7rem; color:#aaa;">${isMe ? 'You' : (msg.name || "User")}</span>
                 </div>
-                <div class="msg" style="padding:8px 12px; border-radius:15px; max-width:70%; margin:2px 0; ${isMe ? 'background:var(--primary); align-self:flex-end;' : 'background:#333; align-self:flex-start;'}">
+                <div class="msg" style="padding:8px 12px; border-radius:15px; max-width:70%; margin:2px 0; ${isMe ? 'background:var(--primary); align-self:flex-end; color:white;' : 'background:#333; align-self:flex-start; color:white;'}">
                     ${msg.text}
                 </div>`;
             board.appendChild(div);
@@ -111,7 +105,6 @@ onAuthStateChanged(auth, async (user) => {
         currentUser = user;
         const docSnap = await getDoc(doc(db, "users", user.uid));
         userProfile = docSnap.exists() ? docSnap.data() : { name: user.displayName, photo: user.photoURL };
-        
         document.getElementById('profileLoginView').style.display = "none";
         document.getElementById('profileEditView').style.display = "block";
         document.getElementById('topProfileImg').src = userProfile.photo || user.photoURL;
@@ -119,6 +112,7 @@ onAuthStateChanged(auth, async (user) => {
     } else {
         document.getElementById('profileLoginView').style.display = "block";
         document.getElementById('profileEditView').style.display = "none";
+        loadMessages(); 
     }
 });
 
