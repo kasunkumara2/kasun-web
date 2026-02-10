@@ -1,15 +1,222 @@
-// --- 1. MOUSE SCULPTING ---
+// --- FIREBASE IMPORTS ---
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+// --- YOUR FIREBASE CONFIGURATION ---
+const firebaseConfig = {
+  apiKey: "AIzaSyAZton7bSKozxi8R3uUN3qZdrNwt09hKHs",
+  authDomain: "kasun-portfolio-7553b.firebaseapp.com",
+  projectId: "kasun-portfolio-7553b",
+  storageBucket: "kasun-portfolio-7553b.firebasestorage.app",
+  messagingSenderId: "619515163796",
+  appId: "1:619515163796:web:f54786f0baa083541e7081",
+  measurementId: "G-619H45RT8Z"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const provider = new GoogleAuthProvider();
+
+// ==========================================
+// 1. AUTHENTICATION LOGIC (LOGIN / LOGOUT)
+// ==========================================
+let currentUser = null;
+
+// Login Function
+window.googleLogin = () => {
+    signInWithPopup(auth, provider)
+        .then((result) => {
+            console.log("Logged in as:", result.user.displayName);
+        }).catch((error) => {
+            console.error("Login Error:", error);
+            alert("Login Failed. Please try again.");
+        });
+}
+
+// Logout Function
+window.googleLogout = () => {
+    signOut(auth).then(() => {
+        alert("You have logged out.");
+    }).catch((error) => {
+        console.error("Logout Error:", error);
+    });
+}
+
+// Monitor Login State
+onAuthStateChanged(auth, (user) => {
+    const overlay = document.getElementById('loginOverlay');
+    if (user) {
+        currentUser = user;
+        if(overlay) overlay.style.display = "none"; // Hide Login Screen
+        loadMessages(); // Start loading chat
+    } else {
+        currentUser = null;
+        if(overlay) overlay.style.display = "flex"; // Show Login Screen
+    }
+});
+
+// ==========================================
+// 2. COMMUNITY CHAT LOGIC (REAL-TIME DB)
+// ==========================================
+
+// Send Message
+window.postCommunity = async () => {
+    const input = document.getElementById('commInput');
+    const text = input.value.trim();
+    
+    if (text !== "" && currentUser) {
+        try {
+            await addDoc(collection(db, "messages"), {
+                text: text,
+                uid: currentUser.uid,
+                name: currentUser.displayName,
+                photo: currentUser.photoURL,
+                createdAt: new Date() // Timestamp for ordering
+            });
+            input.value = ""; // Clear input
+        } catch (e) {
+            console.error("Error sending message: ", e);
+            alert("Error sending message. Check console.");
+        }
+    } else if (!currentUser) {
+        alert("Please login first!");
+    }
+}
+
+// Enter Key Support for Chat
+window.handleCommEnter = function(e) { 
+    if (e.key === 'Enter') window.postCommunity(); 
+}
+
+// Load Messages (Real-time Listener)
+function loadMessages() {
+    const q = query(collection(db, "messages"), orderBy("createdAt", "asc"), limit(50));
+    const msgBoard = document.getElementById('commMessages');
+    
+    // This runs every time the database updates
+    onSnapshot(q, (snapshot) => {
+        msgBoard.innerHTML = ""; // Clear current list
+        snapshot.forEach((doc) => {
+            const msg = doc.data();
+            const isMe = currentUser && msg.uid === currentUser.uid;
+            
+            const div = document.createElement('div');
+            div.className = `msg-container`;
+            
+            // HTML for Message Bubble
+            div.innerHTML = `
+                <div class="msg-info ${isMe ? 'sent' : 'received'}">
+                    ${isMe ? '' : `<img src="${msg.photo}" class="profile-pic">`} 
+                    <span>${isMe ? 'You' : msg.name.split(' ')[0]}</span>
+                </div>
+                <div class="msg ${isMe ? 'sent' : 'received'}">${msg.text}</div>
+            `;
+            msgBoard.appendChild(div);
+        });
+        // Auto Scroll to Bottom
+        msgBoard.scrollTop = msgBoard.scrollHeight;
+    });
+}
+
+// ==========================================
+// 3. SMART BOT (KASUN AI) - NO API KEY NEEDED
+// ==========================================
+window.askSmartBot = function() {
+    const input = document.getElementById('aiInput');
+    const area = document.getElementById('aiMessages');
+    const text = input.value.toLowerCase().trim();
+    if (!text) return;
+
+    // Show User Message
+    area.innerHTML += `<div class="msg user">${input.value}</div>`;
+    input.value = ""; 
+    area.scrollTop = area.scrollHeight;
+
+    // Bot Response Logic
+    setTimeout(() => {
+        let reply = "I didn't catch that. Ask about 'Skills', 'Price', or 'Contact'.";
+
+        if(text.match(/hi|hello|hey|ayubowan|good morning/)) reply = "Hello! I am Kasun AI. How can I help you today? 😊";
+        else if(text.match(/who|name|nama|kawuda/)) reply = "I am Kasun Padma Kumara, a Digital Creator & Video Editor.";
+        else if(text.match(/skill|work|do|job|wada|video|photo|edit/)) reply = "I specialize in: 🎥 Video Editing, 📸 Photography, 🤖 AI Art, and 🎧 DJ Remixing.";
+        else if(text.match(/price|cost|budget|gana|money|salli/)) reply = "Prices depend on the project. Use the 'Hire Me' button to send your budget.";
+        else if(text.match(/contact|number|phone|whatsapp|call/)) reply = "📞 WhatsApp: +94717647693 (Available 24/7)";
+        else if(text.match(/location|koheda|address/)) reply = "📍 Based in Avissawella, Sri Lanka.";
+        else if(text.match(/software|tool|app/)) reply = "I use Adobe Premiere Pro, After Effects, Photoshop, and AI tools.";
+        else if(text.match(/thanks|thank|ela/)) reply = "You're welcome! 🚀";
+
+        area.innerHTML += `<div class="msg bot">${reply}</div>`;
+        area.scrollTop = area.scrollHeight;
+    }, 600);
+}
+// AI Chat Enter Key
+window.handleEnter = function(e) { if (e.key === 'Enter') window.askSmartBot(); }
+
+
+// ==========================================
+// 4. UI EFFECTS (COUNTERS, TILT, NEWS)
+// ==========================================
+
+// Preloader & Counters
+window.addEventListener("load", function() {
+    const preloader = document.getElementById("preloader");
+    if(preloader) {
+        preloader.style.opacity = '0';
+        setTimeout(() => preloader.style.display = "none", 500);
+    }
+    
+    // Animated Counters
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const counters = entry.target.querySelectorAll('.counter');
+                counters.forEach(counter => {
+                    counter.innerText = '0';
+                    const target = +counter.getAttribute('data-target');
+                    let current = 0;
+                    const step = target / 100;
+                    const timer = setInterval(() => {
+                        current += step;
+                        if (current >= target) {
+                            clearInterval(timer);
+                            counter.innerText = target + "+";
+                        } else {
+                            counter.innerText = Math.ceil(current);
+                        }
+                    }, 20);
+                });
+                observer.unobserve(entry.target);
+            }
+        });
+    });
+    const statsSection = document.getElementById('counterSection');
+    if(statsSection) observer.observe(statsSection);
+});
+
+// Auto Typing Text
+const words = ["Video Editor", "Photographer", "AI Artist", "DJ / Remixer"];
+let i = 0;
+function type() {
+    const el = document.querySelector('.typing-text');
+    if(el) {
+        el.textContent = words[i % words.length];
+        i++;
+        setTimeout(type, 2000);
+    }
+}
+type();
+
+// Mouse Sculpting
 const cursorBlob = document.querySelector('.cursor-blob');
 const cursorDot = document.querySelector('.cursor-dot');
-
 document.addEventListener('mousemove', (e) => {
-    cursorDot.style.left = e.clientX + 'px';
-    cursorDot.style.top = e.clientY + 'px';
-    setTimeout(() => {
-        cursorBlob.style.left = e.clientX + 'px';
-        cursorBlob.style.top = e.clientY + 'px';
-    }, 100);
-
+    if(cursorDot) { cursorDot.style.left = e.clientX + 'px'; cursorDot.style.top = e.clientY + 'px'; }
+    if(cursorBlob) { setTimeout(() => { cursorBlob.style.left = e.clientX + 'px'; cursorBlob.style.top = e.clientY + 'px'; }, 100); }
+    
+    // Tilt Effect
     document.querySelectorAll('.tilt-element').forEach(card => {
         const rect = card.getBoundingClientRect();
         const x = e.clientX - rect.left;
@@ -26,60 +233,19 @@ document.addEventListener('mousemove', (e) => {
     });
 });
 
-// --- 2. COUNTERS ---
-window.addEventListener("load", function() {
-    document.getElementById("preloader").style.display = "none";
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const counters = entry.target.querySelectorAll('.counter');
-                counters.forEach(counter => {
-                    counter.innerText = '0';
-                    const target = +counter.getAttribute('data-target');
-                    const duration = 2000; 
-                    const step = target / (duration / 20); 
-                    let current = 0;
-                    const timer = setInterval(() => {
-                        current += step;
-                        if (current >= target) {
-                            clearInterval(timer);
-                            counter.innerText = target + "+";
-                        } else {
-                            counter.innerText = Math.ceil(current);
-                        }
-                    }, 20);
-                });
-                observer.unobserve(entry.target);
-            }
-        });
-    });
-    const statsSection = document.querySelector('.stats-row');
-    if(statsSection) observer.observe(statsSection);
-});
-
-// --- 3. AUTO TYPE SKILLS ---
-const words = ["Video Editor", "Photographer", "AI Artist", "DJ / Remixer", "Social Media Manager"];
-let i = 0;
-function type() {
-    const el = document.querySelector('.typing-text');
-    if(el) {
-        el.textContent = words[i % words.length];
-        i++;
-        setTimeout(type, 2000);
-    }
-}
-type();
-
-// --- 4. NEWS MAGAZINE ---
+// News Data & Functions
 const newsData = [];
 const categories = ['Country', 'Game', 'Tech', 'Funny', 'Girl', 'Men'];
 for(let j=1; j<=40; j++) {
     const cat = categories[j % categories.length];
-    const imgUrl = `https://picsum.photos/300/200?random=${j}`; 
-    newsData.push({ id: j, tag: cat, title: `${cat} News Update #${j}`, img: imgUrl, desc: `Exclusive updates on ${cat} trends.`, date: 'Today' });
+    newsData.push({
+        id: j, tag: cat, title: `${cat} Update #${j}: New Trends`, 
+        img: `https://picsum.photos/300/200?random=${j}`, 
+        desc: `Latest updates on ${cat} specifically curated for you.`, date: 'Today' 
+    });
 }
 
-function renderNews(filter) {
+window.renderNews = (filter) => {
     const grid = document.getElementById('newsGrid');
     if(!grid) return;
     grid.innerHTML = '';
@@ -93,14 +259,16 @@ function renderNews(filter) {
         }
     });
 }
-renderNews('all');
+// Init News
+document.addEventListener('DOMContentLoaded', () => window.renderNews('all'));
+
 window.filterNews = (f) => {
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
     event.target.classList.add('active');
-    renderNews(f);
+    window.renderNews(f);
 }
 
-function openNewsModal(item) {
+window.openNewsModal = (item) => {
     document.getElementById('popupImg').src = item.img;
     document.getElementById('popupTag').innerText = item.tag;
     document.getElementById('popupTitle').innerText = item.title;
@@ -110,73 +278,9 @@ function openNewsModal(item) {
 }
 window.closeNewsModal = () => document.getElementById('newsModal').style.display = 'none';
 
-// --- 5. CONNECT HUB & SMART BOT (THE BRAIN) ---
-window.switchConnect = function(tab) {
-    document.getElementById('aiSection').style.display = (tab === 'ai') ? 'flex' : 'none';
-    document.getElementById('communitySection').style.display = (tab === 'community') ? 'flex' : 'none';
-    document.querySelectorAll('.connect-btn').forEach(b => b.classList.remove('active'));
-    event.currentTarget.classList.add('active');
-    if(tab === 'ai') setTimeout(() => document.getElementById('aiInput').focus(), 100);
-    if(tab === 'community') setTimeout(() => document.getElementById('commInput').focus(), 100);
-}
-
-// *** SMART BOT LOGIC ***
-window.askSmartBot = function() {
-    const input = document.getElementById('aiInput');
-    const area = document.getElementById('aiMessages');
-    const text = input.value.toLowerCase().trim();
-    if (!text) return;
-
-    area.innerHTML += `<div class="msg user">${input.value}</div>`;
-    input.value = ""; 
-    area.scrollTop = area.scrollHeight;
-
-    setTimeout(() => {
-        let reply = "I didn't quite get that. Try asking about 'Skills', 'Price', 'Services', or 'Contact'.";
-
-        // GREETINGS
-        if(text.match(/hi|hello|hey|ayubowan|good morning|moko|kohomada/)) reply = "Hello! I am Kasun AI. How can I help you? 😊";
-        
-        // IDENTITY
-        else if(text.match(/who|name|nama|kawuda|kasun/)) reply = "I am Kasun Padma Kumara, a Digital Creator, Video Editor & AI Artist.";
-        
-        // SERVICES / SKILLS
-        else if(text.match(/skill|work|do|job|wada|video|photo|edit|design|art|dj|music/)) reply = "I specialize in: \n🎥 Video Editing\n📸 Photography\n🤖 AI Art\n🎨 Graphic Design\n🎧 DJ Remixing";
-        
-        // PRICE / BUDGET
-        else if(text.match(/price|cost|budget|gana|money|salli|keeyada|rate|charge/)) reply = "Prices depend on the project scope. Please use the 'Hire Me' button to send your budget.";
-        
-        // CONTACT
-        else if(text.match(/contact|number|phone|whatsapp|email|call|address|location|koheda/)) reply = "📍 Based in Avissawella, Sri Lanka.\n📞 WhatsApp: +94717647693";
-        
-        // TOOLS
-        else if(text.match(/software|tool|app|pc|spec/)) reply = "I use Adobe Premiere Pro, After Effects, Photoshop, Lightroom, and various AI tools.";
-        
-        // FUN / PERSONAL
-        else if(text.match(/age|old|school|love|gf/)) reply = "That's a secret! 🤫 Let's focus on work.";
-        
-        // THANKS
-        else if(text.match(/thanks|thank|ela|jaya/)) reply = "You're welcome! Happy to help. 🚀";
-
-        area.innerHTML += `<div class="msg bot">${reply}</div>`;
-        area.scrollTop = area.scrollHeight;
-    }, 500);
-}
-
-// COMMUNITY
-window.postCommunity = function() {
-    const input = document.getElementById('commInput');
-    const board = document.getElementById('commMessages');
-    const text = input.value.trim();
-    if(text !== "") {
-        board.innerHTML += `<div class="msg sent">${text}</div>`;
-        input.value = "";
-        board.scrollTop = board.scrollHeight;
-    }
-}
-window.handleCommEnter = function(e) { if (e.key === 'Enter') window.postCommunity(); }
-
-// --- 6. COMMON ---
+// ==========================================
+// 5. COMMON UTILS & NAVIGATION
+// ==========================================
 window.onclick = (e) => { if(e.target.classList.contains('modal')) e.target.style.display = 'none'; }
 window.openSettings = () => document.getElementById('settingsModal').style.display = 'flex';
 window.closeSettings = () => document.getElementById('settingsModal').style.display = 'none';
@@ -190,13 +294,20 @@ window.showPage = (id, el) => {
     el.classList.add('active');
 }
 
-window.sendBookingToWhatsApp = () => {
-    const name = document.getElementById('clientName').value;
-    const srv = document.getElementById('serviceType').value;
-    const bud = document.getElementById('clientBudget').value;
-    const msg = document.getElementById('clientMessage').value;
-    if(!name) { alert("Please enter name"); return; }
-    window.open(`https://wa.me/+94717647693?text=Name:${name}%0AService:${srv}%0ABudget:${bud}%0ADetails:${msg}`, '_blank');
+window.switchConnect = (tab) => {
+    document.getElementById('aiSection').style.display = (tab === 'ai') ? 'flex' : 'none';
+    document.getElementById('communitySection').style.display = (tab === 'community') ? 'flex' : 'none';
+    document.querySelectorAll('.connect-btn').forEach(b => b.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+    if(tab === 'ai') setTimeout(() => document.getElementById('aiInput').focus(), 100);
+    if(tab === 'community') setTimeout(() => document.getElementById('commInput').focus(), 100);
+}
+
+window.switchTab = (t) => {
+    document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+    document.getElementById(t+'Tab').style.display = 'block';
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
 }
 
 window.toggleAuth = (t) => {
@@ -206,12 +317,15 @@ window.toggleAuth = (t) => {
     if(t === 'signin') document.getElementById('signInBtn').classList.add('active');
     if(t === 'signup') document.getElementById('signUpBtn').classList.add('active');
 }
-window.toggleTawkChat = function() { if(window.Tawk_API) window.Tawk_API.toggle(); else alert("Chat loading..."); }
-window.handleEnter = function(e) { if (e.key === 'Enter') window.askSmartBot(); }
-window.switchTab = (t) => {
-    document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
-    document.getElementById(t+'Tab').style.display = 'block';
-    document.querySelectorAll('.tab-box').forEach(b => b.classList.remove('active'));
-    event.target.classList.add('active');
+
+window.sendBookingToWhatsApp = () => {
+    const name = document.getElementById('clientName').value;
+    const srv = document.getElementById('serviceType').value;
+    const bud = document.getElementById('clientBudget').value;
+    const msg = document.getElementById('clientMessage').value;
+    if(!name) { alert("Please enter name"); return; }
+    window.open(`https://wa.me/+94717647693?text=Name:${name}%0AService:${srv}%0ABudget:${bud}%0ADetails:${msg}`, '_blank');
 }
+
 window.setTheme = (t) => document.body.className = 'theme-'+t;
+window.toggleTawkChat = function() { if(window.Tawk_API) window.Tawk_API.toggle(); else alert("Chat loading..."); }
