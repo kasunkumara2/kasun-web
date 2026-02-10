@@ -36,43 +36,46 @@
         <div class="modal-content glass-card-simple settings-box tilt-element">
             <span class="close-btn" onclick="closeSettings()">&times;</span>
             <div class="settings-tabs-container">
-                <button class="tab-btn active" onclick="switchTab('auth')">Account</button>
-                <button class="tab-btn" onclick="switchTab('theme')">Themes</button>
+                <button class="tab-btn active" id="tabAuth" onclick="switchTab('auth')">Account</button>
+                <button class="tab-btn" id="tabTheme" onclick="switchTab('theme')">Themes</button>
             </div>
+
             <div id="authTab" class="tab-content active">
-                <div class="auth-toggle-box">
-                    <div class="auth-toggle-btn active" id="signInBtn" onclick="toggleAuth('signin')">Sign In</div>
-                    <div class="auth-toggle-btn" id="signUpBtn" onclick="toggleAuth('signup')">Sign Up</div>
+                <div id="userLoggedOut">
+                    <div class="auth-toggle-box">
+                        <div class="auth-toggle-btn active" id="signInBtn" onclick="toggleAuth('signin')">Sign In</div>
+                        <div class="auth-toggle-btn" id="signUpBtn" onclick="toggleAuth('signup')">Sign Up</div>
+                    </div>
+                    <form id="signInForm" class="auth-form">
+                        <div class="input-group"><i class="fas fa-envelope"></i><input type="text" id="loginEmail" placeholder="Email"></div>
+                        <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="loginPass" placeholder="Password"></div>
+                        <button type="button" class="btn-primary full-width" onclick="emailLogin()">Login</button>
+                    </form>
+                    <form id="signUpForm" class="auth-form" style="display: none;">
+                        <div class="input-group"><i class="fas fa-user"></i><input type="text" id="regName" placeholder="Name"></div>
+                        <div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="regEmail" placeholder="Email"></div>
+                        <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="regPass" placeholder="Password"></div>
+                        <button type="button" class="btn-primary full-width" onclick="emailRegister()">Register</button>
+                    </form>
+                    <div class="social-login">
+                        <button type="button" class="social-btn google" onclick="googleLogin()"><img src="https://img.icons8.com/color/48/google-logo.png"> Google</button>
+                        <button type="button" class="social-btn facebook" onclick="facebookLogin()"><img src="https://img.icons8.com/color/48/facebook-new.png"> Facebook</button>
+                    </div>
                 </div>
-                <form id="signInForm" class="auth-form">
-                    <div class="input-group"><i class="fas fa-envelope"></i><input type="text" placeholder="Email"></div>
-                    <div class="input-group"><i class="fas fa-lock"></i><input type="password" placeholder="Password"></div>
-                    <button type="button" class="btn-primary full-width">Login</button>
-                    <div class="social-login">
-                        <button type="button" class="social-btn google"><img src="https://img.icons8.com/color/48/google-logo.png" alt="G"> Google</button>
-                        <button type="button" class="social-btn facebook"><img src="https://img.icons8.com/color/48/facebook-new.png" alt="F"> Facebook</button>
-                    </div>
-                </form>
-                <form id="signUpForm" class="auth-form" style="display: none;">
-                    <div class="input-group"><i class="fas fa-user"></i><input type="text" placeholder="Name"></div>
-                    <div class="input-group"><i class="fas fa-envelope"></i><input type="email" placeholder="Email"></div>
-                    <div class="input-group"><i class="fas fa-lock"></i><input type="password" placeholder="Password"></div>
-                    <button type="button" class="btn-primary full-width">Register</button>
-                    <div class="social-login">
-                        <button type="button" class="social-btn google"><img src="https://img.icons8.com/color/48/google-logo.png" alt="G"> Google</button>
-                        <button type="button" class="social-btn facebook"><img src="https://img.icons8.com/color/48/facebook-new.png" alt="F"> Facebook</button>
-                    </div>
-                </form>
+                <div id="userLoggedIn" style="display:none; text-align:center;">
+                    <img id="userPhoto" src="" style="width:80px; border-radius:50%; border:2px solid var(--primary); margin-bottom:10px;">
+                    <h3 id="userName" style="color:white; margin-bottom:20px;">User</h3>
+                    <button class="btn-secondary full-width" onclick="logout()">Logout</button>
+                </div>
             </div>
+
             <div id="themeTab" class="tab-content" style="display: none;">
                 <h3 style="margin-bottom:15px; color:white;">Select Theme</h3>
                 <div class="theme-grid">
                     <div class="theme-card dark selected" onclick="setTheme('dark')"><div class="color-dot" style="background:#000;"></div><span>Dark</span></div>
                     <div class="theme-card blue" onclick="setTheme('blue')"><div class="color-dot" style="background:#0ea5e9;"></div><span>Blue</span></div>
-                    <div class="theme-card white" onclick="setTheme('white')"><div class="color-dot" style="background:#fff;"></div><span style="color:#333;">White</span></div>
+                    <div class="theme-card white" onclick="setTheme('white')"><div class="color-dot" style="background:#fff;"></div><span>White</span></div>
                     <div class="theme-card pink" onclick="setTheme('pink')"><div class="color-dot" style="background:#ff007f;"></div><span>Pink</span></div>
-                    <div class="theme-card yellow" onclick="setTheme('yellow')"><div class="color-dot" style="background:#ffd700;"></div><span>Yellow</span></div>
-                    <div class="theme-card green" onclick="setTheme('green')"><div class="color-dot" style="background:#00ff00;"></div><span>Green</span></div>
                 </div>
             </div>
         </div>
@@ -89,11 +92,7 @@
                         <option value="Videography">Videography</option>
                         <option value="Photography">Photography</option>
                         <option value="Video Editing">Video Editing</option>
-                        <option value="Class Poster">Class Poster</option>
-                        <option value="Banner Design">Banner Design</option>
-                        <option value="Social Media">Social Media</option>
                         <option value="AI Art">AI Art</option>
-                        <option value="DJ Remix">DJ Remix</option>
                     </select>
                 </div>
                 <div class="input-group"><i class="fas fa-coins"></i><input type="text" id="clientBudget" placeholder="Budget (LKR)"></div>
@@ -135,7 +134,6 @@
                         <div class="btn-row">
                             <button class="btn-primary" onclick="openBooking()">Hire Me</button>
                             <a href="https://wa.me/+94717647693" target="_blank" class="btn-secondary"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-                            <a href="https://facebook.com/kasunlks" target="_blank" class="btn-secondary"><i class="fab fa-facebook-f"></i> Facebook</a>
                         </div>
                     </div>
                 </div>
@@ -149,54 +147,6 @@
                         <div class="skill-box"><span>Photography</span><div class="bar"><div class="fill" style="width:90%"></div></div><span class="perc">90%</span></div>
                         <div class="skill-box"><span>Video Editing</span><div class="bar"><div class="fill" style="width:85%"></div></div><span class="perc">85%</span></div>
                         <div class="skill-box"><span>AI Art / Video</span><div class="bar"><div class="fill" style="width:80%"></div></div><span class="perc">80%</span></div>
-                        <div class="skill-box"><span>Social Media Mgt</span><div class="bar"><div class="fill" style="width:90%"></div></div><span class="perc">90%</span></div>
-                        <div class="skill-box"><span>DJ Remixing</span><div class="bar"><div class="fill" style="width:75%"></div></div><span class="perc">75%</span></div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="news" class="page">
-                <div class="glass-card">
-                    <h2 class="section-title">AI Magazine 📰</h2>
-                    <div class="news-filters">
-                        <button class="filter-btn active" onclick="filterNews('all')">All</button>
-                        <button class="filter-btn" onclick="filterNews('country')">Country 🇱🇰</button>
-                        <button class="filter-btn" onclick="filterNews('game')">Gaming 🎮</button>
-                        <button class="filter-btn" onclick="filterNews('tech')">Tech 🤖</button>
-                        <button class="filter-btn" onclick="filterNews('funny')">Funny 😂</button>
-                        <button class="filter-btn" onclick="filterNews('girl')">Girls 🎀</button>
-                        <button class="filter-btn" onclick="filterNews('men')">Men 🕶️</button>
-                    </div>
-                    <div class="magazine-grid" id="newsGrid"></div>
-                </div>
-            </section>
-
-            <section id="connect" class="page">
-                <div class="connect-layout">
-                    <div class="connect-sidebar glass-card">
-                        <h3>Connect Hub</h3>
-                        <button class="connect-btn active" onclick="switchConnect('ai')"><i class="fas fa-robot"></i> AI Chatbot</button>
-                        <button class="connect-btn" onclick="switchConnect('community')"><i class="fas fa-users"></i> Community</button>
-                    </div>
-                    <div class="connect-main glass-card">
-                        <div id="aiSection" class="chat-interface">
-                            <div class="chat-header"><i class="fas fa-robot"></i> Kasun AI (Ask anything!)</div>
-                            <div class="chat-messages" id="aiMessages"><div class="msg bot">Hello! I am Kasun AI. Ask me about Services, Price, or Contact info.</div></div>
-                            <div class="chat-input-area">
-                                <input type="text" id="aiInput" placeholder="Ask AI..." onkeypress="handleEnter(event)">
-                                <button onclick="askSmartBot()"><i class="fas fa-paper-plane"></i></button>
-                            </div>
-                        </div>
-                        <div id="communitySection" class="chat-interface" style="display:none;">
-                            <div class="chat-header" style="background:#075e54;"><i class="fas fa-users"></i> Global Community</div>
-                            <div class="chat-messages" id="commMessages" style="background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');">
-                                <div class="msg received">Welcome to the hub!</div>
-                            </div>
-                            <div class="chat-input-area">
-                                <input type="text" id="commInput" placeholder="Type a message..." onkeypress="handleCommEnter(event)">
-                                <button id="commSendBtn" onclick="postCommunity()"><i class="fas fa-paper-plane"></i></button>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </section>
@@ -208,7 +158,39 @@
                         <div class="gallery-item tilt-element"><img src="images/work1.jpg"><div class="tag">Photo</div></div>
                         <div class="gallery-item tilt-element"><img src="images/work2.jpg"><div class="tag">Video</div></div>
                         <div class="gallery-item tilt-element"><img src="images/work3.jpg"><div class="tag">AI Art</div></div>
-                        <div class="gallery-item tilt-element"><img src="images/work4.jpg"><div class="tag">Music</div></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="news" class="page">
+                <div class="glass-card">
+                    <h2 class="section-title">AI Magazine 📰</h2>
+                    <div class="magazine-grid" id="newsGrid"></div>
+                </div>
+            </section>
+
+            <section id="connect" class="page">
+                <div class="connect-layout">
+                    <div class="connect-sidebar glass-card">
+                        <h3>Connect Hub</h3>
+                        <button class="connect-btn active" onclick="switchConnect('ai')"><i class="fas fa-robot"></i> AI Chatbot</button>
+                        <button class="connect-btn" onclick="switchConnect('live')"><i class="fas fa-comment-dots"></i> Live Support</button>
+                    </div>
+                    <div class="connect-main glass-card">
+                        <div id="aiSection" class="chat-interface">
+                            <div class="chat-header"><i class="fas fa-robot"></i> Kasun AI</div>
+                            <div class="chat-messages" id="aiMessages"><div class="msg bot">Hello! I am Kasun AI.</div></div>
+                            <div class="chat-input-area">
+                                <input type="text" id="aiInput" placeholder="Ask AI..." onkeypress="handleEnter(event)">
+                                <button onclick="askSmartBot()"><i class="fas fa-paper-plane"></i></button>
+                            </div>
+                        </div>
+                        <div id="liveSection" class="chat-interface" style="display:none; align-items:center; justify-content:center; text-align:center;">
+                            <i class="fas fa-headset" style="font-size:4rem; color:var(--primary); margin-bottom:20px;"></i>
+                            <h2>Need Direct Help?</h2>
+                            <p style="color:#aaa; margin-bottom:30px;">Chat with me directly in real-time.</p>
+                            <button class="btn-primary" onclick="toggleTawkChat()">Open Live Chat</button>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -219,15 +201,6 @@
                     <div class="timeline">
                         <div class="timeline-item"><i class="fas fa-map-marker-alt icon"></i><h3>Location</h3><p>Avissawella, Sri Lanka 🇱🇰</p></div>
                         <div class="timeline-item"><i class="fas fa-graduation-cap icon"></i><h3>Education</h3><p>R/Anura Maha Vidyalaya</p></div>
-                        <div class="timeline-item">
-                            <i class="fas fa-file-alt icon"></i><h3>O/L Results</h3>
-                            <table class="result-table">
-                                <tr><td>ICT</td><td>B</td></tr><tr><td>Maths</td><td>B</td></tr><tr><td>Science</td><td>C</td></tr>
-                                <tr><td>Sinhala</td><td>S</td></tr><tr><td>Buddhism</td><td>S</td></tr><tr><td>English</td><td>S</td></tr>
-                                <tr><td>History</td><td>W</td></tr><tr><td>Art</td><td>B</td></tr><tr><td>Geo</td><td>C</td></tr>
-                            </table>
-                        </div>
-                        <div class="timeline-item"><i class="fas fa-plane icon"></i><h3>Travel History</h3><div class="tags"><span class="tag">Nuwara Eliya</span><span class="tag">Kataragama</span><span class="tag">Colombo</span><span class="tag">Anuradhapura</span></div></div>
                     </div>
                 </div>
             </section>
@@ -238,14 +211,11 @@
     var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
     (function(){
     var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-    s1.async=true;
-    s1.src='https://embed.tawk.to/698a0b62e0c66b1c3ad16208/1jh1joutb';
-    s1.charset='UTF-8';
-    s1.setAttribute('crossorigin','*');
+    s1.async=true; s1.src='https://embed.tawk.to/698a0b62e0c66b1c3ad16208/1jh1joutb';
+    s1.charset='UTF-8'; s1.setAttribute('crossorigin','*');
     s0.parentNode.insertBefore(s1,s0);
     })();
     </script>
-
-    <script src="script.js"></script>
+    <script type="module" src="script.js"></script>
 </body>
 </html>
