@@ -19,8 +19,14 @@ const googleProvider = new GoogleAuthProvider();
 const facebookProvider = new FacebookAuthProvider();
 
 let currentUser = null;
-let currentChatMode = 'kasun'; // kasun, ai, community
+let currentChatMode = 'kasun';
 let selectedAvatarUrl = "";
+
+// --- SPEEDY LOADER (DOM READY) ---
+document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("preloader").style.display = "none";
+    startCounters();
+});
 
 // --- CURSOR ---
 const dot = document.querySelector('.cursor-dot');
@@ -30,62 +36,31 @@ window.addEventListener('mousemove', (e) => {
     outline.style.left = e.clientX + 'px'; outline.style.top = e.clientY + 'px';
 });
 
-// --- AUTH ---
-window.selectAvatar = (url) => {
-    selectedAvatarUrl = url;
-    document.getElementById('userAvatar').src = url;
-};
+// --- AUTH & PROFILE ---
+window.selectAvatar = (url) => { selectedAvatarUrl = url; document.getElementById('userAvatar').src = url; };
 
 onAuthStateChanged(auth, async (user) => {
     const outUI = document.getElementById('loggedOutUI');
     const inUI = document.getElementById('loggedInUI');
     const topImg = document.getElementById('topProfileImg');
-
     if (user) {
-        currentUser = user;
-        outUI.style.display = 'none';
-        inUI.style.display = 'block';
-        
-        let userData = {
-            name: user.displayName,
-            photo: user.photoURL || "https://img.icons8.com/color/96/user.png",
-            phone: "", city: "", country: "", gender: "Male", nickname: ""
-        };
-
+        currentUser = user; outUI.style.display = 'none'; inUI.style.display = 'block';
+        let userData = { name: user.displayName, photo: user.photoURL || "https://img.icons8.com/color/96/user.png", phone: "", city: "", country: "", gender: "Male", nickname: "" };
         try { const docSnap = await getDoc(doc(db, "users", user.uid)); if(docSnap.exists()) userData = { ...userData, ...docSnap.data() }; } catch(e) {}
-
         const finalPhoto = userData.customPhoto || userData.photo;
-        document.getElementById('userAvatar').src = finalPhoto;
-        topImg.src = finalPhoto;
-        selectedAvatarUrl = finalPhoto;
-        
-        document.getElementById('editName').value = userData.name;
-        document.getElementById('editNick').value = userData.nickname || "";
-        document.getElementById('editPhone').value = userData.phone;
-        document.getElementById('editCity').value = userData.city;
-        document.getElementById('editCountry').value = userData.country;
-        document.getElementById('editGender').value = userData.gender;
-
+        document.getElementById('userAvatar').src = finalPhoto; topImg.src = finalPhoto; selectedAvatarUrl = finalPhoto;
+        document.getElementById('editName').value = userData.name; document.getElementById('editNick').value = userData.nickname || "";
+        document.getElementById('editPhone').value = userData.phone; document.getElementById('editCity').value = userData.city;
+        document.getElementById('editCountry').value = userData.country; document.getElementById('editGender').value = userData.gender;
     } else {
-        currentUser = null;
-        outUI.style.display = 'block';
-        inUI.style.display = 'none';
-        topImg.src = "https://img.icons8.com/color/96/user.png";
+        currentUser = null; outUI.style.display = 'block'; inUI.style.display = 'none'; topImg.src = "https://img.icons8.com/color/96/user.png";
     }
 });
 
 window.saveUserProfile = async () => {
     if(!currentUser) return;
-    const data = {
-        name: document.getElementById('editName').value,
-        nickname: document.getElementById('editNick').value,
-        phone: document.getElementById('editPhone').value,
-        city: document.getElementById('editCity').value,
-        country: document.getElementById('editCountry').value,
-        gender: document.getElementById('editGender').value,
-        customPhoto: selectedAvatarUrl
-    };
-    try { await setDoc(doc(db, "users", currentUser.uid), data, { merge: true }); alert("Profile Saved!"); location.reload(); } catch(e) { alert("Error: " + e.message); }
+    const data = { name: document.getElementById('editName').value, nickname: document.getElementById('editNick').value, phone: document.getElementById('editPhone').value, city: document.getElementById('editCity').value, country: document.getElementById('editCountry').value, gender: document.getElementById('editGender').value, customPhoto: selectedAvatarUrl };
+    try { await setDoc(doc(db, "users", currentUser.uid), data, { merge: true }); alert("Saved!"); location.reload(); } catch(e) { alert("Error: " + e.message); }
 };
 
 window.googleLogin = () => signInWithPopup(auth, googleProvider).catch(e => alert(e.message));
@@ -94,71 +69,33 @@ window.logoutUser = () => signOut(auth).then(() => location.reload());
 window.emailLogin = () => signInWithEmailAndPassword(auth, document.getElementById('loginEmail').value, document.getElementById('loginPass').value).catch(e => alert(e.message));
 window.emailRegister = () => createUserWithEmailAndPassword(auth, document.getElementById('regEmail').value, document.getElementById('regPass').value).catch(e => alert(e.message));
 
-// --- CHAT SYSTEM (3 MODES) ---
+// --- CHAT LOGIC ---
 window.openChat = (mode) => {
     currentChatMode = mode;
     document.querySelectorAll('.chat-contact').forEach(c => c.classList.remove('active'));
     event.currentTarget.classList.add('active');
-    
     const headerName = document.getElementById('chatHeaderName');
     const headerImg = document.getElementById('chatHeaderImg');
-    const messagesArea = document.getElementById('chatMessagesArea');
-    messagesArea.innerHTML = '';
-
-    if (mode === 'kasun') {
-        headerName.innerText = "Chat with Kasun";
-        headerImg.src = "images/profile.jpg";
-        messagesArea.innerHTML = `<div class="msg received">Hi! I am Kasun. Leave a message, I will reply soon!</div>`;
-    } else if (mode === 'ai') {
-        headerName.innerText = "AI Assistant";
-        headerImg.src = "https://img.icons8.com/color/96/bot.png";
-        messagesArea.innerHTML = `<div class="msg received">Hello! I am your AI Helper. Ask me anything.</div>`;
-    } else if (mode === 'community') {
-        headerName.innerText = "Global Community";
-        headerImg.src = "https://img.icons8.com/color/96/group.png";
-        loadCommunityMessages();
-    }
+    const area = document.getElementById('chatMessagesArea');
+    area.innerHTML = '';
+    
+    if (mode === 'kasun') { headerName.innerText = "Chat with Kasun"; headerImg.src = "images/profile.jpg"; area.innerHTML = `<div class="msg received">Hi! Leave a message.</div>`; }
+    else if (mode === 'ai') { headerName.innerText = "AI Assistant"; headerImg.src = "https://img.icons8.com/color/96/bot.png"; area.innerHTML = `<div class="msg received">Hello! Ask me anything.</div>`; }
+    else if (mode === 'community') { headerName.innerText = "Global Community"; headerImg.src = "https://img.icons8.com/color/96/group.png"; loadCommunityMessages(); }
 };
 
 window.sendMessage = async () => {
     const input = document.getElementById('chatInput');
     const text = input.value.trim();
     if (!text) return;
-    
     const area = document.getElementById('chatMessagesArea');
-    
-    // UI Update
     area.innerHTML += `<div class="msg sent">${text}</div>`;
-    input.value = '';
-    area.scrollTop = area.scrollHeight;
+    input.value = ''; area.scrollTop = area.scrollHeight;
 
-    if (currentChatMode === 'kasun') {
-        setTimeout(() => {
-            area.innerHTML += `<div class="msg received">Thanks! I'll check this.</div>`;
-            area.scrollTop = area.scrollHeight;
-        }, 1000);
-    } else if (currentChatMode === 'ai') {
-        setTimeout(() => {
-            let reply = "I am trained to help you with Kasun's services.";
-            if (text.match(/hi|hello/i)) reply = "Hello! How can I assist you?";
-            if (text.match(/price|cost/i)) reply = "Prices depend on the project. Please use the Hire Me button.";
-            area.innerHTML += `<div class="msg received">${reply}</div>`;
-            area.scrollTop = area.scrollHeight;
-        }, 800);
-    } else if (currentChatMode === 'community') {
-        if (currentUser) {
-            await addDoc(collection(db, "community_messages"), {
-                text: text,
-                uid: currentUser.uid,
-                name: currentUser.displayName || "User",
-                createdAt: new Date()
-            });
-        } else {
-            alert("Please login to chat in Community!");
-        }
-    }
+    if (currentChatMode === 'kasun') { setTimeout(() => { area.innerHTML += `<div class="msg received">Thanks! I'll reply soon.</div>`; area.scrollTop = area.scrollHeight; }, 1000); }
+    else if (currentChatMode === 'ai') { setTimeout(() => { let reply = "I am a bot. How can I help?"; area.innerHTML += `<div class="msg received">${reply}</div>`; area.scrollTop = area.scrollHeight; }, 800); }
+    else if (currentChatMode === 'community' && currentUser) { await addDoc(collection(db, "community_messages"), { text: text, uid: currentUser.uid, name: currentUser.displayName, createdAt: new Date() }); }
 };
-
 window.handleChatEnter = (e) => { if(e.key === 'Enter') window.sendMessage(); };
 
 function loadCommunityMessages() {
@@ -182,14 +119,14 @@ const categories = ['AI', 'Tech', 'Gaming', 'Men', 'Women', 'Design'];
 const newsData = [];
 for(let i=1; i<=60; i++) {
     const cat = categories[i % 6];
-    newsData.push({ id: i, cat: cat, img: `https://picsum.photos/400/600?random=${i}`, title: `${cat} Update #${i}`, desc: `Latest update in ${cat}.` });
+    newsData.push({ id: i, cat: cat, img: `https://picsum.photos/400/600?random=${i}`, title: `${cat} Update #${i}`, desc: `Full details about ${cat} news item #${i}. This includes analysis, trends, and future predictions.` });
 }
 function renderNews(filter) {
     if(!newsGrid) return; newsGrid.innerHTML = '';
     newsData.forEach(item => {
         if(filter === 'all' || item.cat === filter) {
-            const el = document.createElement('div'); el.className = 'news-item';
-            el.innerHTML = `<img src="${item.img}"><div class="news-info-box"><span class="news-tag">${item.cat}</span><h3 style="font-size:0.9rem; margin-top:5px; color:white;">${item.title}</h3></div>`;
+            const el = document.createElement('div'); el.className = 'news-item tilt-element';
+            el.innerHTML = `<img src="${item.img}" loading="lazy"><div class="news-info-box"><span class="news-tag">${item.cat}</span><h3 style="font-size:0.9rem; margin-top:5px; color:white;">${item.title}</h3></div>`;
             el.onclick = () => openNewsPopup(item); newsGrid.appendChild(el);
         }
     });
@@ -203,7 +140,7 @@ function openNewsPopup(item) {
 }
 window.closeNewsModal = () => document.getElementById('newsModal').style.display = 'none';
 
-// --- UI ---
+// --- UI UTILS ---
 window.showPage = (id, el) => { document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page')); document.getElementById(id).classList.add('active-page'); document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); el.classList.add('active'); if(id === 'home') startCounters(); };
 window.openSettings = () => document.getElementById('settingsModal').style.display = 'flex';
 window.closeSettings = () => document.getElementById('settingsModal').style.display = 'none';
@@ -215,11 +152,6 @@ window.sendBookingToWhatsApp = () => { window.open(`https://wa.me/+94717647693?t
 window.setTheme = (t) => document.body.className = 'theme-'+t;
 window.toggleTawkChat = () => { if(window.Tawk_API) window.Tawk_API.toggle(); };
 function startCounters() { document.querySelectorAll('.counter').forEach(c => { c.innerText = '0'; const target = +c.dataset.target; let count = 0; const update = () => { count += target/50; if(count<target) { c.innerText = Math.ceil(count)+"+"; setTimeout(update,30); } else c.innerText = target+"+"; }; update(); }); }
-
-window.addEventListener("load", () => {
-    setTimeout(() => { document.getElementById("preloader").style.display = "none"; startCounters(); }, 1000);
-});
 window.onclick = (e) => { if(e.target.classList.contains('modal')) e.target.style.display = 'none'; };
-
 const words = ["Video Editor", "Photographer", "AI Artist"]; let idx = 0;
 function type() { const el = document.querySelector('.typing-text'); if(el) { el.textContent = words[idx % words.length]; idx++; setTimeout(type, 2000); } } type();
