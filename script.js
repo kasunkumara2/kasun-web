@@ -3,7 +3,6 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebas
 import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, limit, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-// --- CONFIG ---
 const firebaseConfig = {
   apiKey: "AIzaSyAZton7bSKozxi8R3uUN3qZdrNwt09hKHs",
   authDomain: "kasun-portfolio-7553b.firebaseapp.com",
@@ -22,14 +21,14 @@ const facebookProvider = new FacebookAuthProvider();
 
 let currentUser = null;
 let userProfile = { name: "Guest", photo: "https://img.icons8.com/color/96/user.png" };
-let authMode = 'signin'; // 'signin' or 'signup'
+let selectedAvatarURL = ""; // To store selected avatar
+let authMode = 'signin';
 
-// --- SOCIAL LOGIN ---
-window.googleLogin = () => signInWithPopup(auth, googleProvider).catch(e => alert("Error: " + e.message));
-window.facebookLogin = () => signInWithPopup(auth, facebookProvider).catch(e => alert("Error: " + e.message));
+// --- AUTH FUNCTIONS ---
+window.googleLogin = () => signInWithPopup(auth, googleProvider).catch(e => alert(e.message));
+window.facebookLogin = () => signInWithPopup(auth, facebookProvider).catch(e => alert(e.message));
 window.googleLogout = () => signOut(auth).then(() => location.reload());
 
-// --- EMAIL LOGIN / SIGNUP ---
 window.toggleProfileAuth = (mode) => {
     authMode = mode;
     document.getElementById('btnSignIn').classList.toggle('active', mode === 'signin');
@@ -40,117 +39,117 @@ window.toggleProfileAuth = (mode) => {
 window.handleEmailAuth = async () => {
     const email = document.getElementById('emailInput').value;
     const pass = document.getElementById('passInput').value;
-    
-    if(!email || !pass) { alert("Please enter email and password"); return; }
-
+    if(!email || !pass) { alert("Enter email & password"); return; }
     try {
-        if(authMode === 'signin') {
-            await signInWithEmailAndPassword(auth, email, pass);
-        } else {
-            const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
-            // Set default name for new email users
-            await updateProfile(userCredential.user, { displayName: email.split('@')[0] });
+        if(authMode === 'signin') await signInWithEmailAndPassword(auth, email, pass);
+        else {
+            const cred = await createUserWithEmailAndPassword(auth, email, pass);
+            await updateProfile(cred.user, { displayName: email.split('@')[0] });
         }
-    } catch (error) {
-        alert("Error: " + error.message);
-    }
+    } catch (e) { alert(e.message); }
 }
 
-// --- AUTH STATE & PROFILE UI ---
+// --- AVATAR SELECTION ---
+window.selectAvatar = (url) => {
+    selectedAvatarURL = url;
+    document.getElementById('editProfilePic').src = url;
+}
+
+// --- LOAD USER DATA ---
 onAuthStateChanged(auth, async (user) => {
     const loginView = document.getElementById('profileLoginView');
     const editView = document.getElementById('profileEditView');
-    
+    const topIcon = document.getElementById('topProfileImg');
+
     if (user) {
         currentUser = user;
-        // Load custom profile
-        try {
-            const docRef = doc(db, "users", user.uid);
-            const docSnap = await getDoc(docRef);
-            if (docSnap.exists()) {
-                userProfile = docSnap.data();
-            } else {
-                userProfile = { 
-                    name: user.displayName || user.email.split('@')[0], 
-                    photo: user.photoURL || "https://img.icons8.com/color/96/user.png" 
-                };
-            }
-        } catch (e) {
-            console.log("Firestore error (safe fallback):", e);
-            userProfile = { name: user.displayName, photo: user.photoURL };
-        }
-
-        // Update UI
-        document.getElementById('topProfileImg').src = userProfile.photo;
-        document.getElementById('editProfilePic').src = userProfile.photo;
-        document.getElementById('editUsername').value = userProfile.name;
-        document.getElementById('editPhotoURL').value = userProfile.photo;
-
         if(loginView) loginView.style.display = "none";
         if(editView) editView.style.display = "block";
+
+        // Default Data
+        let data = {
+            name: user.displayName || "User",
+            photo: user.photoURL || "https://img.icons8.com/color/96/user.png",
+            phone: "", city: "", country: "", address: "", gender: "Male"
+        };
+
+        // Fetch from Firestore
+        try {
+            const docSnap = await getDoc(doc(db, "users", user.uid));
+            if (docSnap.exists()) {
+                data = { ...data, ...docSnap.data() }; // Merge defaults with saved data
+            }
+        } catch (e) { console.log(e); }
+
+        userProfile = data;
+        selectedAvatarURL = data.photo;
+
+        // Set Values to Inputs
+        document.getElementById('editProfilePic').src = data.photo;
+        document.getElementById('editUsername').value = data.name;
+        document.getElementById('editPhone').value = data.phone;
+        document.getElementById('editCity').value = data.city;
+        document.getElementById('editCountry').value = data.country;
+        document.getElementById('editAddress').value = data.address;
+        document.getElementById('editGender').value = data.gender;
         
-        loadMessages(); 
+        if(topIcon) topIcon.src = data.photo;
+        
+        loadMessages();
     } else {
         currentUser = null;
         if(loginView) loginView.style.display = "block";
         if(editView) editView.style.display = "none";
-        document.getElementById('topProfileImg').src = "https://img.icons8.com/color/96/user.png";
+        if(topIcon) topIcon.src = "https://img.icons8.com/color/96/user.png";
     }
 });
 
 // --- SAVE PROFILE ---
 window.saveProfile = async () => {
-    const newName = document.getElementById('editUsername').value.trim();
-    const newPhoto = document.getElementById('editPhotoURL').value.trim();
+    if (!currentUser) return;
     
-    if (currentUser && newName) {
-        const photoToSave = newPhoto || currentUser.photoURL || "https://img.icons8.com/color/96/user.png";
-        
-        try {
-            await setDoc(doc(db, "users", currentUser.uid), {
-                name: newName,
-                photo: photoToSave
-            });
-            alert("Profile Updated!");
-            location.reload(); 
-        } catch(e) {
-            alert("Error saving profile. Check connection.");
-        }
-    }
+    const newData = {
+        name: document.getElementById('editUsername').value,
+        photo: selectedAvatarURL,
+        phone: document.getElementById('editPhone').value,
+        city: document.getElementById('editCity').value,
+        country: document.getElementById('editCountry').value,
+        address: document.getElementById('editAddress').value,
+        gender: document.getElementById('editGender').value
+    };
+
+    try {
+        await setDoc(doc(db, "users", currentUser.uid), newData, { merge: true });
+        alert("Profile Saved!");
+        location.reload();
+    } catch(e) { alert("Error saving: " + e.message); }
 }
 
-// --- COMMUNITY CHAT ---
+// --- CHAT ---
 window.postCommunity = async () => {
     if (!currentUser) {
-        alert("Please login first via the Profile page (Top Right Icon).");
+        alert("Login first!");
         window.showPage('profile', document.getElementById('navProfile'));
         return;
     }
-
     const input = document.getElementById('commInput');
     const text = input.value.trim();
-    
     if (text !== "") {
-        try {
-            await addDoc(collection(db, "messages"), {
-                text: text,
-                uid: currentUser.uid,
-                name: userProfile.name,
-                photo: userProfile.photo,
-                createdAt: new Date()
-            });
-            input.value = "";
-        } catch (e) { console.error(e); }
+        await addDoc(collection(db, "messages"), {
+            text: text, uid: currentUser.uid, 
+            name: userProfile.name, photo: userProfile.photo, 
+            createdAt: new Date()
+        });
+        input.value = "";
     }
 }
 window.handleCommEnter = (e) => { if (e.key === 'Enter') window.postCommunity(); }
 
 function loadMessages() {
     const q = query(collection(db, "messages"), orderBy("createdAt", "asc"), limit(50));
-    const msgBoard = document.getElementById('commMessages');
-    
     onSnapshot(q, (snapshot) => {
-        msgBoard.innerHTML = "";
+        const board = document.getElementById('commMessages');
+        board.innerHTML = "";
         snapshot.forEach((doc) => {
             const msg = doc.data();
             const isMe = currentUser && msg.uid === currentUser.uid;
@@ -164,13 +163,13 @@ function loadMessages() {
                 <div class="msg ${isMe ? 'sent' : 'received'}" style="padding:8px 12px; border-radius:15px; margin:2px 0; max-width:70%; ${isMe ? 'background:var(--primary); align-self:flex-end;' : 'background:#333; align-self:flex-start;'}">${msg.text}</div>
             `;
             div.style.display = "flex"; div.style.flexDirection = "column";
-            msgBoard.appendChild(div);
+            board.appendChild(div);
         });
-        msgBoard.scrollTop = msgBoard.scrollHeight;
+        board.scrollTop = board.scrollHeight;
     });
 }
 
-// --- SMART BOT ---
+// --- STANDARD UTILS ---
 window.askSmartBot = function() {
     const input = document.getElementById('aiInput');
     const area = document.getElementById('aiMessages');
@@ -189,7 +188,6 @@ window.askSmartBot = function() {
 }
 window.handleEnter = (e) => { if (e.key === 'Enter') window.askSmartBot(); }
 
-// --- COMMON UTILS ---
 window.onclick = (e) => { if(e.target.classList.contains('modal')) e.target.style.display = 'none'; }
 window.openSettings = () => document.getElementById('settingsModal').style.display = 'flex';
 window.closeSettings = () => document.getElementById('settingsModal').style.display = 'none';
@@ -205,8 +203,6 @@ window.showPage = (id, el) => {
 window.switchConnect = (tab) => {
     document.getElementById('aiSection').style.display = (tab === 'ai') ? 'flex' : 'none';
     document.getElementById('communitySection').style.display = (tab === 'community') ? 'flex' : 'none';
-    document.querySelectorAll('.connect-btn').forEach(b => b.classList.remove('active'));
-    event.currentTarget.classList.add('active');
 }
 window.setTheme = (t) => document.body.className = 'theme-'+t;
 window.sendBookingToWhatsApp = () => {
@@ -215,27 +211,8 @@ window.sendBookingToWhatsApp = () => {
 }
 window.toggleTawkChat = function() { if(window.Tawk_API) window.Tawk_API.toggle(); else alert("Chat loading..."); }
 
-const cursorBlob = document.querySelector('.cursor-blob');
-const cursorDot = document.querySelector('.cursor-dot');
-document.addEventListener('mousemove', (e) => {
-    if(cursorDot) { cursorDot.style.left = e.clientX + 'px'; cursorDot.style.top = e.clientY + 'px'; }
-    if(cursorBlob) { setTimeout(() => { cursorBlob.style.left = e.clientX + 'px'; cursorBlob.style.top = e.clientY + 'px'; }, 100); }
-    document.querySelectorAll('.tilt-element').forEach(card => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        if(x > -50 && x < rect.width + 50 && y > -50 && y < rect.height + 50) {
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            const rotateX = ((y - centerY) / centerY) * -5;
-            const rotateY = ((x - centerX) / centerX) * 5;
-            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
-        } else {
-            card.style.transform = `perspective(1000px) rotateX(0) rotateY(0) scale(1)`;
-        }
-    });
-});
-window.addEventListener("load", () => {
+// Mouse & Loaders
+window.addEventListener("load", function() {
     const preloader = document.getElementById("preloader");
     if(preloader) { preloader.style.opacity = '0'; setTimeout(() => preloader.style.display = "none", 500); }
     const observer = new IntersectionObserver((entries) => {
@@ -258,6 +235,26 @@ window.addEventListener("load", () => {
     });
     const stats = document.getElementById('counterSection');
     if(stats) observer.observe(stats);
+});
+const cursorBlob = document.querySelector('.cursor-blob');
+const cursorDot = document.querySelector('.cursor-dot');
+document.addEventListener('mousemove', (e) => {
+    if(cursorDot) { cursorDot.style.left = e.clientX + 'px'; cursorDot.style.top = e.clientY + 'px'; }
+    if(cursorBlob) { setTimeout(() => { cursorBlob.style.left = e.clientX + 'px'; cursorBlob.style.top = e.clientY + 'px'; }, 100); }
+    document.querySelectorAll('.tilt-element').forEach(card => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        if(x > -50 && x < rect.width + 50 && y > -50 && y < rect.height + 50) {
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const rotateX = ((y - centerY) / centerY) * -5;
+            const rotateY = ((x - centerX) / centerX) * 5;
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+        } else {
+            card.style.transform = `perspective(1000px) rotateX(0) rotateY(0) scale(1)`;
+        }
+    });
 });
 const newsData = [{id:1, tag:'Tech', title:'AI Update', img:'https://picsum.photos/300/200', desc:'News', date:'Today'}];
 window.renderNews = () => {
