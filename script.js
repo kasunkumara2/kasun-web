@@ -1,4 +1,3 @@
-// --- FIREBASE SETUP ---
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, limit, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -21,7 +20,7 @@ const facebookProvider = new FacebookAuthProvider();
 
 let currentUser = null;
 let userProfile = { name: "Guest", photo: "https://img.icons8.com/color/96/user.png" };
-let selectedAvatarURL = ""; // To store selected avatar
+let selectedAvatarURL = ""; 
 let authMode = 'signin';
 
 // --- AUTH FUNCTIONS ---
@@ -66,25 +65,22 @@ onAuthStateChanged(auth, async (user) => {
         if(loginView) loginView.style.display = "none";
         if(editView) editView.style.display = "block";
 
-        // Default Data
         let data = {
             name: user.displayName || "User",
             photo: user.photoURL || "https://img.icons8.com/color/96/user.png",
             phone: "", city: "", country: "", address: "", gender: "Male"
         };
 
-        // Fetch from Firestore
         try {
             const docSnap = await getDoc(doc(db, "users", user.uid));
             if (docSnap.exists()) {
-                data = { ...data, ...docSnap.data() }; // Merge defaults with saved data
+                data = { ...data, ...docSnap.data() }; 
             }
         } catch (e) { console.log(e); }
 
         userProfile = data;
         selectedAvatarURL = data.photo;
 
-        // Set Values to Inputs
         document.getElementById('editProfilePic').src = data.photo;
         document.getElementById('editUsername').value = data.name;
         document.getElementById('editPhone').value = data.phone;
@@ -211,7 +207,6 @@ window.sendBookingToWhatsApp = () => {
 }
 window.toggleTawkChat = function() { if(window.Tawk_API) window.Tawk_API.toggle(); else alert("Chat loading..."); }
 
-// Mouse & Loaders
 window.addEventListener("load", function() {
     const preloader = document.getElementById("preloader");
     if(preloader) { preloader.style.opacity = '0'; setTimeout(() => preloader.style.display = "none", 500); }
