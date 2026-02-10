@@ -1,6 +1,6 @@
 // --- FIREBASE SETUP ---
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, limit, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 // --- CONFIG ---
@@ -22,33 +22,65 @@ const facebookProvider = new FacebookAuthProvider();
 
 let currentUser = null;
 let userProfile = { name: "Guest", photo: "https://img.icons8.com/color/96/user.png" };
+let authMode = 'signin'; // 'signin' or 'signup'
 
-// --- LOGIN LOGIC ---
-window.googleLogin = () => signInWithPopup(auth, googleProvider).catch(e => alert("Login Error: " + e.message));
-window.facebookLogin = () => signInWithPopup(auth, facebookProvider).catch(e => {
-    if(e.code === 'auth/account-exists-with-different-credential') alert("Please use Google Login as this email is already registered.");
-    else alert("Login Error: " + e.message);
-});
+// --- SOCIAL LOGIN ---
+window.googleLogin = () => signInWithPopup(auth, googleProvider).catch(e => alert("Error: " + e.message));
+window.facebookLogin = () => signInWithPopup(auth, facebookProvider).catch(e => alert("Error: " + e.message));
 window.googleLogout = () => signOut(auth).then(() => location.reload());
 
-// --- AUTH STATE & PROFILE ---
+// --- EMAIL LOGIN / SIGNUP ---
+window.toggleProfileAuth = (mode) => {
+    authMode = mode;
+    document.getElementById('btnSignIn').classList.toggle('active', mode === 'signin');
+    document.getElementById('btnSignUp').classList.toggle('active', mode === 'signup');
+    document.getElementById('actionBtn').innerText = (mode === 'signin') ? "Login" : "Register";
+}
+
+window.handleEmailAuth = async () => {
+    const email = document.getElementById('emailInput').value;
+    const pass = document.getElementById('passInput').value;
+    
+    if(!email || !pass) { alert("Please enter email and password"); return; }
+
+    try {
+        if(authMode === 'signin') {
+            await signInWithEmailAndPassword(auth, email, pass);
+        } else {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+            // Set default name for new email users
+            await updateProfile(userCredential.user, { displayName: email.split('@')[0] });
+        }
+    } catch (error) {
+        alert("Error: " + error.message);
+    }
+}
+
+// --- AUTH STATE & PROFILE UI ---
 onAuthStateChanged(auth, async (user) => {
     const loginView = document.getElementById('profileLoginView');
     const editView = document.getElementById('profileEditView');
     
     if (user) {
         currentUser = user;
-        // Load custom profile from Firestore
-        const docRef = doc(db, "users", user.uid);
-        const docSnap = await getDoc(docRef);
-        
-        if (docSnap.exists()) {
-            userProfile = docSnap.data();
-        } else {
+        // Load custom profile
+        try {
+            const docRef = doc(db, "users", user.uid);
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                userProfile = docSnap.data();
+            } else {
+                userProfile = { 
+                    name: user.displayName || user.email.split('@')[0], 
+                    photo: user.photoURL || "https://img.icons8.com/color/96/user.png" 
+                };
+            }
+        } catch (e) {
+            console.log("Firestore error (safe fallback):", e);
             userProfile = { name: user.displayName, photo: user.photoURL };
         }
 
-        // Update UI Elements
+        // Update UI
         document.getElementById('topProfileImg').src = userProfile.photo;
         document.getElementById('editProfilePic').src = userProfile.photo;
         document.getElementById('editUsername').value = userProfile.name;
@@ -57,7 +89,7 @@ onAuthStateChanged(auth, async (user) => {
         if(loginView) loginView.style.display = "none";
         if(editView) editView.style.display = "block";
         
-        loadMessages(); // Start Chat
+        loadMessages(); 
     } else {
         currentUser = null;
         if(loginView) loginView.style.display = "block";
@@ -72,15 +104,18 @@ window.saveProfile = async () => {
     const newPhoto = document.getElementById('editPhotoURL').value.trim();
     
     if (currentUser && newName) {
-        const photoToSave = newPhoto || currentUser.photoURL;
-        await setDoc(doc(db, "users", currentUser.uid), {
-            name: newName,
-            photo: photoToSave
-        });
-        alert("Profile Updated Successfully!");
-        location.reload();
-    } else {
-        alert("Name cannot be empty.");
+        const photoToSave = newPhoto || currentUser.photoURL || "https://img.icons8.com/color/96/user.png";
+        
+        try {
+            await setDoc(doc(db, "users", currentUser.uid), {
+                name: newName,
+                photo: photoToSave
+            });
+            alert("Profile Updated!");
+            location.reload(); 
+        } catch(e) {
+            alert("Error saving profile. Check connection.");
+        }
     }
 }
 
@@ -100,8 +135,8 @@ window.postCommunity = async () => {
             await addDoc(collection(db, "messages"), {
                 text: text,
                 uid: currentUser.uid,
-                name: userProfile.name, // Sends Custom Name
-                photo: userProfile.photo, // Sends Custom Photo
+                name: userProfile.name,
+                photo: userProfile.photo,
                 createdAt: new Date()
             });
             input.value = "";
@@ -141,19 +176,13 @@ window.askSmartBot = function() {
     const area = document.getElementById('aiMessages');
     const text = input.value.toLowerCase().trim();
     if (!text) return;
-
     area.innerHTML += `<div class="msg user">${input.value}</div>`;
     input.value = ""; area.scrollTop = area.scrollHeight;
-
     setTimeout(() => {
         let reply = "I can help with Skills, Price, or Contact.";
-        if(text.match(/hi|hello|hey|ayubowan/)) reply = "Hello! I am Kasun AI. 😊";
-        else if(text.match(/who|name/)) reply = "I am Kasun Padma Kumara, a Digital Creator.";
-        else if(text.match(/skill|work/)) reply = "I do Video Editing, Photography & AI Art.";
-        else if(text.match(/price|cost/)) reply = "Prices depend on the project. Click 'Hire Me'.";
-        else if(text.match(/contact|phone/)) reply = "WhatsApp: +94717647693";
-        else if(text.match(/location/)) reply = "📍 Avissawella, Sri Lanka.";
-
+        if(text.match(/hi|hello/)) reply = "Hello! I am Kasun AI.";
+        else if(text.match(/price|cost/)) reply = "Click 'Hire Me' for pricing.";
+        else if(text.match(/contact/)) reply = "WhatsApp: +94717647693";
         area.innerHTML += `<div class="msg bot">${reply}</div>`;
         area.scrollTop = area.scrollHeight;
     }, 600);
@@ -186,13 +215,11 @@ window.sendBookingToWhatsApp = () => {
 }
 window.toggleTawkChat = function() { if(window.Tawk_API) window.Tawk_API.toggle(); else alert("Chat loading..."); }
 
-// --- UI EFFECTS ---
 const cursorBlob = document.querySelector('.cursor-blob');
 const cursorDot = document.querySelector('.cursor-dot');
 document.addEventListener('mousemove', (e) => {
     if(cursorDot) { cursorDot.style.left = e.clientX + 'px'; cursorDot.style.top = e.clientY + 'px'; }
     if(cursorBlob) { setTimeout(() => { cursorBlob.style.left = e.clientX + 'px'; cursorBlob.style.top = e.clientY + 'px'; }, 100); }
-    
     document.querySelectorAll('.tilt-element').forEach(card => {
         const rect = card.getBoundingClientRect();
         const x = e.clientX - rect.left;
@@ -211,7 +238,6 @@ document.addEventListener('mousemove', (e) => {
 window.addEventListener("load", () => {
     const preloader = document.getElementById("preloader");
     if(preloader) { preloader.style.opacity = '0'; setTimeout(() => preloader.style.display = "none", 500); }
-    // Counters
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -233,44 +259,26 @@ window.addEventListener("load", () => {
     const stats = document.getElementById('counterSection');
     if(stats) observer.observe(stats);
 });
-
-// NEWS (Dummy Data)
-const newsData = [];
-const categories = ['Tech', 'Game', 'Music', 'Art', 'SL'];
-for(let j=1; j<=40; j++) {
-    const cat = categories[j % categories.length];
-    newsData.push({ id: j, tag: cat, title: `${cat} Update #${j}`, img: `https://picsum.photos/300/200?random=${j}`, desc: `Latest news about ${cat}.`, date: 'Today' });
-}
-window.renderNews = (filter) => {
+const newsData = [{id:1, tag:'Tech', title:'AI Update', img:'https://picsum.photos/300/200', desc:'News', date:'Today'}];
+window.renderNews = () => {
     const grid = document.getElementById('newsGrid');
-    if(!grid) return;
-    grid.innerHTML = '';
-    newsData.forEach(item => {
-        if (!filter || filter === 'all' || item.tag.toLowerCase() === filter.toLowerCase()) {
+    if(grid) {
+        grid.innerHTML = '';
+        newsData.forEach(item => {
             const div = document.createElement('div');
             div.className = 'news-item tilt-element';
             div.onclick = () => window.openNewsModal(item);
             div.innerHTML = `<img src="${item.img}"><div class="news-info-box"><span class="news-tag">${item.tag}</span><h3 class="news-title">${item.title}</h3></div>`;
             grid.appendChild(div);
-        }
-    });
-}
-window.filterNews = (f) => {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    event.target.classList.add('active');
-    window.renderNews(f);
+        });
+    }
 }
 window.openNewsModal = (item) => {
     document.getElementById('popupImg').src = item.img;
-    document.getElementById('popupTag').innerText = item.tag;
-    document.getElementById('popupTitle').innerText = item.title;
-    document.getElementById('popupDate').innerText = item.date;
-    document.getElementById('popupDesc').innerText = item.desc;
     document.getElementById('newsModal').style.display = 'flex';
 }
 window.closeNewsModal = () => document.getElementById('newsModal').style.display = 'none';
-document.addEventListener('DOMContentLoaded', () => window.renderNews('all'));
-
+document.addEventListener('DOMContentLoaded', () => window.renderNews());
 const words = ["Video Editor", "Photographer", "AI Artist", "DJ / Remixer"];
 let i = 0;
 function type() {
