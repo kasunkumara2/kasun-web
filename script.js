@@ -1,11 +1,3 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
-
-// CONFIG
-const API_KEY = "AIzaSyBtLeTafqNFh4hu6RFb78M3pwmChzpd6uc"; 
-const genAI = new GoogleGenerativeAI(API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-let chatSession = model.startChat();
-
 // --- 1. MOUSE SCULPTING & TILT ---
 const cursorBlob = document.querySelector('.cursor-blob');
 const cursorDot = document.querySelector('.cursor-dot');
@@ -18,6 +10,7 @@ document.addEventListener('mousemove', (e) => {
         cursorBlob.style.top = e.clientY + 'px';
     }, 100);
 
+    // Tilt Effect
     document.querySelectorAll('.tilt-element').forEach(card => {
         const rect = card.getBoundingClientRect();
         const x = e.clientX - rect.left;
@@ -34,66 +27,66 @@ document.addEventListener('mousemove', (e) => {
     });
 });
 
-// --- 2. COUNTERS (FIXED - 150, 40, 5) ---
+// --- 2. COUNTERS (ANIMATED 150+, 40+, 5+) ---
 window.addEventListener("load", function() {
-    document.getElementById("preloader").style.display = "none";
+    // Hide Preloader
+    const preloader = document.getElementById("preloader");
+    if(preloader) {
+        preloader.style.opacity = '0';
+        setTimeout(() => preloader.style.display = "none", 500);
+    }
     
-    // Logic to animate numbers from 0 to target
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const counters = entry.target.querySelectorAll('.counter');
-                counters.forEach(counter => {
-                    counter.innerText = '0';
-                    const target = +counter.getAttribute('data-target');
-                    const duration = 2000; 
-                    const step = target / (duration / 20); 
-                    let current = 0;
-                    
-                    const timer = setInterval(() => {
-                        current += step;
-                        if (current >= target) {
-                            clearInterval(timer);
-                            counter.innerText = target + "+";
-                        } else {
-                            counter.innerText = Math.ceil(current);
-                        }
-                    }, 20);
-                });
-                observer.unobserve(entry.target);
+    // Start Counters
+    const counters = document.querySelectorAll('.counter');
+    counters.forEach(counter => {
+        counter.innerText = '0';
+        const target = +counter.getAttribute('data-target');
+        const duration = 2000; 
+        const step = target / (duration / 20); 
+        let current = 0;
+        
+        const timer = setInterval(() => {
+            current += step;
+            if (current >= target) {
+                clearInterval(timer);
+                counter.innerText = target + "+";
+            } else {
+                counter.innerText = Math.ceil(current);
             }
-        });
+        }, 20);
     });
-    
-    const statsSection = document.querySelector('.stats-row');
-    if(statsSection) observer.observe(statsSection);
 });
 
 // --- 3. AUTO TYPE SKILLS ---
 const words = ["Video Editor", "Photographer", "AI Artist", "DJ / Remixer", "Social Media Manager"];
 let i = 0;
 function type() {
-    let word = words[i % words.length];
-    document.querySelector('.typing-text').textContent = word;
-    i++;
-    setTimeout(type, 2000);
+    const textElement = document.querySelector('.typing-text');
+    if(textElement) {
+        let word = words[i % words.length];
+        textElement.textContent = word;
+        i++;
+        setTimeout(type, 2000);
+    }
 }
 type();
 
-// --- 4. NEWS MAGAZINE ---
+// --- 4. NEWS MAGAZINE (40 Items) ---
 const newsData = [];
 const categories = ['Country', 'Game', 'Tech', 'Funny', 'Girl', 'Men'];
 for(let j=1; j<=40; j++) {
     const cat = categories[j % categories.length];
+    // Reliable Image Source
     const imgUrl = `https://picsum.photos/300/200?random=${j}`; 
     newsData.push({
-        id: j, tag: cat, title: `${cat} News: Major Update #${j} Revealed!`, img: imgUrl,
-        desc: `This is a detailed description for news item #${j}. It contains exciting updates about ${cat} trends in 2026. Click to read more!`, date: 'Today'
+        id: j, tag: cat, title: `${cat} Update: Trending Topic #${j}`, img: imgUrl,
+        desc: `This is a major update regarding ${cat}. It involves new trends, viral content, and future predictions for 2026. Stay tuned for more details!`, date: 'Today'
     });
 }
 
 function renderNews(filter) {
     const grid = document.getElementById('newsGrid');
+    if(!grid) return;
     grid.innerHTML = '';
     newsData.forEach(item => {
         if (filter === 'all' || item.tag.toLowerCase() === filter.toLowerCase()) {
@@ -122,7 +115,7 @@ function openNewsModal(item) {
 }
 window.closeNewsModal = () => document.getElementById('newsModal').style.display = 'none';
 
-// --- 5. CONNECT HUB & CHAT LOGIC ---
+// --- 5. CONNECT HUB & SMART CHATBOT (NO API KEY NEEDED) ---
 window.switchConnect = function(tab) {
     document.getElementById('aiSection').style.display = (tab === 'ai') ? 'flex' : 'none';
     document.getElementById('communitySection').style.display = (tab === 'community') ? 'flex' : 'none';
@@ -132,20 +125,44 @@ window.switchConnect = function(tab) {
     if(tab === 'community') setTimeout(() => document.getElementById('commInput').focus(), 100);
 }
 
-// AI CHAT
-window.askGeminiAI = async function() {
+// SMART BOT LOGIC (100% Working Free AI)
+window.askGeminiAI = function() {
     const input = document.getElementById('aiInput');
     const area = document.getElementById('aiMessages');
-    const text = input.value.trim();
+    const text = input.value.toLowerCase().trim();
     if (!text) return;
-    area.innerHTML += `<div class="msg user">${text}</div>`;
-    input.value = ""; area.scrollTop = area.scrollHeight;
-    try {
-        const result = await chatSession.sendMessage(text);
-        const response = await result.response;
-        area.innerHTML += `<div class="msg bot">${response.text()}</div>`;
-    } catch (e) { area.innerHTML += `<div class="msg bot" style="color:red">Connecting...</div>`; }
+
+    // Show User Message
+    area.innerHTML += `<div class="msg user">${input.value}</div>`;
+    input.value = ""; 
     area.scrollTop = area.scrollHeight;
+
+    // Bot Thinking Delay
+    setTimeout(() => {
+        let reply = "Mata therune na machan. 'Skills', 'Price', 'Contact' gana ahanna."; // Default
+
+        // Smart Answers
+        if(text.includes("hi") || text.includes("hello") || text.includes("kohomada")) {
+            reply = "Haai! Mama Kasun AI. Oyaata monawada dana ganna one?";
+        } else if(text.includes("name") || text.includes("nama")) {
+            reply = "Mage nama Kasun Padma Kumara.";
+        } else if(text.includes("skill") || text.includes("wada") || text.includes("karanna puluwan")) {
+            reply = "Mata Video Editing, Photography, AI Art, saha DJ Remixing supiriyatama puluwan!";
+        } else if(text.includes("price") || text.includes("gana") || text.includes("budget")) {
+            reply = "Gana thiranaya wenne wada anuwa. 'Hire Me' button eka obala budget eka ewanna.";
+        } else if(text.includes("contact") || text.includes("number") || text.includes("phone")) {
+            reply = "WhatsApp: +94717647693";
+        } else if(text.includes("video")) {
+            reply = "Ow, mama Cinematic Video Editing karanawa.";
+        } else if(text.includes("photo")) {
+            reply = "Mama Wedding & Event Photography karanawa.";
+        } else if(text.includes("bye")) {
+            reply = "Ela, Passe set wemu! 👋";
+        }
+
+        area.innerHTML += `<div class="msg bot">${reply}</div>`;
+        area.scrollTop = area.scrollHeight;
+    }, 600);
 }
 
 // COMMUNITY CHAT
@@ -180,6 +197,7 @@ window.sendBookingToWhatsApp = () => {
     const srv = document.getElementById('serviceType').value;
     const bud = document.getElementById('clientBudget').value;
     const msg = document.getElementById('clientMessage').value;
+    if(!name) { alert("Please enter your name"); return; }
     window.open(`https://wa.me/+94717647693?text=Name:${name}%0AService:${srv}%0ABudget:${bud}%0ADetails:${msg}`, '_blank');
 }
 
