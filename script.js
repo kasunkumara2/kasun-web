@@ -6,7 +6,7 @@ const genAI = new GoogleGenerativeAI(API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 let chatSession = model.startChat();
 
-// --- 1. MOUSE SCULPTING & TILT ---
+// --- 1. MOUSE SCULPTING ---
 const cursorBlob = document.querySelector('.cursor-blob');
 const cursorDot = document.querySelector('.cursor-dot');
 
@@ -35,15 +35,63 @@ document.addEventListener('mousemove', (e) => {
     });
 });
 
-// --- 2. MAGAZINE NEWS DATA (More Categories) ---
-const newsData = [
-    { id: 1, tag: 'Country', title: 'Sri Lanka Tourism Booms in 2026', img: 'https://images.unsplash.com/photo-1586861635167-e5223aeb4227?w=500', desc: 'Tourism in Sri Lanka has reached an all-time high with new eco-zones opening in Nuwara Eliya and Ella.', date: 'Today' },
-    { id: 2, tag: 'Game', title: 'GTA 6 Map Leaked?', img: 'https://images.unsplash.com/photo-1552820728-8b83bb6b773f?w=500', desc: 'Gamers are excited as new leaks suggest the Vice City map is 3x larger than GTA 5.', date: 'Yesterday' },
-    { id: 3, tag: 'Funny', title: 'Cat Elected Mayor', img: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=500', desc: 'A ginger cat named Ginger has been honorary mayor of a small town for a day.', date: '2 days ago' },
-    { id: 4, tag: 'Girl', title: 'Cyberpunk Fashion Trends', img: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=500', desc: 'Neon aesthetics and tech-wear are dominating the 2026 fashion week.', date: 'Today' },
-    { id: 5, tag: 'Men', title: 'Future of Muscle Cars', img: 'https://images.unsplash.com/photo-1617788138017-80ad40651399?w=500', desc: 'Electric muscle cars are now faster than ever, hitting 0-60 in 1.9 seconds.', date: 'Just Now' },
-    { id: 6, tag: 'Game', title: 'Valorant New Agent', img: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500', desc: 'Riot Games reveals a new controller agent with time-bending abilities.', date: '3 days ago' }
-];
+// --- 2. COUNTERS (FIXED LOGIC) ---
+window.addEventListener("load", function() {
+    document.getElementById("preloader").style.display = "none";
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const counters = entry.target.querySelectorAll('.counter');
+                counters.forEach(counter => {
+                    counter.innerText = '0';
+                    const target = +counter.getAttribute('data-target');
+                    const inc = target / 50; 
+                    let c = 0;
+                    const updateCount = () => {
+                        if (c < target) {
+                            c += inc;
+                            counter.innerText = Math.ceil(c) + "+";
+                            setTimeout(updateCount, 30);
+                        } else { counter.innerText = target + "+"; }
+                    };
+                    updateCount();
+                });
+                observer.unobserve(entry.target);
+            }
+        });
+    });
+    
+    const statsSection = document.querySelector('.stats-row');
+    if(statsSection) observer.observe(statsSection);
+});
+
+// --- 3. AUTO TYPE SKILLS ---
+const words = ["Video Editor", "Photographer", "AI Artist", "DJ / Remixer", "Social Media Manager"];
+let i = 0;
+function type() {
+    let word = words[i % words.length];
+    document.querySelector('.typing-text').textContent = word;
+    i++;
+    setTimeout(type, 2000);
+}
+type();
+
+// --- 4. NEWS MAGAZINE (40 Items) ---
+const newsData = [];
+const categories = ['Country', 'Game', 'Tech', 'Funny', 'Girl', 'Men'];
+// Generate 40 News Items
+for(let j=1; j<=40; j++) {
+    const cat = categories[j % categories.length];
+    newsData.push({
+        id: j,
+        tag: cat,
+        title: `${cat} News: Major Update #${j} Revealed!`,
+        img: `https://source.unsplash.com/random/300x200?${cat.toLowerCase()},technology,gaming,sig=${j}`, // Dynamic Image
+        desc: `This is a detailed description for news item #${j}. It contains exciting updates about ${cat} trends in 2026. Click to read more!`,
+        date: 'Today'
+    });
+}
 
 function renderNews(filter) {
     const grid = document.getElementById('newsGrid');
@@ -52,10 +100,10 @@ function renderNews(filter) {
         if (filter === 'all' || item.tag.toLowerCase() === filter.toLowerCase()) {
             const div = document.createElement('div');
             div.className = 'news-item tilt-element';
-            div.onclick = () => openNewsModal(item); // Open Popup on Click
+            div.onclick = () => openNewsModal(item);
             div.innerHTML = `
-                <img src="${item.img}">
-                <div class="news-overlay">
+                <img src="${item.img}" alt="News">
+                <div class="news-info-box">
                     <span class="news-tag">${item.tag}</span>
                     <h3 class="news-title">${item.title}</h3>
                 </div>
@@ -71,41 +119,25 @@ window.filterNews = (f) => {
     renderNews(f);
 }
 
-// --- NEWS POPUP LOGIC ---
 function openNewsModal(item) {
     document.getElementById('popupImg').src = item.img;
+    document.getElementById('popupTag').innerText = item.tag;
     document.getElementById('popupTitle').innerText = item.title;
     document.getElementById('popupDate').innerText = item.date;
-    document.getElementById('popupDesc').innerText = item.desc;
+    document.getElementById('popupDesc').innerText = item.desc + " Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
     document.getElementById('newsModal').style.display = 'flex';
 }
 window.closeNewsModal = () => document.getElementById('newsModal').style.display = 'none';
 
-// --- 3. COUNTERS ---
-window.addEventListener("load", function() {
-    document.getElementById("preloader").style.display = "none";
-    const counters = document.querySelectorAll('.counter');
-    counters.forEach(counter => {
-        const target = +counter.getAttribute('data-target');
-        let count = 0;
-        const inc = target / 50; 
-        const updateCount = () => {
-            if (count < target) {
-                count += inc;
-                counter.innerText = Math.ceil(count) + "+";
-                setTimeout(updateCount, 30);
-            } else { counter.innerText = target + "+"; }
-        };
-        updateCount();
-    });
-});
-
-// --- 4. CONNECT HUB & AI ---
+// --- 5. CONNECT HUB & AI ---
 window.switchConnect = function(tab) {
     document.getElementById('aiSection').style.display = (tab === 'ai') ? 'flex' : 'none';
     document.getElementById('communitySection').style.display = (tab === 'community') ? 'flex' : 'none';
     document.querySelectorAll('.connect-btn').forEach(b => b.classList.remove('active'));
     event.currentTarget.classList.add('active');
+    // Auto Focus
+    if(tab === 'ai') setTimeout(() => document.getElementById('aiInput').focus(), 100);
+    if(tab === 'community') setTimeout(() => document.getElementById('commInput').focus(), 100);
 }
 
 window.askGeminiAI = async function() {
@@ -123,12 +155,12 @@ window.askGeminiAI = async function() {
         const response = await result.response;
         area.innerHTML += `<div class="msg bot">${response.text()}</div>`;
     } catch (e) {
-        area.innerHTML += `<div class="msg bot" style="color:red">Error connecting to AI.</div>`;
+        area.innerHTML += `<div class="msg bot" style="color:red">Connecting...</div>`;
     }
     area.scrollTop = area.scrollHeight;
 }
 
-// --- 5. COMMON FUNCTIONS ---
+// --- 6. COMMON ---
 window.onclick = (e) => { if(e.target.classList.contains('modal')) e.target.style.display = 'none'; }
 window.openSettings = () => document.getElementById('settingsModal').style.display = 'flex';
 window.closeSettings = () => document.getElementById('settingsModal').style.display = 'none';
@@ -150,38 +182,20 @@ window.sendBookingToWhatsApp = () => {
     window.open(`https://wa.me/+94717647693?text=Name:${name}%0AService:${srv}%0ABudget:${bud}%0ADetails:${msg}`, '_blank');
 }
 
-window.postCommunity = () => {
-    const inp = document.getElementById('commInput');
-    const board = document.getElementById('commMessages');
-    if(inp.value) {
-        board.innerHTML += `<div class="msg sent">${inp.value}</div>`;
-        inp.value = "";
-        board.scrollTop = board.scrollHeight;
-    }
+window.toggleAuth = (t) => {
+    document.getElementById('signInForm').style.display = (t === 'signin') ? 'block' : 'none';
+    document.getElementById('signUpForm').style.display = (t === 'signup') ? 'block' : 'none';
+    document.querySelectorAll('.auth-toggle-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(t+'Btn').classList.add('active');
 }
-
-// Auth & Theme
+window.toggleTawkChat = function() {
+    if(window.Tawk_API) window.Tawk_API.toggle(); else alert("Chat loading...");
+}
+window.handleEnter = function(e) { if (e.key === 'Enter') window.askGeminiAI(); }
 window.switchTab = (t) => {
     document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
     document.getElementById(t+'Tab').style.display = 'block';
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     event.target.classList.add('active');
 }
-window.toggleAuth = (t) => {
-    document.getElementById('signInForm').style.display = (t === 'signin') ? 'block' : 'none';
-    document.getElementById('signUpForm').style.display = (t === 'signup') ? 'block' : 'none';
-    document.getElementById('signInBtn').classList.toggle('active', t === 'signin');
-    document.getElementById('signUpBtn').classList.toggle('active', t === 'signup');
-}
 window.setTheme = (t) => document.body.className = 'theme-'+t;
-
-// Auto Type
-const words = ["Video Editor", "Photographer", "AI Artist", "DJ"];
-let i = 0;
-function type() {
-    let word = words[i % words.length];
-    document.querySelector('.typing-text').textContent = word;
-    i++;
-    setTimeout(type, 2000);
-}
-type();
