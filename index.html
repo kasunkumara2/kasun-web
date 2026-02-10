@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kasun Padma Kumara | Creator Hub</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Rajdhani:wght@500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -42,7 +42,6 @@
     <div id="settingsModal" class="modal">
         <div class="modal-content glass-card-simple settings-box tilt-element">
             <span class="close-btn" onclick="closeSettings()">&times;</span>
-            
             <div class="settings-tabs-container">
                 <button class="tab-btn active" onclick="switchTab('auth')">Profile</button>
                 <button class="tab-btn" onclick="switchTab('theme')">Themes</button>
@@ -54,20 +53,17 @@
                         <div class="auth-toggle-btn active" id="signInBtn" onclick="toggleAuth('signin')">Sign In</div>
                         <div class="auth-toggle-btn" id="signUpBtn" onclick="toggleAuth('signup')">Sign Up</div>
                     </div>
-                    
                     <form id="signInForm" class="auth-form">
                         <div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="loginEmail" placeholder="Email"></div>
                         <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="loginPass" placeholder="Password"></div>
                         <button type="button" class="btn-primary full-width" onclick="emailLogin()">Login</button>
                     </form>
-
                     <form id="signUpForm" class="auth-form" style="display: none;">
                         <div class="input-group"><i class="fas fa-user"></i><input type="text" id="regName" placeholder="Name"></div>
                         <div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="regEmail" placeholder="Email"></div>
                         <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="regPass" placeholder="Password"></div>
                         <button type="button" class="btn-primary full-width" onclick="emailRegister()">Register</button>
                     </form>
-
                     <div class="social-login">
                         <button type="button" class="social-btn google" onclick="googleLogin()"><img src="https://img.icons8.com/color/48/google-logo.png"> Google</button>
                         <button type="button" class="social-btn facebook" onclick="facebookLogin()"><img src="https://img.icons8.com/color/48/facebook-new.png"> Facebook</button>
@@ -79,7 +75,6 @@
                         <img id="userAvatar" src="" class="profile-avatar">
                         <input type="text" id="customPhotoUrl" placeholder="Paste Image URL to change photo" class="url-input">
                     </div>
-                    
                     <div class="profile-edit-grid">
                         <div class="input-group"><i class="fas fa-user"></i><input type="text" id="editName" placeholder="Full Name"></div>
                         <div class="input-group"><i class="fas fa-phone"></i><input type="text" id="editPhone" placeholder="Phone"></div>
@@ -89,13 +84,9 @@
                         </div>
                         <div class="input-group">
                             <i class="fas fa-venus-mars"></i>
-                            <select id="editGender">
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                            </select>
+                            <select id="editGender"><option value="Male">Male</option><option value="Female">Female</option></select>
                         </div>
                     </div>
-
                     <button class="btn-primary full-width" onclick="saveUserProfile()">Save Profile <i class="fas fa-save"></i></button>
                     <button class="btn-logout full-width" onclick="logoutUser()">Logout <i class="fas fa-sign-out-alt"></i></button>
                 </div>
@@ -155,8 +146,8 @@
                 <div class="glass-card hero-card tilt-element">
                     <div class="hero-content">
                         <div class="profile-glow"><img src="images/profile.jpg" alt="Profile"></div>
-                        <h1>I'm <span class="neon-text">Kasun</span></h1>
-                        <h2 class="typing-container">I am a <span class="typing-text"></span></h2>
+                        <h1 class="hero-title">I'm <span class="neon-text gradient-text">Kasun</span></h1>
+                        <h2 class="typing-container">I am a <span class="typing-text highlight-text"></span></h2>
                         <div class="stats-row" id="counterSection">
                             <div class="stat-item"><h3 class="counter" data-target="150">0</h3><p>Projects</p></div>
                             <div class="stat-item"><h3 class="counter" data-target="40">0</h3><p>Clients</p></div>
@@ -191,7 +182,9 @@
                         <button class="filter-btn active" onclick="filterNews('all')">All</button>
                         <button class="filter-btn" onclick="filterNews('AI')">AI</button>
                         <button class="filter-btn" onclick="filterNews('Tech')">Tech</button>
-                        <button class="filter-btn" onclick="filterNews('Video')">Video</button>
+                        <button class="filter-btn" onclick="filterNews('Gaming')">Gaming</button>
+                        <button class="filter-btn" onclick="filterNews('Men')">Men</button>
+                        <button class="filter-btn" onclick="filterNews('Women')">Women</button>
                     </div>
                     <div class="magazine-grid" id="newsGrid"></div>
                 </div>
@@ -204,16 +197,19 @@
                         <div class="timeline-item"><i class="fas fa-map-marker-alt icon"></i><h3>Location</h3><p>Avissawella, Sri Lanka 🇱🇰</p></div>
                         <div class="timeline-item"><i class="fas fa-graduation-cap icon"></i><h3>Education</h3><p>R/Anura Maha Vidyalaya (13 Years)</p></div>
                         <div class="timeline-item">
-                            <i class="fas fa-file-alt icon"></i><h3>O/L Results</h3>
+                            <i class="fas fa-file-alt icon"></i><h3>O/L Examination Results (Complete)</h3>
                             <div class="results-box">
-                                <table class="result-table">
-                                    <tr><td>ICT</td><td class="grade">B</td></tr>
-                                    <tr><td>Maths</td><td class="grade">B</td></tr>
-                                    <tr><td>Science</td><td class="grade">C</td></tr>
-                                    <tr><td>Art</td><td class="grade">B</td></tr>
-                                    <tr><td>English</td><td class="grade">S</td></tr>
-                                    <tr><td>History</td><td class="grade">W</td></tr>
-                                </table>
+                                <div class="results-grid">
+                                    <div class="subject-item"><span>ICT</span><span class="grade">B</span></div>
+                                    <div class="subject-item"><span>Mathematics</span><span class="grade">B</span></div>
+                                    <div class="subject-item"><span>Science</span><span class="grade">C</span></div>
+                                    <div class="subject-item"><span>English</span><span class="grade">S</span></div>
+                                    <div class="subject-item"><span>Sinhala Language</span><span class="grade">S</span></div>
+                                    <div class="subject-item"><span>Buddhism</span><span class="grade">S</span></div>
+                                    <div class="subject-item"><span>History</span><span class="grade">W</span></div>
+                                    <div class="subject-item"><span>Art</span><span class="grade">B</span></div>
+                                    <div class="subject-item"><span>Geography</span><span class="grade">C</span></div>
+                                </div>
                             </div>
                         </div>
                         <div class="timeline-item"><i class="fas fa-plane icon"></i><h3>Travel</h3><div class="travel-tags"><span class="tag">Nuwara Eliya</span><span class="tag">Polonnaruwa</span><span class="tag">Kataragama</span><span class="tag">Yapahuwa</span></div></div>
