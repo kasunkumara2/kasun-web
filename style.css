@@ -6,20 +6,17 @@
     --glass: rgba(255, 255, 255, 0.02); 
     --border: rgba(255, 255, 255, 0.1);
     --text: #fff;
-    --input-bg: rgba(255,255,255,0.05); /* Default Input BG */
+    --input-bg: rgba(255,255,255,0.05);
 }
 
-/* --- THEMES (Pink, Yellow, Green Added) --- */
-body.theme-blue { --primary: #3b82f6; --glass: rgba(15, 23, 42, 0.2); --input-bg: rgba(59, 130, 246, 0.15); /* Blue Theme Input Fix */ }
+body.theme-blue { --primary: #3b82f6; --glass: rgba(15, 23, 42, 0.2); --input-bg: rgba(59, 130, 246, 0.15); }
 body.theme-pink { --primary: #ff007f; --glass: rgba(25, 0, 10, 0.2); --input-bg: rgba(255, 0, 127, 0.1); }
 body.theme-yellow { --primary: #ffd700; --glass: rgba(25, 20, 0, 0.2); --input-bg: rgba(255, 215, 0, 0.1); }
 body.theme-green { --primary: #00ff00; --glass: rgba(0, 25, 0, 0.2); --input-bg: rgba(0, 255, 0, 0.1); }
 body.theme-white { --bg: #f3f4f6; --primary: #2563eb; --text: #111; --glass: rgba(255,255,255,0.7); --border: #ccc; --input-bg: #fff; }
 
-/* Apply Blue BG to Inputs specifically in Blue Theme */
 body.theme-blue input, body.theme-blue select, body.theme-blue textarea {
-    background-color: var(--input-bg) !important;
-    border-color: var(--primary) !important;
+    background-color: var(--input-bg) !important; border-color: var(--primary) !important;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; cursor: none; }
@@ -118,23 +115,35 @@ h1 { font-size: 4rem; line-height: 1; font-family: 'Rajdhani', sans-serif; text-
 .msg.bot, .msg.received { background: rgba(255,255,255,0.1); align-self: flex-start; }
 .msg.user, .msg.sent { background: var(--primary); align-self: flex-end; color: white; }
 
-/* MODALS & THEME SELECTOR */
-.modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-.glass-card-simple { background: #0a0a0a; padding: 40px 30px; border-radius: 20px; width: 450px; border: 1px solid var(--primary); position: relative; box-shadow: 0 0 30px rgba(14, 165, 233, 0.2); }
-.close-btn { position: absolute; top: 15px; right: 20px; font-size: 1.8rem; cursor: pointer; color: #ff4d4d; z-index: 10; }
-.settings-tabs-container { display: flex; gap: 15px; margin-bottom: 25px; border: none; background: transparent; }
-.tab-btn { flex: 1; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: #aaa; cursor: pointer; border-radius: 12px; font-weight: bold; transition: 0.3s; }
-.tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 0 10px var(--primary); }
+/* AUTH TABS & BOXES (NEW) */
+.settings-tabs-wrapper { display: flex; gap: 15px; margin-bottom: 25px; }
+.tab-box { 
+    flex: 1; padding: 12px; border: 1px solid var(--border); background: rgba(255,255,255,0.05);
+    color: #ccc; cursor: pointer; border-radius: 12px; font-weight: bold; transition: 0.3s;
+}
+.tab-box.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 0 10px var(--primary); }
+
 .auth-toggle-box { display: flex; background: rgba(255,255,255,0.05); border-radius: 30px; padding: 5px; margin-bottom: 25px; border: 1px solid var(--border); }
 .auth-toggle-btn { flex: 1; text-align: center; padding: 12px; border-radius: 25px; cursor: pointer; color: #aaa; transition: 0.3s; font-weight: bold; }
 .auth-toggle-btn.active { background: var(--primary); color: white; box-shadow: 0 0 15px var(--primary); }
+
+/* WHITE SOCIAL BUTTONS */
 .social-login { display: flex; gap: 15px; margin-top: 25px; }
-.social-btn { flex: 1; padding: 15px; border: 1px solid var(--border); border-radius: 12px; cursor: pointer; background: rgba(255,255,255,0.05); color: white; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; }
-.social-btn:hover { transform: translateY(-3px); background: rgba(255,255,255,0.1); }
-.google:hover { border-color: #db4437; box-shadow: 0 0 15px rgba(219, 68, 55, 0.3); }
-.facebook:hover { border-color: #4267B2; box-shadow: 0 0 15px rgba(66, 103, 178, 0.3); }
-.google i { color: #db4437; } .facebook i { color: #4267B2; }
-.input-group { display: flex; align-items: center; background: var(--input-bg); border: 1px solid var(--border); padding: 0 20px; border-radius: 12px; margin-bottom: 15px; transition: 0.3s; }
+.social-btn { 
+    flex: 1; padding: 12px; border: none; border-radius: 12px; cursor: pointer; 
+    background: white; color: #333; font-weight: bold; font-size: 0.9rem;
+    display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s;
+}
+.social-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(255,255,255,0.3); }
+.social-btn img { width: 20px; height: 20px; }
+
+/* MODALS */
+.modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+.glass-card-simple { background: #0a0a0a; padding: 40px 30px; border-radius: 20px; width: 450px; border: 1px solid var(--primary); position: relative; box-shadow: 0 0 30px rgba(14, 165, 233, 0.2); }
+.close-btn { position: absolute; top: 15px; right: 20px; font-size: 1.8rem; cursor: pointer; color: #ff4d4d; z-index: 10; }
+select, textarea { width: 100%; padding: 12px; margin: 10px 0; background: var(--input-bg); border: 1px solid #444; color: white; border-radius: 8px; outline: none; }
+select option { background: #000; }
+.input-group { display: flex; align-items: center; background: var(--input-bg); border: 1px solid #444; padding: 0 20px; border-radius: 12px; margin-bottom: 15px; transition: 0.3s; }
 .input-group:focus-within { border-color: var(--primary); box-shadow: 0 0 10px var(--primary); }
 .input-group i { color: var(--primary); margin-right: 15px; font-size: 1.1rem; }
 .input-group input { border: none; background: transparent; padding: 15px 0; color: white; width: 100%; outline: none; font-size: 1rem; }
