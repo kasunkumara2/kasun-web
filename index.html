@@ -54,23 +54,19 @@
                         <div class="auth-toggle-btn active" id="signInBtn" onclick="toggleAuth('signin')">Sign In</div>
                         <div class="auth-toggle-btn" id="signUpBtn" onclick="toggleAuth('signup')">Sign Up</div>
                     </div>
-                    
                     <form id="signInForm" class="auth-form">
                         <div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="loginEmail" placeholder="Email"></div>
                         <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="loginPass" placeholder="Password"></div>
                         <button type="button" class="btn-primary full-width" onclick="emailLogin()">Login</button>
                     </form>
-
                     <form id="signUpForm" class="auth-form" style="display: none;">
                         <div class="input-group"><i class="fas fa-user"></i><input type="text" id="regName" placeholder="Name"></div>
                         <div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="regEmail" placeholder="Email"></div>
                         <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="regPass" placeholder="Password"></div>
                         <button type="button" class="btn-primary full-width" onclick="emailRegister()">Register</button>
                     </form>
-
                     <div class="social-login">
                         <button type="button" class="social-btn google" onclick="googleLogin()"><img src="https://img.icons8.com/color/48/google-logo.png"> Google</button>
-                        <button type="button" class="social-btn facebook" onclick="facebookLogin()"><img src="https://img.icons8.com/color/48/facebook-new.png"> Facebook</button>
                     </div>
                 </div>
 
@@ -78,19 +74,18 @@
                     <div class="profile-header">
                         <img id="userAvatar" src="" class="profile-avatar">
                         <div class="avatar-selector">
-                            <span onclick="selectAvatar('https://img.icons8.com/color/96/user-male-circle--v1.png')">👨</span>
-                            <span onclick="selectAvatar('https://img.icons8.com/color/96/user-female-circle.png')">👩</span>
-                            <span onclick="selectAvatar('https://img.icons8.com/color/96/cat-profile.png')">😺</span>
+                            <img src="https://img.icons8.com/color/48/user-male-circle--v1.png" onclick="selectAvatar(this.src)">
+                            <img src="https://img.icons8.com/color/48/user-female-circle.png" onclick="selectAvatar(this.src)">
+                            <img src="https://img.icons8.com/color/48/cat-profile.png" onclick="selectAvatar(this.src)">
                         </div>
-                        <input type="text" id="customPhotoUrl" placeholder="Or paste Image URL" class="url-input">
                     </div>
                     
                     <div class="profile-edit-grid">
                         <div class="input-group">
                             <i class="fas fa-user"></i>
-                            <div style="display: flex; flex-direction: column; width: 100%;">
+                            <div class="double-input">
                                 <input type="text" id="editName" placeholder="Full Name">
-                                <input type="text" id="editNick" placeholder="Nickname" style="font-size: 0.8rem; color: var(--primary);">
+                                <input type="text" id="editNick" placeholder="Nickname (Sup)" style="font-size: 0.8rem; color: var(--primary);">
                             </div>
                         </div>
                         <div class="input-group"><i class="fas fa-phone"></i><input type="text" id="editPhone" placeholder="Phone"></div>
@@ -105,17 +100,17 @@
                     </div>
 
                     <button class="btn-primary full-width" onclick="saveUserProfile()">Save Profile <i class="fas fa-save"></i></button>
-                    <button class="btn-logout full-width" onclick="logoutUser()">Logout <i class="fas fa-sign-out-alt"></i></button>
+                    <button class="btn-logout full-width" onclick="logoutUser()">Logout</button>
                 </div>
             </div>
 
             <div id="themeTab" class="tab-content" style="display: none;">
                 <h3 style="margin-bottom:15px; color:white; text-align:center;">Choose Style</h3>
                 <div class="theme-grid-new">
-                    <div class="theme-box dark" onclick="setTheme('dark')"><div class="dot" style="background:#000;"></div> Dark</div>
-                    <div class="theme-box blue" onclick="setTheme('blue')"><div class="dot" style="background:#0ea5e9;"></div> Blue</div>
-                    <div class="theme-box pink" onclick="setTheme('pink')"><div class="dot" style="background:#ff007f;"></div> Pink</div>
-                    <div class="theme-box white" onclick="setTheme('white')"><div class="dot" style="background:#fff;"></div> White</div>
+                    <div class="theme-box dark" onclick="setTheme('dark')"><div class="dot" style="background:#000;"></div> Dark Mode</div>
+                    <div class="theme-box blue" onclick="setTheme('blue')"><div class="dot" style="background:#0ea5e9;"></div> Blue Sky</div>
+                    <div class="theme-box pink" onclick="setTheme('pink')"><div class="dot" style="background:#ff007f;"></div> Neon Pink</div>
+                    <div class="theme-box white" onclick="setTheme('white')"><div class="dot" style="background:#fff;"></div> Clean White</div>
                 </div>
             </div>
         </div>
@@ -233,12 +228,12 @@
                         <div class="timeline-item">
                             <i class="fas fa-plane icon"></i><h3>Travel History</h3>
                             <div class="travel-grid">
-                                <div class="travel-card"><span>Nuwara Eliya</span></div>
-                                <div class="travel-card"><span>Anuradhapura</span></div>
-                                <div class="travel-card"><span>Polonnaruwa</span></div>
-                                <div class="travel-card"><span>Colombo</span></div>
-                                <div class="travel-card"><span>Yapahuwa</span></div>
-                                <div class="travel-card"><span>Kataragama</span></div>
+                                <div class="travel-card">Nuwara Eliya</div>
+                                <div class="travel-card">Anuradhapura</div>
+                                <div class="travel-card">Polonnaruwa</div>
+                                <div class="travel-card">Colombo</div>
+                                <div class="travel-card">Yapahuwa</div>
+                                <div class="travel-card">Kataragama</div>
                             </div>
                         </div>
                     </div>
