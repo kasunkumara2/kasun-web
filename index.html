@@ -16,6 +16,10 @@
     <div class="background-image"></div>
     <div class="overlay"></div>
 
+    <div id="topProfileIcon" onclick="showPage('profile', document.getElementById('navProfile'))">
+        <img id="topProfileImg" src="https://img.icons8.com/color/96/user.png" alt="Profile">
+    </div>
+
     <div id="newsModal" class="modal">
         <div class="modal-content glass-card-simple news-popup tilt-element">
             <span class="close-btn" onclick="closeNewsModal()">&times;</span>
@@ -35,19 +39,14 @@
     <div id="settingsModal" class="modal">
         <div class="modal-content glass-card-simple settings-box tilt-element">
             <span class="close-btn" onclick="closeSettings()">&times;</span>
-            <div class="settings-tabs-container">
-                <button class="tab-btn active" onclick="switchTab('theme')">Themes</button>
-            </div>
-            <div id="themeTab" class="tab-content" style="display: block;">
-                <h3 style="margin-bottom:15px; color:white;">Select Theme</h3>
-                <div class="theme-grid">
-                    <div class="theme-card dark selected" onclick="setTheme('dark')"><div class="color-dot" style="background:#000;"></div><span>Dark</span></div>
-                    <div class="theme-card blue" onclick="setTheme('blue')"><div class="color-dot" style="background:#0ea5e9;"></div><span>Blue</span></div>
-                    <div class="theme-card white" onclick="setTheme('white')"><div class="color-dot" style="background:#fff;"></div><span style="color:#333;">White</span></div>
-                    <div class="theme-card pink" onclick="setTheme('pink')"><div class="color-dot" style="background:#ff007f;"></div><span>Pink</span></div>
-                    <div class="theme-card yellow" onclick="setTheme('yellow')"><div class="color-dot" style="background:#ffd700;"></div><span>Yellow</span></div>
-                    <div class="theme-card green" onclick="setTheme('green')"><div class="color-dot" style="background:#00ff00;"></div><span>Green</span></div>
-                </div>
+            <h3 style="margin-bottom:15px; color:white; text-align:center;">Select Theme</h3>
+            <div class="theme-grid">
+                <div class="theme-card dark selected" onclick="setTheme('dark')"><div class="color-dot" style="background:#000;"></div><span>Dark</span></div>
+                <div class="theme-card blue" onclick="setTheme('blue')"><div class="color-dot" style="background:#0ea5e9;"></div><span>Blue</span></div>
+                <div class="theme-card white" onclick="setTheme('white')"><div class="color-dot" style="background:#fff;"></div><span style="color:#333;">White</span></div>
+                <div class="theme-card pink" onclick="setTheme('pink')"><div class="color-dot" style="background:#ff007f;"></div><span>Pink</span></div>
+                <div class="theme-card yellow" onclick="setTheme('yellow')"><div class="color-dot" style="background:#ffd700;"></div><span>Yellow</span></div>
+                <div class="theme-card green" onclick="setTheme('green')"><div class="color-dot" style="background:#00ff00;"></div><span>Green</span></div>
             </div>
         </div>
     </div>
@@ -59,19 +58,19 @@
             <div class="booking-grid-layout">
                 <div class="input-group"><i class="fas fa-user"></i><input type="text" id="clientName" placeholder="Your Name"></div>
                 <div class="input-group"><i class="fas fa-briefcase"></i>
-                    <select id="serviceType">
+                    <select id="serviceType" style="background: transparent; color: white; border: none; width: 100%;">
                         <option value="Videography">Videography</option>
                         <option value="Photography">Photography</option>
                         <option value="Video Editing">Video Editing</option>
-                        <option value="Class Poster">Class Poster Design</option>
+                        <option value="Class Poster">Class Poster</option>
                         <option value="Banner Design">Banner Design</option>
-                        <option value="Social Media">Social Media Management</option>
-                        <option value="AI Art">AI Art Creation</option>
-                        <option value="DJ Remix">DJ Remixing</option>
+                        <option value="Social Media">Social Media</option>
+                        <option value="AI Art">AI Art</option>
+                        <option value="DJ Remix">DJ Remix</option>
                     </select>
                 </div>
                 <div class="input-group"><i class="fas fa-coins"></i><input type="text" id="clientBudget" placeholder="Budget (LKR)"></div>
-                <div class="input-group textarea-group"><textarea id="clientMessage" placeholder="Tell me about your idea..." rows="3"></textarea></div>
+                <div class="input-group textarea-group"><textarea id="clientMessage" placeholder="Tell me about your idea..." rows="3" style="background: transparent; color: white; border: none; width: 100%;"></textarea></div>
             </div>
             <button class="btn-primary full-width" onclick="sendBookingToWhatsApp()">Send via WhatsApp <i class="fab fa-whatsapp"></i></button>
         </div>
@@ -88,6 +87,7 @@
                     <li class="nav-item" onclick="showPage('portfolio', this)"><i class="fas fa-images"></i><span class="tooltip">Gallery</span></li>
                     <li class="nav-item" onclick="showPage('news', this)"><i class="fas fa-globe"></i><span class="tooltip">News</span></li>
                     <li class="nav-item" onclick="showPage('connect', this)"><i class="fas fa-users"></i><span class="tooltip">Community</span></li>
+                    <li class="nav-item" id="navProfile" onclick="showPage('profile', this)" style="display:none;"><i class="fas fa-user-circle"></i><span class="tooltip">Profile</span></li>
                     <li class="nav-item" onclick="toggleTawkChat()"><i class="fas fa-comment-dots"></i><span class="tooltip">Live Chat</span></li>
                 </ul>
             </div>
@@ -155,10 +155,9 @@
                     </div>
                     
                     <div class="connect-main glass-card">
-                        
                         <div id="aiSection" class="chat-interface">
-                            <div class="chat-header"><i class="fas fa-robot"></i> Kasun AI (Smart Bot)</div>
-                            <div class="chat-messages" id="aiMessages"><div class="msg bot">Hello! I am Kasun AI. Ask about Skills, Price, or Contact.</div></div>
+                            <div class="chat-header"><i class="fas fa-robot"></i> Kasun AI</div>
+                            <div class="chat-messages" id="aiMessages"><div class="msg bot">Hello! I am Kasun AI.</div></div>
                             <div class="chat-input-area">
                                 <input type="text" id="aiInput" placeholder="Ask AI..." onkeypress="handleEnter(event)">
                                 <button onclick="askSmartBot()"><i class="fas fa-paper-plane"></i></button>
@@ -166,30 +165,49 @@
                         </div>
 
                         <div id="communitySection" class="chat-interface" style="display:none;">
-                            <div id="loginOverlay" class="login-overlay">
-                                <div class="glass-card-simple" style="width:300px; text-align:center;">
-                                    <h3>Join Community</h3>
-                                    <p style="font-size:0.9rem; color:#ccc; margin-bottom:20px;">Login with Google to chat.</p>
-                                    <button class="social-btn google" onclick="googleLogin()" style="width:100%; justify-content:center;">
-                                        <img src="https://img.icons8.com/color/48/google-logo.png" alt="G"> Login with Google
-                                    </button>
-                                </div>
-                            </div>
-
                             <div class="chat-header" style="background:#075e54;">
-                                <div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
-                                    <span><i class="fas fa-users"></i> Global Community</span>
-                                    <button onclick="googleLogout()" style="background:none; border:none; color:white; cursor:pointer; font-size:0.8rem;">Logout <i class="fas fa-sign-out-alt"></i></button>
-                                </div>
+                                <span><i class="fas fa-users"></i> Global Community</span>
                             </div>
                             <div class="chat-messages" id="commMessages" style="background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');">
-                                </div>
+                                <div class="msg received">Welcome! Please login to chat.</div>
+                            </div>
                             <div class="chat-input-area">
                                 <input type="text" id="commInput" placeholder="Type a message..." onkeypress="handleCommEnter(event)">
                                 <button id="commSendBtn" onclick="postCommunity()"><i class="fas fa-paper-plane"></i></button>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </section>
 
+            <section id="profile" class="page">
+                <div class="glass-card" style="display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                    <h2 class="section-title">My Profile</h2>
+                    
+                    <div id="profileLoginView" style="text-align:center; width:100%; max-width:400px;">
+                        <p style="margin-bottom:20px; color:#ccc;">Login to manage your profile and join the chat.</p>
+                        <button class="social-btn google" onclick="googleLogin()" style="width:100%; justify-content:center; margin-bottom:10px; background:white; color:black;">
+                            <img src="https://img.icons8.com/color/48/google-logo.png" style="width:20px;"> Login with Google
+                        </button>
+                        <button class="social-btn facebook" onclick="facebookLogin()" style="width:100%; justify-content:center; background:#4267B2; color:white;">
+                            <img src="https://img.icons8.com/color/48/facebook-new.png" style="width:20px;"> Login with Facebook
+                        </button>
+                    </div>
+
+                    <div id="profileEditView" style="display:none; width:100%; max-width:500px; text-align:center;">
+                        <img id="editProfilePic" src="" style="width:120px; height:120px; border-radius:50%; border:3px solid var(--primary); object-fit:cover; margin-bottom:20px;">
+                        
+                        <div class="input-group">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="editUsername" placeholder="Enter Custom Username">
+                        </div>
+                        <div class="input-group">
+                            <i class="fas fa-image"></i>
+                            <input type="text" id="editPhotoURL" placeholder="Paste Image URL (Optional)">
+                        </div>
+                        
+                        <button class="btn-primary full-width" onclick="saveProfile()" style="margin-top:10px;">Save Profile <i class="fas fa-save"></i></button>
+                        <button class="btn-secondary full-width" onclick="googleLogout()" style="margin-top:10px; border-color:red; color:red;">Logout <i class="fas fa-sign-out-alt"></i></button>
                     </div>
                 </div>
             </section>
@@ -212,22 +230,15 @@
                     <div class="timeline">
                         <div class="timeline-item"><i class="fas fa-map-marker-alt icon"></i><h3>Location</h3><p>Avissawella, Sri Lanka 🇱🇰</p></div>
                         <div class="timeline-item"><i class="fas fa-graduation-cap icon"></i><h3>Education</h3><p>R/Anura Maha Vidyalaya</p></div>
-                        <div class="timeline-item">
-                            <i class="fas fa-file-alt icon"></i><h3>O/L Examination Results</h3>
-                            <table class="result-table">
-                                <tr><td>ICT</td><td>B</td></tr><tr><td>Maths</td><td>B</td></tr><tr><td>Science</td><td>C</td></tr>
-                                <tr><td>Sinhala</td><td>S</td></tr><tr><td>Buddhism</td><td>S</td></tr><tr><td>English</td><td>S</td></tr>
-                                <tr><td>History</td><td>W</td></tr><tr><td>Art</td><td>B</td></tr><tr><td>Geo</td><td>C</td></tr>
-                            </table>
-                        </div>
-                        <div class="timeline-item"><i class="fas fa-plane icon"></i><h3>Travel History</h3><div class="tags"><span class="tag">Nuwara Eliya</span><span class="tag">Kataragama</span><span class="tag">Colombo</span><span class="tag">Anuradhapura</span></div></div>
+                        <div class="timeline-item"><i class="fas fa-file-alt icon"></i><h3>O/L Results</h3><table class="result-table"><tr><td>ICT</td><td>B</td></tr><tr><td>Maths</td><td>B</td></tr><tr><td>Science</td><td>C</td></tr></table></div>
                     </div>
                 </div>
             </section>
+
         </main>
     </div>
 
-   <script type="text/javascript">
+    <script type="text/javascript">
     var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
     (function(){
     var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
