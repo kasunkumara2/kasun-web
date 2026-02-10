@@ -8,9 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="theme-blue">
-
-    <div id="preloader"><div class="loader-circle"></div><div class="loader-text">KASUN...</div></div>
+<body class="theme-dark"> <div id="preloader"><div class="loader-circle"></div><div class="loader-text">KASUN...</div></div>
     <div class="cursor"></div>
     <div class="cursor2"></div>
 
@@ -33,7 +31,7 @@
                 </div>
 
                 <form id="signInForm" class="auth-form">
-                    <input type="text" placeholder="Username / Email">
+                    <input type="text" placeholder="Username or Email">
                     <input type="password" placeholder="Password">
                     <button type="button" class="btn-primary full-width" onclick="alert('Logged in!')">Sign In</button>
                     <div class="social-login">
@@ -44,7 +42,7 @@
 
                 <form id="signUpForm" class="auth-form" style="display: none;">
                     <input type="text" placeholder="Full Name">
-                    <input type="email" placeholder="Email">
+                    <input type="email" placeholder="Email Address">
                     <input type="password" placeholder="Password">
                     <button type="button" class="btn-primary full-width" onclick="alert('Account Created!')">Sign Up</button>
                     <div class="social-login">
@@ -55,19 +53,16 @@
             </div>
 
             <div id="themeTab" class="tab-content" style="display: none;">
-                <h3 style="margin-bottom: 15px;">Select Theme</h3>
+                <h3 style="color:white; margin-bottom:15px;">Appearance</h3>
                 <div class="theme-options">
-                    <div class="theme-card blue selected" onclick="setTheme('blue')">
-                        <div class="color-preview" style="background: #0ea5e9;"></div>
-                        <span>Blue Mode</span>
+                    <div class="theme-card dark selected" onclick="setTheme('dark')">
+                        <div class="color-preview" style="background: #000;"></div><span>Dark (Default)</span>
                     </div>
-                    <div class="theme-card dark" onclick="setTheme('dark')">
-                        <div class="color-preview" style="background: #222;"></div>
-                        <span>Dark Mode</span>
+                    <div class="theme-card blue" onclick="setTheme('blue')">
+                        <div class="color-preview" style="background: #0ea5e9;"></div><span>Blue</span>
                     </div>
                     <div class="theme-card white" onclick="setTheme('white')">
-                        <div class="color-preview" style="background: #eee;"></div>
-                        <span>White Mode</span>
+                        <div class="color-preview" style="background: #fff;"></div><span>White</span>
                     </div>
                 </div>
             </div>
@@ -77,7 +72,7 @@
     <div id="bookingModal" class="modal">
         <div class="modal-content glass-card-simple" style="width: 450px; text-align: left;">
             <span class="close-btn" onclick="closeBooking()">&times;</span>
-            <h2 style="text-align: center; color: var(--primary-color); margin-bottom: 10px;">Start a Project 🚀</h2>
+            <h2 style="text-align: center; color: var(--primary-color);">Start a Project 🚀</h2>
             
             <label>Your Name:</label>
             <input type="text" id="clientName" placeholder="Enter your name">
@@ -98,8 +93,8 @@
             <label>Budget (LKR):</label>
             <input type="text" id="clientBudget" placeholder="Ex: 5000">
 
-            <label>Project Details:</label>
-            <textarea id="clientMessage" placeholder="Describe your requirement..."></textarea>
+            <label>Details:</label>
+            <textarea id="clientMessage" placeholder="Describe what you want..."></textarea>
 
             <button class="btn-primary full-width" onclick="sendBookingToWhatsApp()" style="margin-top: 15px;">Send via WhatsApp <i class="fab fa-whatsapp"></i></button>
         </div>
@@ -116,6 +111,7 @@
                     <li class="nav-item" onclick="showPage('skills', this)"><i class="fas fa-code"></i><span class="tooltip">Skills</span></li>
                     <li class="nav-item" onclick="showPage('portfolio', this)"><i class="fas fa-images"></i><span class="tooltip">Gallery</span></li>
                     <li class="nav-item" onclick="showPage('life', this)"><i class="fas fa-globe-asia"></i><span class="tooltip">Life</span></li>
+                    <li class="nav-item" onclick="showPage('news', this)"><i class="fas fa-newspaper"></i><span class="tooltip">News</span></li>
                     <li class="nav-item" onclick="showPage('community', this)"><i class="fas fa-users"></i><span class="tooltip">Community</span></li>
                     <li class="nav-item" onclick="toggleTawkChat()"><i class="fas fa-comment-dots"></i><span class="tooltip">Chat Me</span></li>
                 </ul>
@@ -138,7 +134,7 @@
                     </div>
                     
                     <div class="btn-group">
-                        <button class="btn-primary" onclick="openBooking()" style="background: #22c55e; border:none;">Hire Me / Booking</button>
+                        <button class="btn-primary" onclick="openBooking()">Hire Me / Booking</button>
                         <a href="https://wa.me/+94717647693" target="_blank" class="btn-secondary"><i class="fab fa-whatsapp"></i> WhatsApp</a>
                         <a href="https://www.facebook.com/kasunlks" target="_blank" class="btn-secondary"><i class="fab fa-facebook"></i> Facebook</a>
                     </div>
@@ -149,13 +145,30 @@
                 <div class="glass-card">
                     <h2 class="section-title">My Skills</h2>
                     <div class="skills-grid-v1">
-                        <div class="skill-item"><div class="skill-info"><span>Videography</span><span>95%</span></div><div class="progress-bar"><div class="fill" style="width: 95%"></div></div></div>
-                        <div class="skill-item"><div class="skill-info"><span>Photography</span><span>90%</span></div><div class="progress-bar"><div class="fill" style="width: 90%"></div></div></div>
-                        <div class="skill-item"><div class="skill-info"><span>Video & Photo Editing</span><span>85%</span></div><div class="progress-bar"><div class="fill" style="width: 85%"></div></div></div>
-                        <div class="skill-item"><div class="skill-info"><span>AI Image/Video Creat</span><span>80%</span></div><div class="progress-bar"><div class="fill" style="width: 80%"></div></div></div>
-                        <div class="skill-item"><div class="skill-info"><span>Social Media Post Create</span><span>90%</span></div><div class="progress-bar"><div class="fill" style="width: 90%"></div></div></div>
-                        <div class="skill-item"><div class="skill-info"><span>Video Ad Create</span><span>85%</span></div><div class="progress-bar"><div class="fill" style="width: 85%"></div></div></div>
-                        <div class="skill-item"><div class="skill-info"><span>Dj Remix Create</span><span>75%</span></div><div class="progress-bar"><div class="fill" style="width: 75%"></div></div></div>
+                        <div class="skill-item">
+                            <div class="skill-info"><span>Videography</span><span>95%</span></div>
+                            <div class="progress-bar"><div class="fill" style="width: 95%"></div></div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info"><span>Photography</span><span>90%</span></div>
+                            <div class="progress-bar"><div class="fill" style="width: 90%"></div></div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info"><span>Video Editing</span><span>85%</span></div>
+                            <div class="progress-bar"><div class="fill" style="width: 85%"></div></div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info"><span>AI Art</span><span>80%</span></div>
+                            <div class="progress-bar"><div class="fill" style="width: 80%"></div></div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info"><span>Social Media</span><span>90%</span></div>
+                            <div class="progress-bar"><div class="fill" style="width: 90%"></div></div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info"><span>DJ Remix</span><span>75%</span></div>
+                            <div class="progress-bar"><div class="fill" style="width: 75%"></div></div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -164,10 +177,10 @@
                 <div class="glass-card">
                     <h2 class="section-title">My Creative Gallery</h2>
                     <div class="gallery-grid">
-                        <div class="gallery-item"><img src="images/work1.jpg" alt="Work"><div class="category-tag">Photography</div><div class="overlay-card"><h3>Clicks</h3></div></div>
-                        <div class="gallery-item"><img src="images/work2.jpg" alt="Work"><div class="category-tag">Editing</div><div class="overlay-card"><h3>Video Edit</h3></div></div>
-                        <div class="gallery-item"><img src="images/work3.jpg" alt="Work"><div class="category-tag">AI Art</div><div class="overlay-card"><h3>AI Gen</h3></div></div>
-                        <div class="gallery-item"><img src="images/work4.jpg" alt="Work"><div class="category-tag">DJ</div><div class="overlay-card"><h3>Remixes</h3></div></div>
+                        <div class="gallery-item"><img src="images/work1.jpg" alt="Work"><div class="category-tag">Photo</div><div class="overlay-card"><h3>Clicks</h3></div></div>
+                        <div class="gallery-item"><img src="images/work2.jpg" alt="Work"><div class="category-tag">Edit</div><div class="overlay-card"><h3>Video</h3></div></div>
+                        <div class="gallery-item"><img src="images/work3.jpg" alt="Work"><div class="category-tag">AI</div><div class="overlay-card"><h3>AI Art</h3></div></div>
+                        <div class="gallery-item"><img src="images/work4.jpg" alt="Work"><div class="category-tag">DJ</div><div class="overlay-card"><h3>Music</h3></div></div>
                     </div>
                 </div>
             </section>
@@ -186,27 +199,16 @@
                         <div class="timeline-item glass-box">
                             <div class="icon-circle"><i class="fas fa-plane"></i></div>
                             <h3>Travel History</h3>
-                            <p>Places I have visited:</p>
                             <div class="tags">
-                                <span class="tag">Nuwara Eliya</span>
-                                <span class="tag">Anuradhapura</span>
-                                <span class="tag">Polonnaruwa</span>
-                                <span class="tag">Colombo</span>
-                                <span class="tag">Yapahuwa</span>
-                                <span class="tag">Kataragama</span>
+                                <span class="tag">Nuwara Eliya</span><span class="tag">Anuradhapura</span>
+                                <span class="tag">Polonnaruwa</span><span class="tag">Colombo</span>
+                                <span class="tag">Yapahuwa</span><span class="tag">Kataragama</span>
                             </div>
                         </div>
 
                         <div class="timeline-item glass-box">
-                            <div class="icon-circle"><i class="fas fa-graduation-cap"></i></div>
-                            <h3>Education</h3>
-                            <h4>R/Anura Maha Vidyalaya (13 Years)</h4>
-                            <p>Roles: School Photographer & IT Specialist</p>
-                        </div>
-
-                        <div class="timeline-item glass-box">
                             <div class="icon-circle"><i class="fas fa-file-alt"></i></div>
-                            <h3>O/L Results</h3>
+                            <h3>O/L Examination Results</h3>
                             <table class="result-table">
                                 <tr><td>ICT</td><td><span class="grade grade-b">B</span></td></tr>
                                 <tr><td>Mathematics</td><td><span class="grade grade-b">B</span></td></tr>
@@ -223,26 +225,27 @@
                 </div>
             </section>
 
+             <section id="news" class="page">
+                <div class="glass-card">
+                    <h2 class="section-title">AI News Feed 📰</h2>
+                    <div class="news-filters">
+                        <button class="filter-btn active" onclick="filterNews('all')">All</button>
+                        <button class="filter-btn" onclick="filterNews('country')">Country</button>
+                        <button class="filter-btn" onclick="filterNews('game')">Gaming</button>
+                        <button class="filter-btn" onclick="filterNews('funny')">Funny</button>
+                    </div>
+                    <div class="news-grid" id="newsGrid">
+                        </div>
+                </div>
+            </section>
+
             <section id="community" class="page">
                 <div class="glass-card whatsapp-container">
-                    <div class="chat-header-wa">
-                        <div class="wa-profile"><i class="fas fa-users"></i></div>
-                        <div class="wa-info">
-                            <h3>Community Group</h3>
-                            <p>Kasun, You, +50 others...</p>
-                        </div>
-                    </div>
+                    <div class="chat-header-wa"><div class="wa-info"><h3>Community Group</h3><p>Kasun, You...</p></div></div>
                     <div class="chat-body-wa" id="communityBoard">
-                        <div class="wa-msg received">
-                            <div class="sender-name">Kasun (Admin)</div>
-                            <div class="msg-text">Welcome! Share your ideas here.</div>
-                            <div class="msg-time">10:00 AM</div>
-                        </div>
+                        <div class="wa-msg received"><div class="sender-name">Kasun (Admin)</div><div class="msg-text">Welcome!</div></div>
                     </div>
-                    <div class="chat-footer-wa">
-                        <input type="text" id="communityInput" placeholder="Type a message...">
-                        <button onclick="postToCommunity()"><i class="fas fa-paper-plane"></i></button>
-                    </div>
+                    <div class="chat-footer-wa"><input type="text" id="communityInput" placeholder="Type a message..."><button onclick="postToCommunity()"><i class="fas fa-paper-plane"></i></button></div>
                 </div>
             </section>
 
@@ -252,29 +255,17 @@
     <div class="ai-chat-icon" onclick="toggleAIChat()"><i class="fas fa-robot"></i></div>
     <div class="ai-chat-box" id="aiChatBox">
         <div class="ai-header">
-            <span>Kasun AI (Singlish) 🤖</span>
+            <span>Kasun AI 🧠</span>
             <span class="close-chat" onclick="toggleAIChat()">&times;</span>
         </div>
         <div class="ai-messages" id="aiMessages">
-            <div class="msg bot-msg">Haai! Mama Kasun AI. Oyaata ona deyak Singlish walin ahanna.</div>
+            <div class="msg bot-msg">Haai! Ona deyak ahanna. (Ask me anything!)</div>
         </div>
         <div class="ai-input">
             <input type="text" id="aiInput" placeholder="Type here..." onkeypress="handleEnter(event)">
             <button id="sendBtn" onclick="askGeminiAI()"><i class="fas fa-paper-plane"></i></button>
         </div>
     </div>
-
-    <script type="text/javascript">
-    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-    (function(){
-    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-    s1.async=true;
-    s1.src='https://embed.tawk.to/698a0b62e0c66b1c3ad16208/1jh1joutb';
-    s1.charset='UTF-8';
-    s1.setAttribute('crossorigin','*');
-    s0.parentNode.insertBefore(s1,s0);
-    })();
-    </script>
 
     <script type="importmap">
       {
