@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -21,7 +21,7 @@ const facebookProvider = new FacebookAuthProvider();
 let currentUser = null;
 let selectedAvatarUrl = "";
 
-// --- CURSOR ---
+// --- CURSOR LOGIC ---
 const dot = document.querySelector('.cursor-dot');
 const outline = document.querySelector('.cursor-outline');
 window.addEventListener('mousemove', (e) => {
@@ -57,7 +57,6 @@ onAuthStateChanged(auth, async (user) => {
         const finalPhoto = userData.customPhoto || userData.photo;
         document.getElementById('userAvatar').src = finalPhoto;
         topImg.src = finalPhoto;
-        selectedAvatarUrl = finalPhoto;
         
         document.getElementById('editName').value = userData.name;
         document.getElementById('editNick').value = userData.nickname || "";
@@ -95,7 +94,7 @@ window.logoutUser = () => signOut(auth).then(() => location.reload());
 window.emailLogin = () => signInWithEmailAndPassword(auth, document.getElementById('loginEmail').value, document.getElementById('loginPass').value).catch(e => alert(e.message));
 window.emailRegister = () => createUserWithEmailAndPassword(auth, document.getElementById('regEmail').value, document.getElementById('regPass').value).catch(e => alert(e.message));
 
-// --- NEWS (60 ITEMS) ---
+// --- NEWS LOGIC ---
 const newsGrid = document.getElementById('newsGrid');
 const categories = ['AI', 'Tech', 'Gaming', 'Men', 'Women', 'Design'];
 const newsData = [];
@@ -122,7 +121,7 @@ function openNewsPopup(item) {
 }
 window.closeNewsModal = () => document.getElementById('newsModal').style.display = 'none';
 
-// --- UI ---
+// --- UI FUNCTIONS ---
 window.showPage = (id, el) => { document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page')); document.getElementById(id).classList.add('active-page'); document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); el.classList.add('active'); if(id === 'home') startCounters(); };
 window.openSettings = () => document.getElementById('settingsModal').style.display = 'flex';
 window.closeSettings = () => document.getElementById('settingsModal').style.display = 'none';
@@ -134,6 +133,11 @@ window.sendBookingToWhatsApp = () => { window.open(`https://wa.me/+94717647693?t
 window.setTheme = (t) => document.body.className = 'theme-'+t;
 window.toggleTawkChat = () => { if(window.Tawk_API) window.Tawk_API.toggle(); };
 function startCounters() { document.querySelectorAll('.counter').forEach(c => { c.innerText = '0'; const target = +c.dataset.target; let count = 0; const update = () => { count += target/50; if(count<target) { c.innerText = Math.ceil(count)+"+"; setTimeout(update,30); } else c.innerText = target+"+"; }; update(); }); }
-window.addEventListener("load", () => { document.getElementById("preloader").style.display = "none"; startCounters(); });
+
+// FAST LOAD FIX
+window.addEventListener("load", () => {
+    setTimeout(() => { document.getElementById("preloader").style.display = "none"; startCounters(); }, 1500);
+});
+
 const words = ["Video Editor", "Photographer", "AI Artist"]; let idx = 0;
 function type() { const el = document.querySelector('.typing-text'); if(el) { el.textContent = words[idx % words.length]; idx++; setTimeout(type, 2000); } } type();
