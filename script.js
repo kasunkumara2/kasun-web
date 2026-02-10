@@ -22,11 +22,8 @@ let currentUser = null;
 let currentChatMode = 'kasun';
 let selectedAvatarUrl = "";
 
-// --- SPEEDY LOADER (DOM READY) ---
-document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("preloader").style.display = "none";
-    startCounters();
-});
+// --- CLICK OUTSIDE TO CLOSE ---
+window.onclick = (e) => { if(e.target.classList.contains('modal')) e.target.style.display = 'none'; };
 
 // --- CURSOR ---
 const dot = document.querySelector('.cursor-dot');
@@ -36,7 +33,7 @@ window.addEventListener('mousemove', (e) => {
     outline.style.left = e.clientX + 'px'; outline.style.top = e.clientY + 'px';
 });
 
-// --- AUTH & PROFILE ---
+// --- AUTH ---
 window.selectAvatar = (url) => { selectedAvatarUrl = url; document.getElementById('userAvatar').src = url; };
 
 onAuthStateChanged(auth, async (user) => {
@@ -79,7 +76,10 @@ window.openChat = (mode) => {
     const area = document.getElementById('chatMessagesArea');
     area.innerHTML = '';
     
-    if (mode === 'kasun') { headerName.innerText = "Chat with Kasun"; headerImg.src = "images/profile.jpg"; area.innerHTML = `<div class="msg received">Hi! Leave a message.</div>`; }
+    if (mode === 'kasun') { 
+        headerName.innerText = "Chat with Kasun"; headerImg.src = "images/profile.jpg"; 
+        area.innerHTML = `<div class="msg received">Hi! I am available on Live Chat.<br><br><button class="btn-primary" onclick="window.Tawk_API.maximize()" style="padding:10px; font-size:0.9rem;">Open Live Chat Widget</button></div>`; 
+    }
     else if (mode === 'ai') { headerName.innerText = "AI Assistant"; headerImg.src = "https://img.icons8.com/color/96/bot.png"; area.innerHTML = `<div class="msg received">Hello! Ask me anything.</div>`; }
     else if (mode === 'community') { headerName.innerText = "Global Community"; headerImg.src = "https://img.icons8.com/color/96/group.png"; loadCommunityMessages(); }
 };
@@ -92,7 +92,7 @@ window.sendMessage = async () => {
     area.innerHTML += `<div class="msg sent">${text}</div>`;
     input.value = ''; area.scrollTop = area.scrollHeight;
 
-    if (currentChatMode === 'kasun') { setTimeout(() => { area.innerHTML += `<div class="msg received">Thanks! I'll reply soon.</div>`; area.scrollTop = area.scrollHeight; }, 1000); }
+    if (currentChatMode === 'kasun') { setTimeout(() => { area.innerHTML += `<div class="msg received">Please use the Live Chat button above to contact me directly.</div>`; area.scrollTop = area.scrollHeight; }, 1000); }
     else if (currentChatMode === 'ai') { setTimeout(() => { let reply = "I am a bot. How can I help?"; area.innerHTML += `<div class="msg received">${reply}</div>`; area.scrollTop = area.scrollHeight; }, 800); }
     else if (currentChatMode === 'community' && currentUser) { await addDoc(collection(db, "community_messages"), { text: text, uid: currentUser.uid, name: currentUser.displayName, createdAt: new Date() }); }
 };
@@ -152,6 +152,10 @@ window.sendBookingToWhatsApp = () => { window.open(`https://wa.me/+94717647693?t
 window.setTheme = (t) => document.body.className = 'theme-'+t;
 window.toggleTawkChat = () => { if(window.Tawk_API) window.Tawk_API.toggle(); };
 function startCounters() { document.querySelectorAll('.counter').forEach(c => { c.innerText = '0'; const target = +c.dataset.target; let count = 0; const update = () => { count += target/50; if(count<target) { c.innerText = Math.ceil(count)+"+"; setTimeout(update,30); } else c.innerText = target+"+"; }; update(); }); }
-window.onclick = (e) => { if(e.target.classList.contains('modal')) e.target.style.display = 'none'; };
+
+window.addEventListener("load", () => {
+    setTimeout(() => { document.getElementById("preloader").style.display = "none"; startCounters(); }, 1000);
+});
+
 const words = ["Video Editor", "Photographer", "AI Artist"]; let idx = 0;
 function type() { const el = document.querySelector('.typing-text'); if(el) { el.textContent = words[idx % words.length]; idx++; setTimeout(type, 2000); } } type();
