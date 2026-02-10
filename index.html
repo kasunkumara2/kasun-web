@@ -10,7 +10,11 @@
 </head>
 <body class="theme-dark">
 
-    <div id="preloader"><div class="loader-circle"></div><div class="loader-text">LOADING...</div></div>
+    <div id="preloader">
+        <div class="loader-ring"></div>
+        <div class="loader-text">Kasun...</div>
+    </div>
+
     <div class="cursor-blob"></div>
     <div class="cursor-dot"></div>
     <div class="background-image"></div>
@@ -37,33 +41,28 @@
     <div id="settingsModal" class="modal">
         <div class="modal-content glass-card-simple settings-box tilt-element">
             <span class="close-btn" onclick="closeSettings()">&times;</span>
-            
             <div class="settings-tabs-container">
                 <button class="tab-btn active" onclick="switchTab('auth')">Profile</button>
                 <button class="tab-btn" onclick="switchTab('theme')">Themes</button>
             </div>
 
             <div id="authTab" class="tab-content active">
-                
                 <div id="loggedOutUI">
                     <div class="auth-toggle-box">
                         <div class="auth-toggle-btn active" id="signInBtn" onclick="toggleAuth('signin')">Sign In</div>
                         <div class="auth-toggle-btn" id="signUpBtn" onclick="toggleAuth('signup')">Sign Up</div>
                     </div>
-                    
                     <form id="signInForm" class="auth-form">
                         <div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="loginEmail" placeholder="Email"></div>
                         <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="loginPass" placeholder="Password"></div>
                         <button type="button" class="btn-primary full-width" onclick="emailLogin()">Login</button>
                     </form>
-
                     <form id="signUpForm" class="auth-form" style="display: none;">
                         <div class="input-group"><i class="fas fa-user"></i><input type="text" id="regName" placeholder="Name"></div>
                         <div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="regEmail" placeholder="Email"></div>
                         <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="regPass" placeholder="Password"></div>
                         <button type="button" class="btn-primary full-width" onclick="emailRegister()">Register</button>
                     </form>
-
                     <div class="social-login">
                         <button type="button" class="social-btn google" onclick="googleLogin()"><img src="https://img.icons8.com/color/48/google-logo.png"> Google</button>
                         <button type="button" class="social-btn facebook" onclick="facebookLogin()"><img src="https://img.icons8.com/color/48/facebook-new.png"> Facebook</button>
@@ -72,13 +71,14 @@
 
                 <div id="loggedInUI" style="display: none;">
                     <div style="text-align:center; margin-bottom:15px;">
-                        <img id="userAvatar" src="" style="width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--primary); object-fit:cover;">
-                        <p style="font-size:0.8rem; color:#aaa;">Edit your details below</p>
+                        <img id="userAvatar" src="" style="width:80px; height:80px; border-radius:50%; border:2px solid var(--primary); object-fit:cover;">
+                        <div style="margin-top:10px;">
+                            <input type="text" id="customPhotoUrl" placeholder="Paste Image URL here" style="background:rgba(255,255,255,0.1); border:none; padding:5px; color:white; border-radius:5px; font-size:0.8rem; width:100%;">
+                        </div>
                     </div>
-                    
                     <div class="profile-edit-grid">
                         <div class="input-group"><i class="fas fa-user"></i><input type="text" id="editName" placeholder="Full Name"></div>
-                        <div class="input-group"><i class="fas fa-phone"></i><input type="text" id="editPhone" placeholder="Phone Number"></div>
+                        <div class="input-group"><i class="fas fa-phone"></i><input type="text" id="editPhone" placeholder="Phone"></div>
                         <div style="display:flex; gap:10px;">
                             <div class="input-group"><i class="fas fa-city"></i><input type="text" id="editCity" placeholder="City"></div>
                             <div class="input-group"><i class="fas fa-globe"></i><input type="text" id="editCountry" placeholder="Country"></div>
@@ -91,14 +91,12 @@
                             </select>
                         </div>
                     </div>
-
                     <button class="btn-primary full-width" onclick="saveUserProfile()">Save Profile <i class="fas fa-save"></i></button>
                     <button class="btn-secondary full-width" onclick="logoutUser()" style="margin-top:10px; border-color:red; color:red;">Logout</button>
                 </div>
             </div>
 
             <div id="themeTab" class="tab-content" style="display: none;">
-                <h3 style="margin-bottom:15px; color:white; text-align:center;">Select Theme</h3>
                 <div class="theme-grid">
                     <div class="theme-card dark selected" onclick="setTheme('dark')"><div class="color-dot" style="background:#000;"></div><span>Dark</span></div>
                     <div class="theme-card blue" onclick="setTheme('blue')"><div class="color-dot" style="background:#0ea5e9;"></div><span>Blue</span></div>
@@ -144,7 +142,7 @@
                     <li class="nav-item" onclick="toggleTawkChat()"><i class="fas fa-comment-dots"></i><span class="tooltip">Chat</span></li>
                 </ul>
             </div>
-            <div class="settings" onclick="openSettings()"><i class="fas fa-cog"></i></div>
+            <div class="settings" onclick="openSettings()"><i class="fas fa-cog fa-spin"></i></div>
         </nav>
 
         <main class="content-area">
