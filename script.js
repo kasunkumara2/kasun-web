@@ -1,212 +1,157 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// --- API CONFIG (GEMINI AI SDK) ---
+// --- CONFIG ---
 const API_KEY = "AIzaSyBtLeTafqNFh4hu6RFb78M3pwmChzpd6uc"; 
 const genAI = new GoogleGenerativeAI(API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+let chatSession = model.startChat();
 
-// AI Chat Initial Session
-let chatSession = model.startChat({
-    history: [
-        {
-            role: "user",
-            parts: [{ text: "You are Kasun AI. You speak Singlish or English. Be helpful, friendly and cool." }],
-        },
-        {
-            role: "model",
-            parts: [{ text: "Hari machan, mama ready. Ona deyak ahanna!" }],
-        },
-    ]
-});
+// --- 1. MOUSE SCULPTING & TILT EFFECT ---
+const cursorBlob = document.querySelector('.cursor-blob');
+const cursorDot = document.querySelector('.cursor-dot');
 
-// --- 1. CLICK OUTSIDE TO CLOSE MODALS ---
-window.onclick = function(event) {
-    const modals = document.querySelectorAll('.modal');
-    modals.forEach(modal => {
-        if (event.target == modal) {
-            modal.style.display = "none";
+document.addEventListener('mousemove', (e) => {
+    // Move Cursor
+    cursorDot.style.left = e.clientX + 'px';
+    cursorDot.style.top = e.clientY + 'px';
+    
+    // Delayed Blob movement
+    setTimeout(() => {
+        cursorBlob.style.left = e.clientX + 'px';
+        cursorBlob.style.top = e.clientY + 'px';
+    }, 100);
+
+    // 3D TILT LOGIC for Cards
+    document.querySelectorAll('.tilt-element').forEach(card => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        // Only tilt if mouse is near/over
+        if(x > -50 && x < rect.width + 50 && y > -50 && y < rect.height + 50) {
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const rotateX = ((y - centerY) / centerY) * -5; // Max 5 deg tilt
+            const rotateY = ((x - centerX) / centerX) * 5;
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+        } else {
+            card.style.transform = `perspective(1000px) rotateX(0) rotateY(0) scale(1)`;
         }
     });
-}
-
-// --- 2. PRELOADER & COUNTERS ---
-window.addEventListener("load", function() {
-    const loader = document.getElementById("preloader");
-    setTimeout(function() { 
-        loader.style.display = "none";
-        // Start Counters
-        const counters = document.querySelectorAll('.counter');
-        counters.forEach(counter => {
-            const target = +counter.getAttribute('data-target');
-            let count = 0;
-            const inc = target / 50; 
-            const updateCount = () => {
-                if (count < target) {
-                    count += inc;
-                    counter.innerText = Math.ceil(count);
-                    setTimeout(updateCount, 30);
-                } else {
-                    counter.innerText = target + "+";
-                }
-            };
-            updateCount();
-        });
-    }, 1500);
 });
 
-// --- 3. MAGIC CURSOR ---
-const cursor = document.querySelector(".cursor");
-const cursor2 = document.querySelector(".cursor2");
-document.addEventListener("mousemove", function(e) {
-    cursor.style.cssText = cursor2.style.cssText = "left: " + e.clientX + "px; top: " + e.clientY + "px;";
-});
-
-// --- 4. AUTO TYPING ---
-const textElement = document.querySelector(".typing-text");
-if(textElement) {
-    const words = ["Video Editor", "Photographer", "AI Artist", "DJ & Remixer"];
-    let wordIndex = 0, charIndex = 0, isDeleting = false;
-    function typeEffect() {
-        const currentWord = words[wordIndex];
-        if (isDeleting) textElement.textContent = currentWord.substring(0, charIndex--);
-        else textElement.textContent = currentWord.substring(0, charIndex++);
-        
-        let typeSpeed = isDeleting ? 100 : 200;
-        if (!isDeleting && charIndex === currentWord.length) { isDeleting = true; typeSpeed = 2000; }
-        else if (isDeleting && charIndex === 0) { isDeleting = false; wordIndex = (wordIndex + 1) % words.length; typeSpeed = 500; }
-        setTimeout(typeEffect, typeSpeed);
-    }
-    typeEffect();
-}
-
-// --- 5. AI CHAT (FIXED) ---
-window.askGeminiAI = async function() {
-    const input = document.getElementById('aiInput');
-    const msgArea = document.getElementById('aiMessages');
-    const sendBtn = document.getElementById('sendBtn');
-    const userText = input.value.trim();
-
-    if (userText === "") return;
-    
-    msgArea.innerHTML += `<div class="msg user-msg">${userText}</div>`;
-    input.value = ""; 
-    msgArea.scrollTop = msgArea.scrollHeight;
-    sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; 
-    sendBtn.disabled = true;
-
-    try {
-        const result = await chatSession.sendMessage(userText);
-        const response = await result.response;
-        const text = response.text();
-        msgArea.innerHTML += `<div class="msg bot-msg">${text}</div>`;
-    } catch (error) {
-        console.error("AI Error:", error);
-        msgArea.innerHTML += `<div class="msg bot-msg" style="color:red;">Internet problem or AI busy. Try again.</div>`;
-        chatSession = model.startChat(); 
-    }
-
-    sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i>'; 
-    sendBtn.disabled = false; 
-    msgArea.scrollTop = msgArea.scrollHeight;
-}
-
-// --- 6. SETTINGS & AUTH LOGIC ---
-window.openSettings = function() { document.getElementById('settingsModal').style.display = 'flex'; }
-window.closeSettings = function() { document.getElementById('settingsModal').style.display = 'none'; }
-
-window.switchTab = function(tabName) {
-    document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
-    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-    document.getElementById(tabName + 'Tab').style.display = 'block';
+// --- 2. CONNECT HUB SWITCHER ---
+window.switchConnect = function(tab) {
+    document.getElementById('aiSection').style.display = (tab === 'ai') ? 'flex' : 'none';
+    document.getElementById('communitySection').style.display = (tab === 'community') ? 'flex' : 'none';
+    document.querySelectorAll('.connect-btn').forEach(b => b.classList.remove('active'));
     event.currentTarget.classList.add('active');
 }
 
-window.toggleAuth = function(type) {
-    document.getElementById('signInForm').style.display = (type === 'signin') ? 'block' : 'none';
-    document.getElementById('signUpForm').style.display = (type === 'signup') ? 'block' : 'none';
-    document.getElementById('signInBtn').classList.toggle('active', type === 'signin');
-    document.getElementById('signUpBtn').classList.toggle('active', type === 'signup');
-}
-
-window.setTheme = function(theme) {
-    document.body.className = 'theme-' + theme;
-    document.querySelectorAll('.theme-card').forEach(c => c.classList.remove('selected'));
-    document.querySelector('.theme-card.' + theme).classList.add('selected');
-}
-
-// --- 7. BOOKING & NEWS ---
-window.openBooking = function() { document.getElementById('bookingModal').style.display = 'flex'; }
-window.closeBooking = function() { document.getElementById('bookingModal').style.display = 'none'; }
-
-window.sendBookingToWhatsApp = function() {
-    const name = document.getElementById('clientName').value;
-    const service = document.getElementById('serviceType').value;
-    const budget = document.getElementById('clientBudget').value;
-    const message = document.getElementById('clientMessage').value;
-    if(name === "") { alert("Enter Name"); return; }
-    
-    const text = `*New Booking* 🚀%0A👤 Name: ${name}%0A🎬 Service: ${service}%0A💰 Budget: ${budget} LKR%0A📝 Msg: ${message}`;
-    window.open(`https://wa.me/+94717647693?text=${text}`, '_blank');
-    closeBooking();
-}
-
-// News Data
+// --- 3. MAGAZINE NEWS DATA ---
 const newsData = [
-    { id: 1, category: 'country', title: 'Sri Lanka Tourism Up', desc: 'More tourists arriving in 2026.', date: 'Today' },
-    { id: 2, category: 'game', title: 'GTA 6 Leaks', desc: 'New map details revealed.', date: 'Yesterday' },
-    { id: 3, category: 'funny', title: 'Cat Wins Election', desc: 'A cat became mayor for a day.', date: '2 days ago' }
+    { id: 1, tag: 'Lanka', title: 'Sri Lanka Tourism Booms in 2026', img: 'https://images.unsplash.com/photo-1586861635167-e5223aeb4227?w=500', featured: true },
+    { id: 2, tag: 'Tech', title: 'AI Takes Over Editing', img: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=500' },
+    { id: 3, tag: 'Game', title: 'GTA 6 Map Leaked?', img: 'https://images.unsplash.com/photo-1552820728-8b83bb6b773f?w=500' },
+    { id: 4, tag: 'Tech', title: 'New Camera Gear 2026', img: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=500' },
+    { id: 5, tag: 'Lanka', title: 'Colombo Night Races', img: 'https://images.unsplash.com/photo-1590523278135-1e672957b23d?w=500' }
 ];
 
-window.filterNews = function(filter) {
+function renderNews(filter) {
     const grid = document.getElementById('newsGrid');
     grid.innerHTML = '';
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    event.target.classList.add('active');
-
-    newsData.forEach(news => {
-        if (filter === 'all' || news.category === filter) {
+    newsData.forEach(item => {
+        if (filter === 'all' || item.tag.toLowerCase() === filter.toLowerCase()) {
             grid.innerHTML += `
-                <div class="news-card">
-                    <div class="news-content">
-                        <span class="news-cat">${news.category}</span>
-                        <h3 class="news-title">${news.title}</h3>
-                        <p>${news.desc}</p>
-                        <span class="news-date">${news.date}</span>
+                <div class="news-item tilt-element ${item.featured ? 'featured' : ''}">
+                    <img src="${item.img}">
+                    <div class="news-overlay">
+                        <span class="news-tag">${item.tag}</span>
+                        <h3 class="news-title">${item.title}</h3>
                     </div>
-                </div>`;
+                </div>
+            `;
         }
     });
 }
-document.addEventListener('DOMContentLoaded', () => filterNews('all'));
+// Init News
+renderNews('all');
+window.filterNews = (f) => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    renderNews(f);
+}
 
-window.postToCommunity = function() {
-    const input = document.getElementById('communityInput');
-    const board = document.getElementById('communityBoard');
+// --- 4. AI CHAT LOGIC ---
+window.askGeminiAI = async function() {
+    const input = document.getElementById('aiInput');
+    const area = document.getElementById('aiMessages');
     const text = input.value.trim();
-    if(text !== "") {
-        const now = new Date();
-        const time = now.getHours() + ":" + (now.getMinutes()<10?'0':'') + now.getMinutes();
-        const newMsg = `<div class="wa-msg sent"><div class="sender-name">You</div><div class="msg-text">${text}</div><div class="msg-time">${time}</div></div>`;
-        board.innerHTML += newMsg;
-        input.value = "";
+    if (!text) return;
+
+    area.innerHTML += `<div class="msg user">${text}</div>`;
+    input.value = "";
+    area.scrollTop = area.scrollHeight;
+
+    try {
+        const result = await chatSession.sendMessage(text);
+        const response = await result.response;
+        area.innerHTML += `<div class="msg bot">${response.text()}</div>`;
+    } catch (e) {
+        area.innerHTML += `<div class="msg bot" style="color:red">Error connecting to AI.</div>`;
+    }
+    area.scrollTop = area.scrollHeight;
+}
+
+// --- 5. MODAL & NAVIGATION ---
+window.onclick = (e) => { if(e.target.classList.contains('modal')) e.target.style.display = 'none'; }
+window.openSettings = () => document.getElementById('settingsModal').style.display = 'flex';
+window.closeSettings = () => document.getElementById('settingsModal').style.display = 'none';
+window.openBooking = () => document.getElementById('bookingModal').style.display = 'flex';
+window.closeBooking = () => document.getElementById('bookingModal').style.display = 'none';
+
+window.showPage = (id, el) => {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+    document.getElementById(id).classList.add('active-page');
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    el.classList.add('active');
+}
+
+window.sendBookingToWhatsApp = () => {
+    const name = document.getElementById('clientName').value;
+    const srv = document.getElementById('serviceType').value;
+    const bud = document.getElementById('clientBudget').value;
+    const msg = document.getElementById('clientMessage').value;
+    if(!name) return alert('Name required');
+    window.open(`https://wa.me/+94717647693?text=Name:${name}%0AService:${srv}%0ABudget:${bud}%0ADetails:${msg}`, '_blank');
+}
+
+window.postCommunity = () => {
+    const inp = document.getElementById('commInput');
+    const board = document.getElementById('commMessages');
+    if(inp.value) {
+        board.innerHTML += `<div class="msg sent">${inp.value}</div>`;
+        inp.value = "";
         board.scrollTop = board.scrollHeight;
     }
 }
 
-// --- STANDARD NAV ---
-window.showPage = function(pageId, element) {
-    document.querySelectorAll('.page').forEach(page => page.classList.remove('active-page'));
-    const target = document.getElementById(pageId);
-    if(target) target.classList.add('active-page');
-    document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-    if(element) element.classList.add('active');
+// Settings Tabs
+window.switchTab = (t) => {
+    document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+    document.getElementById(t+'Tab').style.display = 'block';
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
 }
-window.toggleAIChat = function() {
-    const box = document.getElementById('aiChatBox');
-    box.style.display = (box.style.display === 'flex') ? 'none' : 'flex';
-    if(box.style.display === 'flex') document.getElementById('aiInput').focus();
+window.setTheme = (t) => document.body.className = 'theme-'+t;
+
+// Auto Type
+const words = ["Editor", "Photographer", "Designer"];
+let i = 0, timer;
+function type() {
+    let word = words[i % words.length];
+    document.querySelector('.typing-text').textContent = word;
+    i++;
+    setTimeout(type, 2000);
 }
-window.toggleTawkChat = function() {
-    if(window.Tawk_API) window.Tawk_API.toggle(); else alert("Chat loading...");
-}
-window.handleEnter = function(e) { if (e.key === 'Enter') window.askGeminiAI(); }
+type();
