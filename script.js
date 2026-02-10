@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -20,6 +20,29 @@ const facebookProvider = new FacebookAuthProvider();
 
 let currentUser = null;
 
+// --- 1. NEW CURSOR LOGIC (DOT + SLOW RING) ---
+const dot = document.querySelector('.cursor-dot');
+const outline = document.querySelector('.cursor-outline');
+
+window.addEventListener('mousemove', (e) => {
+    // Dot moves instantly
+    dot.style.left = e.clientX + 'px';
+    dot.style.top = e.clientY + 'px';
+    
+    // Outline moves with delay (css transition handles smooth lerp)
+    outline.style.left = e.clientX + 'px';
+    outline.style.top = e.clientY + 'px';
+    
+    // 3D Tilt Effect on Elements
+    document.querySelectorAll('.tilt-element').forEach(el => {
+        const r = el.getBoundingClientRect();
+        const x = ((e.clientX - r.left) / r.width - 0.5) * 10;
+        const y = ((e.clientY - r.top) / r.height - 0.5) * -10;
+        el.style.transform = `perspective(1000px) rotateX(${y}deg) rotateY(${x}deg) scale(1.01)`;
+    });
+});
+
+// --- 2. AUTH & PROFILE ---
 onAuthStateChanged(auth, async (user) => {
     const outUI = document.getElementById('loggedOutUI');
     const inUI = document.getElementById('loggedInUI');
@@ -84,7 +107,68 @@ window.logoutUser = () => signOut(auth).then(() => location.reload());
 window.emailLogin = () => signInWithEmailAndPassword(auth, document.getElementById('loginEmail').value, document.getElementById('loginPass').value).catch(e => alert(e.message));
 window.emailRegister = () => createUserWithEmailAndPassword(auth, document.getElementById('regEmail').value, document.getElementById('regPass').value).catch(e => alert(e.message));
 
-// TABS
+// --- 3. GENERATE 40 NEWS ITEMS + POPUP ---
+const newsGrid = document.getElementById('newsGrid');
+const categories = ['AI', 'Tech', 'Video', 'Design'];
+const newsData = [];
+
+for(let i=1; i<=40; i++) {
+    const cat = categories[i % 4];
+    newsData.push({
+        id: i,
+        cat: cat,
+        img: `https://picsum.photos/400/600?random=${i}`,
+        title: `${cat} Innovation Update #${i}`,
+        desc: `This is a detailed description about ${cat} update #${i}. Kasun's AI Magazine brings you the latest trends in technology and creativity. Stay tuned for more updates.`
+    });
+}
+
+function renderNews(filter) {
+    if(!newsGrid) return;
+    newsGrid.innerHTML = '';
+    newsData.forEach(item => {
+        if(filter === 'all' || item.cat === filter) {
+            const el = document.createElement('div');
+            el.className = 'news-item tilt-element';
+            el.innerHTML = `
+                <img src="${item.img}">
+                <div class="news-info-box">
+                    <span class="news-tag">${item.cat}</span>
+                    <h3 style="font-size:0.9rem; margin-top:5px; color:white;">${item.title}</h3>
+                </div>`;
+            el.onclick = () => openNewsPopup(item);
+            newsGrid.appendChild(el);
+        }
+    });
+}
+renderNews('all');
+window.filterNews = (f) => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    renderNews(f);
+};
+
+function openNewsPopup(item) {
+    document.getElementById('popupImg').src = item.img;
+    document.getElementById('popupTag').innerText = item.cat;
+    document.getElementById('popupTitle').innerText = item.title;
+    document.getElementById('popupDesc').innerText = item.desc;
+    document.getElementById('newsModal').style.display = 'flex';
+}
+window.closeNewsModal = () => document.getElementById('newsModal').style.display = 'none';
+
+// --- 4. STANDARD FUNCTIONS ---
+window.showPage = (id, el) => {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+    document.getElementById(id).classList.add('active-page');
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    el.classList.add('active');
+    if(id === 'home') startCounters();
+};
+window.openSettings = () => document.getElementById('settingsModal').style.display = 'flex';
+window.closeSettings = () => document.getElementById('settingsModal').style.display = 'none';
+window.openBooking = () => document.getElementById('bookingModal').style.display = 'flex';
+window.closeBooking = () => document.getElementById('bookingModal').style.display = 'none';
 window.switchTab = (t) => {
     document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
     document.getElementById(t+'Tab').style.display = 'block';
@@ -97,19 +181,6 @@ window.toggleAuth = (t) => {
     document.getElementById('signInBtn').classList.toggle('active', t === 'signin');
     document.getElementById('signUpBtn').classList.toggle('active', t === 'signup');
 };
-
-// UI UTILS
-window.showPage = (id, el) => {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
-    document.getElementById(id).classList.add('active-page');
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    el.classList.add('active');
-    if(id === 'home') startCounters();
-};
-window.openSettings = () => document.getElementById('settingsModal').style.display = 'flex';
-window.closeSettings = () => document.getElementById('settingsModal').style.display = 'none';
-window.openBooking = () => document.getElementById('bookingModal').style.display = 'flex';
-window.closeBooking = () => document.getElementById('bookingModal').style.display = 'none';
 window.sendBookingToWhatsApp = () => {
     const name = document.getElementById('clientName').value;
     const msg = document.getElementById('clientMessage').value;
@@ -136,15 +207,3 @@ function type() {
     if(el) { el.textContent = words[idx % words.length]; idx++; setTimeout(type, 2000); }
 }
 type();
-
-// 40 NEWS
-const newsGrid = document.getElementById('newsGrid');
-if(newsGrid) {
-    const cats = ['AI', 'Tech', 'Video'];
-    for(let i=1; i<=40; i++) {
-        const item = document.createElement('div');
-        item.className = 'news-item tilt-element';
-        item.innerHTML = `<img src="https://picsum.photos/400/600?random=${i}"><div class="news-info-box"><span class="news-tag">${cats[i%3]}</span><h3 style="font-size:0.9rem; margin-top:5px;">News #${i}</h3></div>`;
-        newsGrid.appendChild(item);
-    }
-}
