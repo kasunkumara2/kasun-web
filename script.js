@@ -1,5 +1,23 @@
-// --- API CONFIG (Direct Fetch Fix) ---
+// Google AI SDK Import (මේක අනිවාර්යයි)
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
+// --- API CONFIG ---
 const API_KEY = "AIzaSyBtLeTafqNFh4hu6RFb78M3pwmChzpd6uc"; 
+// SDK එක Initialize කිරීම
+const genAI = new GoogleGenerativeAI(API_KEY);
+const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+
+// AI එකට දෙන උපදෙස්
+let chatHistory = [
+  {
+    role: "user",
+    parts: [{ text: "You are Kasun AI. You act as a helpful assistant on Kasun's portfolio website. You can speak 'Singlish' (Sinhala in English letters) and English. Be friendly and cool. You can answer any general question." }],
+  },
+  {
+    role: "model",
+    parts: [{ text: "Hari machan, mama ready. Ona deyak ahanna!" }],
+  },
+];
 
 // --- 1. PRELOADER & COUNTERS ---
 window.addEventListener("load", function() {
@@ -7,14 +25,16 @@ window.addEventListener("load", function() {
     setTimeout(function() { 
         loader.style.display = "none";
         
+        // Start Counters
         const counters = document.querySelectorAll('.counter');
         counters.forEach(counter => {
+            const target = +counter.getAttribute('data-target');
+            let count = 0;
+            const inc = target / 50; 
             const updateCount = () => {
-                const target = +counter.getAttribute('data-target');
-                const count = +counter.innerText;
-                const inc = target / 100;
                 if (count < target) {
-                    counter.innerText = Math.ceil(count + inc);
+                    count += inc;
+                    counter.innerText = Math.ceil(count);
                     setTimeout(updateCount, 30);
                 } else {
                     counter.innerText = target + "+";
@@ -51,23 +71,9 @@ if(textElement) {
     typeEffect();
 }
 
-// --- 4. 3D TILT EFFECT ---
-document.addEventListener('mousemove', function(e) {
-    document.querySelectorAll('.glass-card').forEach(card => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        if (x > 0 && x < rect.width && y > 0 && y < rect.height) {
-            const rotateX = ((y - rect.height/2) / (rect.height/2)) * -2; // අඩු කරා -2 ට
-            const rotateY = ((x - rect.width/2) / (rect.width/2)) * 2;
-            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-        } else {
-            card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
-        }
-    });
-});
+// --- 4. AI CHAT (SDK METHOD - FIXED) ---
+let chatSession = model.startChat({ history: chatHistory });
 
-// --- 5. AI CHAT (FIXED FETCH METHOD) ---
 window.askGeminiAI = async function() {
     const input = document.getElementById('aiInput');
     const msgArea = document.getElementById('aiMessages');
@@ -83,41 +89,39 @@ window.askGeminiAI = async function() {
     sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; 
     sendBtn.disabled = true;
 
-    // Direct API Call (Fixes SDK Errors)
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`;
-    
-    const requestBody = {
-        contents: [{
-            parts: [{
-                text: "You are Kasun AI. You speak Singlish or English. Keep it short. User asks: " + userText
-            }]
-        }]
-    };
-
     try {
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(requestBody)
-        });
-
-        const data = await response.json();
+        // SDK එක හරහා මැසේජ් එක යැවීම
+        const result = await chatSession.sendMessage(userText);
+        const response = await result.response;
+        const text = response.text();
         
-        if (data.candidates && data.candidates.length > 0) {
-            const text = data.candidates[0].content.parts[0].text;
-            msgArea.innerHTML += `<div class="msg bot-msg">${text}</div>`;
-        } else {
-            msgArea.innerHTML += `<div class="msg bot-msg">Mata therune na machan. Aaye kiyanna.</div>`;
-        }
+        msgArea.innerHTML += `<div class="msg bot-msg">${text}</div>`;
 
     } catch (error) {
         console.error("AI Error:", error);
-        msgArea.innerHTML += `<div class="msg bot-msg" style="color:red;">Internet aulak wage. Please check.</div>`;
+        msgArea.innerHTML += `<div class="msg bot-msg" style="color:red;">Sorry machan, podi aulak giya. Aaye try karanna. (Check internet too)</div>`;
+        // Error එකක් ආවොත් Chat session එක reset කරනවා
+        chatSession = model.startChat({ history: chatHistory });
     }
 
     sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i>'; 
     sendBtn.disabled = false; 
     msgArea.scrollTop = msgArea.scrollHeight;
+}
+
+// --- 5. BOOKING SYSTEM ---
+window.openBooking = function() { document.getElementById('bookingModal').style.display = 'flex'; }
+window.closeBooking = function() { document.getElementById('bookingModal').style.display = 'none'; }
+window.sendBookingToWhatsApp = function() {
+    const name = document.getElementById('clientName').value;
+    const service = document.getElementById('serviceType').value;
+    const budget = document.getElementById('clientBudget').value;
+    const message = document.getElementById('clientMessage').value;
+    if(name === "") { alert("Please enter your name!"); return; }
+    
+    const text = `*New Project Request* 🚀%0A👤 *Name:* ${name}%0A🎬 *Service:* ${service}%0A💰 *Budget:* ${budget} LKR%0A📝 *Details:* ${message}`;
+    window.open(`https://wa.me/+94717647693?text=${text}`, '_blank');
+    closeBooking();
 }
 
 // --- 6. COMMUNITY (WhatsApp Style) ---
@@ -127,20 +131,12 @@ window.postToCommunity = function() {
     const text = input.value.trim();
     
     if(text !== "") {
-        // Get current time
         const now = new Date();
         const time = now.getHours() + ":" + (now.getMinutes()<10?'0':'') + now.getMinutes();
-        
-        const newMsg = `
-            <div class="wa-msg sent">
-                <div class="sender-name">You</div>
-                <div class="msg-text">${text}</div>
-                <div class="msg-time">${time}</div>
-            </div>
-        `;
+        const newMsg = `<div class="wa-msg sent"><div class="sender-name">You</div><div class="msg-text">${text}</div><div class="msg-time">${time}</div></div>`;
         board.innerHTML += newMsg;
         input.value = "";
-        board.scrollTop = board.scrollHeight; // Scroll to bottom
+        board.scrollTop = board.scrollHeight;
     }
 }
 
