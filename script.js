@@ -21,7 +21,14 @@ const facebookProvider = new FacebookAuthProvider();
 let currentUser = null;
 let selectedAvatarUrl = "";
 
-// --- CURSOR LOGIC ---
+// --- CLICK OUTSIDE TO CLOSE MODAL ---
+window.onclick = (e) => {
+    if (e.target.classList.contains('modal')) {
+        e.target.style.display = 'none';
+    }
+}
+
+// --- CURSOR ---
 const dot = document.querySelector('.cursor-dot');
 const outline = document.querySelector('.cursor-outline');
 window.addEventListener('mousemove', (e) => {
@@ -29,7 +36,7 @@ window.addEventListener('mousemove', (e) => {
     outline.style.left = e.clientX + 'px'; outline.style.top = e.clientY + 'px';
 });
 
-// --- AUTH & PROFILE ---
+// --- AUTH ---
 window.selectAvatar = (url) => {
     selectedAvatarUrl = url;
     document.getElementById('userAvatar').src = url;
@@ -121,7 +128,20 @@ function openNewsPopup(item) {
 }
 window.closeNewsModal = () => document.getElementById('newsModal').style.display = 'none';
 
-// --- UI FUNCTIONS ---
+// --- WHATSAPP FORMATTED MESSAGE ---
+window.sendBookingToWhatsApp = () => {
+    const name = document.getElementById('clientName').value;
+    const service = document.getElementById('serviceType').value;
+    const budget = document.getElementById('clientBudget').value;
+    const message = document.getElementById('clientMessage').value;
+    
+    // FORMATTED MESSAGE
+    const text = `🚀 *New Project Request* 🚀%0A%0A👤 *Name:* ${name}%0A💼 *Service:* ${service}%0A💰 *Budget:* ${budget}%0A📝 *Details:* ${message}`;
+    
+    window.open(`https://wa.me/+94717647693?text=${text}`, '_blank');
+};
+
+// --- UI ---
 window.showPage = (id, el) => { document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page')); document.getElementById(id).classList.add('active-page'); document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); el.classList.add('active'); if(id === 'home') startCounters(); };
 window.openSettings = () => document.getElementById('settingsModal').style.display = 'flex';
 window.closeSettings = () => document.getElementById('settingsModal').style.display = 'none';
@@ -129,7 +149,6 @@ window.openBooking = () => document.getElementById('bookingModal').style.display
 window.closeBooking = () => document.getElementById('bookingModal').style.display = 'none';
 window.switchTab = (t) => { document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none'); document.getElementById(t+'Tab').style.display = 'block'; document.querySelectorAll('.tab-box-btn').forEach(b => b.classList.remove('active')); event.target.classList.add('active'); };
 window.toggleAuth = (t) => { document.getElementById('signInForm').style.display = (t === 'signin') ? 'block' : 'none'; document.getElementById('signUpForm').style.display = (t === 'signup') ? 'block' : 'none'; document.getElementById('signInBtn').classList.toggle('active', t === 'signin'); document.getElementById('signUpBtn').classList.toggle('active', t === 'signup'); };
-window.sendBookingToWhatsApp = () => { window.open(`https://wa.me/+94717647693?text=Hi, I am ${document.getElementById('clientName').value}. ${document.getElementById('clientMessage').value}`, '_blank'); };
 window.setTheme = (t) => document.body.className = 'theme-'+t;
 window.toggleTawkChat = () => { if(window.Tawk_API) window.Tawk_API.toggle(); };
 function startCounters() { document.querySelectorAll('.counter').forEach(c => { c.innerText = '0'; const target = +c.dataset.target; let count = 0; const update = () => { count += target/50; if(count<target) { c.innerText = Math.ceil(count)+"+"; setTimeout(update,30); } else c.innerText = target+"+"; }; update(); }); }
