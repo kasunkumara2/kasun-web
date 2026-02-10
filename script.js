@@ -6,7 +6,7 @@ const genAI = new GoogleGenerativeAI(API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 let chatSession = model.startChat();
 
-// --- 1. MOUSE SCULPTING ---
+// --- 1. MOUSE SCULPTING & TILT ---
 const cursorBlob = document.querySelector('.cursor-blob');
 const cursorDot = document.querySelector('.cursor-dot');
 
@@ -18,7 +18,6 @@ document.addEventListener('mousemove', (e) => {
         cursorBlob.style.top = e.clientY + 'px';
     }, 100);
 
-    // Tilt Effect
     document.querySelectorAll('.tilt-element').forEach(card => {
         const rect = card.getBoundingClientRect();
         const x = e.clientX - rect.left;
@@ -35,35 +34,31 @@ document.addEventListener('mousemove', (e) => {
     });
 });
 
-// --- 2. COUNTERS (FIXED LOGIC) ---
+// --- 2. COUNTERS (FIXED & ANIMATED) ---
 window.addEventListener("load", function() {
-    document.getElementById("preloader").style.display = "none";
+    // Hide Preloader
+    const preloader = document.getElementById("preloader");
+    preloader.style.opacity = '0';
+    setTimeout(() => preloader.style.display = "none", 500);
     
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const counters = entry.target.querySelectorAll('.counter');
-                counters.forEach(counter => {
-                    counter.innerText = '0';
-                    const target = +counter.getAttribute('data-target');
-                    const inc = target / 50; 
-                    let c = 0;
-                    const updateCount = () => {
-                        if (c < target) {
-                            c += inc;
-                            counter.innerText = Math.ceil(c) + "+";
-                            setTimeout(updateCount, 30);
-                        } else { counter.innerText = target + "+"; }
-                    };
-                    updateCount();
-                });
-                observer.unobserve(entry.target);
+    // Start Counters
+    const counters = document.querySelectorAll('.counter');
+    counters.forEach(counter => {
+        counter.innerText = '0';
+        const target = +counter.getAttribute('data-target');
+        const duration = 2000; // Animation time in ms
+        const step = target / (duration / 20); // Calculate step size based on time
+        let current = 0;
+        const timer = setInterval(() => {
+            current += step;
+            if (current >= target) {
+                clearInterval(timer);
+                counter.innerText = target + "+";
+            } else {
+                counter.innerText = Math.ceil(current);
             }
-        });
+        }, 20);
     });
-    
-    const statsSection = document.querySelector('.stats-row');
-    if(statsSection) observer.observe(statsSection);
 });
 
 // --- 3. AUTO TYPE SKILLS ---
@@ -77,19 +72,16 @@ function type() {
 }
 type();
 
-// --- 4. NEWS MAGAZINE (40 Items) ---
+// --- 4. NEWS MAGAZINE (40 Items - Fixed Images) ---
 const newsData = [];
 const categories = ['Country', 'Game', 'Tech', 'Funny', 'Girl', 'Men'];
-// Generate 40 News Items
 for(let j=1; j<=40; j++) {
     const cat = categories[j % categories.length];
+    // Use picsum.photos for reliable random images
+    const imgUrl = `https://picsum.photos/300/200?random=${j}`; 
     newsData.push({
-        id: j,
-        tag: cat,
-        title: `${cat} News: Major Update #${j} Revealed!`,
-        img: `https://source.unsplash.com/random/300x200?${cat.toLowerCase()},technology,gaming,sig=${j}`, // Dynamic Image
-        desc: `This is a detailed description for news item #${j}. It contains exciting updates about ${cat} trends in 2026. Click to read more!`,
-        date: 'Today'
+        id: j, tag: cat, title: `${cat} News: Major Update #${j} Revealed!`, img: imgUrl,
+        desc: `This is a detailed description for news item #${j}. It contains exciting updates about ${cat} trends in 2026. Click to read more!`, date: 'Today'
     });
 }
 
@@ -135,7 +127,6 @@ window.switchConnect = function(tab) {
     document.getElementById('communitySection').style.display = (tab === 'community') ? 'flex' : 'none';
     document.querySelectorAll('.connect-btn').forEach(b => b.classList.remove('active'));
     event.currentTarget.classList.add('active');
-    // Auto Focus
     if(tab === 'ai') setTimeout(() => document.getElementById('aiInput').focus(), 100);
     if(tab === 'community') setTimeout(() => document.getElementById('commInput').focus(), 100);
 }
@@ -145,18 +136,13 @@ window.askGeminiAI = async function() {
     const area = document.getElementById('aiMessages');
     const text = input.value.trim();
     if (!text) return;
-
     area.innerHTML += `<div class="msg user">${text}</div>`;
-    input.value = "";
-    area.scrollTop = area.scrollHeight;
-
+    input.value = ""; area.scrollTop = area.scrollHeight;
     try {
         const result = await chatSession.sendMessage(text);
         const response = await result.response;
         area.innerHTML += `<div class="msg bot">${response.text()}</div>`;
-    } catch (e) {
-        area.innerHTML += `<div class="msg bot" style="color:red">Connecting...</div>`;
-    }
+    } catch (e) { area.innerHTML += `<div class="msg bot" style="color:red">Connecting...</div>`; }
     area.scrollTop = area.scrollHeight;
 }
 
@@ -188,9 +174,7 @@ window.toggleAuth = (t) => {
     document.querySelectorAll('.auth-toggle-btn').forEach(b => b.classList.remove('active'));
     document.getElementById(t+'Btn').classList.add('active');
 }
-window.toggleTawkChat = function() {
-    if(window.Tawk_API) window.Tawk_API.toggle(); else alert("Chat loading...");
-}
+window.toggleTawkChat = function() { if(window.Tawk_API) window.Tawk_API.toggle(); else alert("Chat loading..."); }
 window.handleEnter = function(e) { if (e.key === 'Enter') window.askGeminiAI(); }
 window.switchTab = (t) => {
     document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
