@@ -33,6 +33,8 @@
                 <div class="news-text-area">
                     <span id="popupTag" class="news-tag-popup"></span>
                     <h2 id="popupTitle"></h2>
+                    <div class="news-meta">By Kasun PK | <span id="popupDate">Just Now</span></div>
+                    <hr>
                     <p id="popupDesc" class="news-full-text"></p>
                 </div>
             </div>
@@ -42,7 +44,6 @@
     <div id="settingsModal" class="modal">
         <div class="modal-content glass-card-simple settings-box">
             <span class="close-btn" onclick="closeSettings()">&times;</span>
-            
             <div class="settings-tabs-container">
                 <button class="tab-box-btn active" onclick="switchTab('auth')">Account</button>
                 <button class="tab-box-btn" onclick="switchTab('theme')">Themes</button>
@@ -84,7 +85,7 @@
                             <i class="fas fa-user"></i>
                             <div class="double-input">
                                 <input type="text" id="editName" placeholder="Full Name">
-                                <input type="text" id="editNick" placeholder="Nickname" style="font-size: 0.8rem; color: var(--primary);">
+                                <input type="text" id="editNick" placeholder="Nickname">
                             </div>
                         </div>
                         <div class="input-group"><i class="fas fa-phone"></i><input type="text" id="editPhone" placeholder="Phone"></div>
@@ -97,13 +98,12 @@
                             <select id="editGender"><option value="Male">Male</option><option value="Female">Female</option></select>
                         </div>
                     </div>
-                    <button class="btn-primary full-width" onclick="saveUserProfile()">Save Profile <i class="fas fa-save"></i></button>
+                    <button class="btn-primary full-width" onclick="saveUserProfile()">Save Profile</button>
                     <button class="btn-logout full-width" onclick="logoutUser()">Logout</button>
                 </div>
             </div>
 
             <div id="themeTab" class="tab-content" style="display: none;">
-                <h3 style="margin-bottom:15px; color:white; text-align:center;">Choose Style</h3>
                 <div class="theme-grid-new">
                     <div class="theme-box dark" onclick="setTheme('dark')"><div class="dot" style="background:#000;"></div> Dark</div>
                     <div class="theme-box blue" onclick="setTheme('blue')"><div class="dot" style="background:#0ea5e9;"></div> Blue</div>
@@ -113,7 +113,6 @@
                     <div class="theme-box green" onclick="setTheme('green')"><div class="dot" style="background:#00ff00;"></div> Green</div>
                     <div class="theme-box purple" onclick="setTheme('purple')"><div class="dot" style="background:#800080;"></div> Purple</div>
                     <div class="theme-box red" onclick="setTheme('red')"><div class="dot" style="background:#ff0000;"></div> Red</div>
-                    <div class="theme-box cream" onclick="setTheme('cream')"><div class="dot" style="background:#f5f5dc;"></div> Cream</div>
                 </div>
             </div>
         </div>
@@ -132,14 +131,10 @@
                         <option value="Video Editing">Video Editing</option>
                         <option value="AI Art">AI Art</option>
                         <option value="DJ Remix">DJ Remix</option>
-                        <option value="Video Ad">Video Ad</option>
-                        <option value="Social Media Mgt">Social Media Mgt</option>
-                        <option value="Banner/Poster">Banner / Poster</option>
-                        <option value="Graphic Design">Graphic Design</option>
                     </select>
                 </div>
                 <div class="input-group"><i class="fas fa-coins"></i><input type="text" id="clientBudget" placeholder="Budget (LKR)"></div>
-                <div class="input-group textarea-group"><textarea id="clientMessage" placeholder="Describe your project here..." rows="4"></textarea></div>
+                <div class="input-group textarea-group"><textarea id="clientMessage" placeholder="Project Details..." rows="4"></textarea></div>
             </div>
             <button class="btn-primary full-width" onclick="sendBookingToWhatsApp()">Send via WhatsApp <i class="fab fa-whatsapp"></i></button>
         </div>
@@ -156,7 +151,7 @@
                     <li class="nav-item magic-hover" onclick="showPage('portfolio', this)"><i class="fas fa-images"></i><span class="tooltip">Gallery</span></li>
                     <li class="nav-item magic-hover" onclick="showPage('news', this)"><i class="fas fa-globe"></i><span class="tooltip">News</span></li>
                     <li class="nav-item magic-hover" onclick="showPage('life', this)"><i class="fas fa-graduation-cap"></i><span class="tooltip">Journey</span></li>
-                    <li class="nav-item magic-hover" onclick="toggleTawkChat()"><i class="fas fa-comment-dots"></i><span class="tooltip">Chat</span></li>
+                    <li class="nav-item magic-hover" onclick="showPage('chat', this)"><i class="fas fa-comment-dots"></i><span class="tooltip">Chat</span></li>
                 </ul>
             </div>
             <div class="settings magic-hover" onclick="openSettings()"><i class="fas fa-cog fa-spin"></i></div>
@@ -186,7 +181,7 @@
             <section id="skills" class="page">
                 <div class="glass-card">
                     <h2 class="section-title">Professional Skills</h2>
-                    <div class="skills-wrapper-vertical">
+                    <div class="skills-wrapper-vertical" style="max-width: 450px; margin: 0 auto;">
                         <div class="skill-box"><span>Videography <small>95%</small></span><div class="bar"><div class="fill" style="width:95%"></div></div></div>
                         <div class="skill-box"><span>Photography <small>90%</small></span><div class="bar"><div class="fill" style="width:90%"></div></div></div>
                         <div class="skill-box"><span>Video Editing <small>85%</small></span><div class="bar"><div class="fill" style="width:85%"></div></div></div>
@@ -218,33 +213,18 @@
                     <div class="timeline">
                         <div class="timeline-item"><i class="fas fa-map-marker-alt icon"></i><h3>Location</h3><p>Avissawella, Sri Lanka 🇱🇰</p></div>
                         <div class="timeline-item"><i class="fas fa-graduation-cap icon"></i><h3>Education</h3><p>R/Anura Maha Vidyalaya (13 Years)</p></div>
-                        
                         <div class="timeline-item">
                             <i class="fas fa-file-alt icon"></i><h3>O/L Results</h3>
                             <div class="results-list">
                                 <div class="res-row"><span>ICT</span><span class="res-box b-grade">B</span></div>
-                                <div class="res-row"><span>Mathematics</span><span class="res-box b-grade">B</span></div>
+                                <div class="res-row"><span>Maths</span><span class="res-box b-grade">B</span></div>
                                 <div class="res-row"><span>Science</span><span class="res-box c-grade">C</span></div>
                                 <div class="res-row"><span>English</span><span class="res-box s-grade">S</span></div>
                                 <div class="res-row"><span>Sinhala</span><span class="res-box s-grade">S</span></div>
-                                <div class="res-row"><span>History</span><span class="res-box w-grade">W</span></div>
                                 <div class="res-row"><span>Art</span><span class="res-box b-grade">B</span></div>
-                                <div class="res-row"><span>Buddhism</span><span class="res-box s-grade">S</span></div>
-                                <div class="res-row"><span>Geography</span><span class="res-box c-grade">C</span></div>
                             </div>
                         </div>
-
-                        <div class="timeline-item">
-                            <i class="fas fa-plane icon"></i><h3>Travel History</h3>
-                            <div class="travel-grid">
-                                <div class="travel-card">Nuwara Eliya</div>
-                                <div class="travel-card">Anuradhapura</div>
-                                <div class="travel-card">Polonnaruwa</div>
-                                <div class="travel-card">Colombo</div>
-                                <div class="travel-card">Yapahuwa</div>
-                                <div class="travel-card">Kataragama</div>
-                            </div>
-                        </div>
+                        <div class="timeline-item"><i class="fas fa-plane icon"></i><h3>Travel</h3><div class="travel-grid"><div class="travel-card">Nuwara Eliya</div><div class="travel-card">Anuradhapura</div><div class="travel-card">Polonnaruwa</div><div class="travel-card">Kataragama</div></div></div>
                     </div>
                 </div>
             </section>
@@ -253,25 +233,56 @@
                 <div class="glass-card">
                     <h2 class="section-title">Creative Gallery</h2>
                     <div class="gallery-grid">
-                        <div class="gallery-item"><img src="images/work1.jpg"><div class="tag">Photo</div></div>
-                        <div class="gallery-item"><img src="images/work2.jpg"><div class="tag">Video</div></div>
-                        <div class="gallery-item"><img src="images/work3.jpg"><div class="tag">AI Art</div></div>
-                        <div class="gallery-item"><img src="images/work4.jpg"><div class="tag">Design</div></div>
+                        <div class="gallery-item"><img src="images/work1.jpg" loading="lazy"><div class="tag">Photo</div></div>
+                        <div class="gallery-item"><img src="images/work2.jpg" loading="lazy"><div class="tag">Video</div></div>
+                        <div class="gallery-item"><img src="images/work3.jpg" loading="lazy"><div class="tag">AI Art</div></div>
+                        <div class="gallery-item"><img src="images/work4.jpg" loading="lazy"><div class="tag">Design</div></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="chat" class="page">
+                <div class="chat-container">
+                    <div class="chat-sidebar">
+                        <div class="chat-header-small"><h3>Chats</h3></div>
+                        <div class="contact-list">
+                            <div class="contact active">
+                                <img src="https://img.icons8.com/color/48/user.png">
+                                <div class="contact-info">
+                                    <h4>Kasun AI</h4>
+                                    <p>Online</p>
+                                </div>
+                            </div>
+                            <div class="contact">
+                                <img src="https://img.icons8.com/color/48/group.png">
+                                <div class="contact-info">
+                                    <h4>Community</h4>
+                                    <p>Join the hub</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chat-main">
+                        <div class="chat-header-main">
+                            <img src="https://img.icons8.com/color/48/user.png" id="chatHeaderImg">
+                            <div class="chat-header-info">
+                                <h3 id="chatHeaderName">Kasun AI</h3>
+                                <p>Typing...</p>
+                            </div>
+                        </div>
+                        <div class="chat-messages" id="chatMessages">
+                            <div class="msg bot">Hello! I am Kasun's AI assistant. Ask me anything!</div>
+                        </div>
+                        <div class="chat-input-area">
+                            <input type="text" id="chatInput" placeholder="Type a message..." onkeypress="handleChatEnter(event)">
+                            <button onclick="sendChatMessage()"><i class="fas fa-paper-plane"></i></button>
+                        </div>
                     </div>
                 </div>
             </section>
         </main>
     </div>
 
-    <script type="text/javascript">
-    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-    (function(){
-    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-    s1.async=true; s1.src='https://embed.tawk.to/698a0b62e0c66b1c3ad16208/1jh1joutb';
-    s1.charset='UTF-8'; s1.setAttribute('crossorigin','*');
-    s0.parentNode.insertBefore(s1,s0);
-    })();
-    </script>
     <script type="module" src="script.js"></script>
 </body>
 </html>
