@@ -1,23 +1,5 @@
-// Google AI SDK Import (මේක අනිවාර්යයි)
-import { GoogleGenerativeAI } from "@google/generative-ai";
-
-// --- API CONFIG ---
+// --- API CONFIG (FIXED FETCH METHOD) ---
 const API_KEY = "AIzaSyBtLeTafqNFh4hu6RFb78M3pwmChzpd6uc"; 
-// SDK එක Initialize කිරීම
-const genAI = new GoogleGenerativeAI(API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-
-// AI එකට දෙන උපදෙස්
-let chatHistory = [
-  {
-    role: "user",
-    parts: [{ text: "You are Kasun AI. You act as a helpful assistant on Kasun's portfolio website. You can speak 'Singlish' (Sinhala in English letters) and English. Be friendly and cool. You can answer any general question." }],
-  },
-  {
-    role: "model",
-    parts: [{ text: "Hari machan, mama ready. Ona deyak ahanna!" }],
-  },
-];
 
 // --- 1. PRELOADER & COUNTERS ---
 window.addEventListener("load", function() {
@@ -71,9 +53,32 @@ if(textElement) {
     typeEffect();
 }
 
-// --- 4. AI CHAT (SDK METHOD - FIXED) ---
-let chatSession = model.startChat({ history: chatHistory });
+// --- 4. SETTINGS MODAL & THEMES ---
+window.openSettings = function() { document.getElementById('settingsModal').style.display = 'flex'; }
+window.closeSettings = function() { document.getElementById('settingsModal').style.display = 'none'; }
 
+window.switchTab = function(tabName) {
+    document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+    document.getElementById(tabName + 'Tab').style.display = 'block';
+    event.currentTarget.classList.add('active');
+}
+
+window.toggleAuth = function(type) {
+    document.getElementById('signInForm').style.display = (type === 'signin') ? 'block' : 'none';
+    document.getElementById('signUpForm').style.display = (type === 'signup') ? 'block' : 'none';
+    document.getElementById('signInBtn').classList.toggle('active', type === 'signin');
+    document.getElementById('signUpBtn').classList.toggle('active', type === 'signup');
+}
+
+window.setTheme = function(theme) {
+    document.body.className = 'theme-' + theme;
+    // Highlight selected theme
+    document.querySelectorAll('.theme-card').forEach(c => c.classList.remove('selected'));
+    document.querySelector('.theme-card.' + theme).classList.add('selected');
+}
+
+// --- 5. AI CHAT (ROBUST FETCH FIX) ---
 window.askGeminiAI = async function() {
     const input = document.getElementById('aiInput');
     const msgArea = document.getElementById('aiMessages');
@@ -89,19 +94,38 @@ window.askGeminiAI = async function() {
     sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; 
     sendBtn.disabled = true;
 
+    // Direct API Call to handle "Mata therune na" issue
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`;
+    
+    const requestBody = {
+        contents: [{
+            parts: [{
+                text: "You are Kasun AI, a helpful assistant. Speak in Singlish or English. Be friendly. Question: " + userText
+            }]
+        }]
+    };
+
     try {
-        // SDK එක හරහා මැසේජ් එක යැවීම
-        const result = await chatSession.sendMessage(userText);
-        const response = await result.response;
-        const text = response.text();
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(requestBody)
+        });
+
+        const data = await response.json();
         
-        msgArea.innerHTML += `<div class="msg bot-msg">${text}</div>`;
+        // Check if candidate exists
+        if (data.candidates && data.candidates.length > 0 && data.candidates[0].content) {
+            const text = data.candidates[0].content.parts[0].text;
+            msgArea.innerHTML += `<div class="msg bot-msg">${text}</div>`;
+        } else {
+            // Fallback if AI returns empty
+            msgArea.innerHTML += `<div class="msg bot-msg">Samawenna machan, mata eka therune na. Wena widiyakata ahanna.</div>`;
+        }
 
     } catch (error) {
         console.error("AI Error:", error);
-        msgArea.innerHTML += `<div class="msg bot-msg" style="color:red;">Sorry machan, podi aulak giya. Aaye try karanna. (Check internet too)</div>`;
-        // Error එකක් ආවොත් Chat session එක reset කරනවා
-        chatSession = model.startChat({ history: chatHistory });
+        msgArea.innerHTML += `<div class="msg bot-msg" style="color:red;">Internet aulak wage. Please check.</div>`;
     }
 
     sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i>'; 
@@ -109,7 +133,7 @@ window.askGeminiAI = async function() {
     msgArea.scrollTop = msgArea.scrollHeight;
 }
 
-// --- 5. BOOKING SYSTEM ---
+// --- 6. BOOKING SYSTEM ---
 window.openBooking = function() { document.getElementById('bookingModal').style.display = 'flex'; }
 window.closeBooking = function() { document.getElementById('bookingModal').style.display = 'none'; }
 window.sendBookingToWhatsApp = function() {
@@ -124,23 +148,7 @@ window.sendBookingToWhatsApp = function() {
     closeBooking();
 }
 
-// --- 6. COMMUNITY (WhatsApp Style) ---
-window.postToCommunity = function() {
-    const input = document.getElementById('communityInput');
-    const board = document.getElementById('communityBoard');
-    const text = input.value.trim();
-    
-    if(text !== "") {
-        const now = new Date();
-        const time = now.getHours() + ":" + (now.getMinutes()<10?'0':'') + now.getMinutes();
-        const newMsg = `<div class="wa-msg sent"><div class="sender-name">You</div><div class="msg-text">${text}</div><div class="msg-time">${time}</div></div>`;
-        board.innerHTML += newMsg;
-        input.value = "";
-        board.scrollTop = board.scrollHeight;
-    }
-}
-
-// --- STANDARD FUNCTIONS ---
+// --- STANDARD NAVIGATION ---
 window.showPage = function(pageId, element) {
     document.querySelectorAll('.page').forEach(page => page.classList.remove('active-page'));
     const target = document.getElementById(pageId);
@@ -158,5 +166,4 @@ window.toggleTawkChat = function() {
 }
 window.openLogin = function() { document.getElementById('loginModal').style.display = 'flex'; }
 window.closeLogin = function() { document.getElementById('loginModal').style.display = 'none'; }
-window.userLogin = function() { if(document.getElementById('usernameInput').value) { closeLogin(); } }
 window.handleEnter = function(e) { if (e.key === 'Enter') window.askGeminiAI(); }
