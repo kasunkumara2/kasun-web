@@ -12,12 +12,13 @@
 
     <div id="preloader">
         <div class="loader-ring"></div>
-        <div class="loader-text">Kasun...</div>
+        <div class="loader-text">Loading...</div>
     </div>
 
-    <div class="cursor-glow"></div> <div class="cursor-dot"></div>
-    <div class="cursor-outline"></div>
     <div id="magic-snow-container"></div>
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+    <div class="cursor-glow"></div>
 
     <div class="background-image"></div>
     <div class="overlay"></div>
@@ -38,7 +39,7 @@
                 <div class="news-text-area">
                     <span id="popupTag" class="news-tag-popup"></span>
                     <h2 id="popupTitle"></h2>
-                    <p id="popupDesc" class="news-full-text"></p>
+                    <div id="popupDesc" class="news-full-text"></div>
                 </div>
             </div>
         </div>
@@ -71,12 +72,8 @@
                     </form>
                     <div class="divider"><span>OR</span></div>
                     <div class="social-login">
-                        <button type="button" class="social-btn google" onclick="googleLogin()">
-                            <img src="https://img.icons8.com/color/48/google-logo.png"> Google
-                        </button>
-                        <button type="button" class="social-btn facebook" onclick="facebookLogin()">
-                            <img src="https://img.icons8.com/color/48/facebook-new.png"> Facebook
-                        </button>
+                        <button type="button" class="social-btn google" onclick="googleLogin()"><img src="https://img.icons8.com/color/48/google-logo.png"> Google</button>
+                        <button type="button" class="social-btn facebook" onclick="facebookLogin()"><img src="https://img.icons8.com/color/48/facebook-new.png"> Facebook</button>
                     </div>
                 </div>
                 <div id="loggedInUI" style="display: none;">
@@ -110,6 +107,12 @@
                     <div class="theme-box purple" onclick="setTheme('purple')"><div class="dot" style="background:#800080;"></div> Purple</div>
                     <div class="theme-box red" onclick="setTheme('red')"><div class="dot" style="background:#ff0000;"></div> Red</div>
                     <div class="theme-box cream" onclick="setTheme('cream')"><div class="dot" style="background:#f5f5dc;"></div> Cream</div>
+                    <div class="theme-box orange" onclick="setTheme('orange')"><div class="dot" style="background:#ff6600;"></div> Orange</div>
+                    <div class="theme-box teal" onclick="setTheme('teal')"><div class="dot" style="background:#008080;"></div> Teal</div>
+                    <div class="theme-box gold" onclick="setTheme('gold')"><div class="dot" style="background:#d4af37;"></div> Gold</div>
+                    <div class="theme-box silver" onclick="setTheme('silver')"><div class="dot" style="background:#c0c0c0;"></div> Silver</div>
+                    <div class="theme-box midnight" onclick="setTheme('midnight')"><div class="dot" style="background:#191970;"></div> Midnight</div>
+                    <div class="theme-box lime" onclick="setTheme('lime')"><div class="dot" style="background:#32cd32;"></div> Lime</div>
                 </div>
             </div>
         </div>
@@ -147,12 +150,12 @@
             <div class="nav-line-container">
                 <div class="nav-line"></div>
                 <ul class="nav-links">
-                    <li class="nav-item active magic-hover fire-icon" onclick="showPage('home', this)"><i class="fas fa-home"></i><span class="tooltip">Home</span></li>
-                    <li class="nav-item magic-hover fire-icon" onclick="showPage('skills', this)"><i class="fas fa-code"></i><span class="tooltip">Skills</span></li>
-                    <li class="nav-item magic-hover fire-icon" onclick="showPage('portfolio', this)"><i class="fas fa-images"></i><span class="tooltip">Gallery</span></li>
-                    <li class="nav-item magic-hover fire-icon" onclick="showPage('news', this)"><i class="fas fa-globe"></i><span class="tooltip">News</span></li>
-                    <li class="nav-item magic-hover fire-icon" onclick="showPage('life', this)"><i class="fas fa-graduation-cap"></i><span class="tooltip">Journey</span></li>
-                    <li class="nav-item magic-hover fire-icon" onclick="showPage('chat', this)"><i class="fas fa-comment-dots"></i><span class="tooltip">Chat</span></li>
+                    <li class="nav-item active magic-hover smoke-icon" onclick="showPage('home', this)"><i class="fas fa-home"></i><span class="tooltip">Home</span></li>
+                    <li class="nav-item magic-hover smoke-icon" onclick="showPage('skills', this)"><i class="fas fa-code"></i><span class="tooltip">Skills</span></li>
+                    <li class="nav-item magic-hover smoke-icon" onclick="showPage('portfolio', this)"><i class="fas fa-images"></i><span class="tooltip">Gallery</span></li>
+                    <li class="nav-item magic-hover smoke-icon" onclick="showPage('news', this)"><i class="fas fa-globe"></i><span class="tooltip">News</span></li>
+                    <li class="nav-item magic-hover smoke-icon" onclick="showPage('life', this)"><i class="fas fa-graduation-cap"></i><span class="tooltip">Journey</span></li>
+                    <li class="nav-item magic-hover smoke-icon" onclick="showPage('chat', this)"><i class="fas fa-comment-dots"></i><span class="tooltip">Chat</span></li>
                 </ul>
             </div>
             <div class="settings magic-hover fa-spin-hover" onclick="openSettings()"><i class="fas fa-cog fa-spin"></i></div>
@@ -214,36 +217,15 @@
                     <div class="chat-sidebar-area">
                         <div class="chat-sidebar-header"><h3>Chats</h3></div>
                         <div class="chat-list">
-                            <div class="chat-contact active" onclick="openChat('kasun')">
-                                <div class="chat-avatar"><img src="images/profile.jpg"></div>
-                                <div class="chat-info"><h4>Chat with Kasun</h4><p>Live Support (Tawk.to)</p></div>
-                                <div class="chat-icon"><i class="fas fa-comment-dots" style="color:#0f0;"></i></div>
-                            </div>
-                            <div class="chat-contact" onclick="openChat('ai')">
-                                <div class="chat-avatar"><img src="https://img.icons8.com/color/96/bot.png"></div>
-                                <div class="chat-info"><h4>AI Assistant</h4><p>Auto Helper Bot</p></div>
-                                <div class="chat-icon"><i class="fas fa-robot"></i></div>
-                            </div>
-                            <div class="chat-contact" onclick="openChat('community')">
-                                <div class="chat-avatar"><img src="https://img.icons8.com/color/96/group.png"></div>
-                                <div class="chat-info"><h4>Global Community</h4><p>Public Room</p></div>
-                                <div class="chat-icon"><i class="fas fa-users"></i></div>
-                            </div>
+                            <div class="chat-contact active" onclick="openChat('kasun')"><div class="chat-avatar"><img src="images/profile.jpg"></div><div class="chat-info"><h4>Chat with Kasun</h4><p>Live Support (Tawk.to)</p></div><div class="chat-icon"><i class="fas fa-comment-dots" style="color:#0f0;"></i></div></div>
+                            <div class="chat-contact" onclick="openChat('ai')"><div class="chat-avatar"><img src="https://img.icons8.com/color/96/bot.png"></div><div class="chat-info"><h4>AI Assistant</h4><p>Auto Helper Bot</p></div><div class="chat-icon"><i class="fas fa-robot"></i></div></div>
+                            <div class="chat-contact" onclick="openChat('community')"><div class="chat-avatar"><img src="https://img.icons8.com/color/96/group.png"></div><div class="chat-info"><h4>Global Community</h4><p>Public Room</p></div><div class="chat-icon"><i class="fas fa-users"></i></div></div>
                         </div>
                     </div>
                     <div class="chat-main-window">
-                        <div class="chat-header-top">
-                            <img id="chatHeaderImg" src="images/profile.jpg">
-                            <div class="chat-header-info">
-                                <h3 id="chatHeaderName">Chat with Kasun</h3>
-                                <span id="chatHeaderStatus" style="color:#0f0;">● Online</span>
-                            </div>
-                        </div>
+                        <div class="chat-header-top"><img id="chatHeaderImg" src="images/profile.jpg"><div class="chat-header-info"><h3 id="chatHeaderName">Chat with Kasun</h3><span id="chatHeaderStatus" style="color:#0f0;">● Online</span></div></div>
                         <div class="chat-messages-area" id="chatMessagesArea"></div>
-                        <div class="chat-input-bar">
-                            <input type="text" id="chatInput" placeholder="Type a message..." onkeypress="handleChatEnter(event)">
-                            <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
-                        </div>
+                        <div class="chat-input-bar"><input type="text" id="chatInput" placeholder="Type a message..." onkeypress="handleChatEnter(event)"><button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button></div>
                     </div>
                 </div>
             </section>
