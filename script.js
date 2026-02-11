@@ -205,3 +205,11 @@ window.onclick = (e) => { if(e.target.classList.contains('modal')) e.target.styl
 
 const words = ["Video Editor", "Photographer", "AI Artist"]; let idx = 0;
 function type() { const el = document.querySelector('.typing-text'); if(el) { el.textContent = words[idx % words.length]; idx++; setTimeout(type, 2000); } } type();
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log('Service Worker Registered!'))
+      .catch(err => console.log('Registration Failed:', err));
+  });
+}
+
