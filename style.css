@@ -22,40 +22,38 @@ body.theme-cream { --primary: #e8d5b5; }
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; cursor: none; }
 body { background: var(--bg); color: var(--text); height: 100vh; overflow: hidden; transition: 0.5s; }
 
-/* CUSTOM SCROLLBAR (MODIFIER) */
-::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { background: #111; }
-::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: #fff; }
-
-/* SNOWFALL ANIMATION */
-#magic-snow-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1; }
+/* SNOW OVERLAY (TOP LAYER) */
+#magic-snow-container { 
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+    pointer-events: none; z-index: 9999; /* ABOVE TEXT BOXES */
+}
 .snowflake {
-    position: absolute;
-    top: -10px;
-    background: white;
-    border-radius: 50%;
-    opacity: 0.8;
-    animation: fall linear forwards;
-    box-shadow: 0 0 5px var(--primary);
+    position: absolute; top: -10px; background: white; border-radius: 50%;
+    opacity: 0.8; animation: fall linear forwards; box-shadow: 0 0 5px var(--primary);
 }
-@keyframes fall {
-    to { transform: translateY(100vh); opacity: 0; }
+@keyframes fall { to { transform: translateY(100vh) rotate(360deg); opacity: 0; } }
+
+/* STEAM EFFECT (ICONS) */
+.steam-icon { position: relative; overflow: visible; }
+.steam-icon::after {
+    content: ''; position: absolute; top: -10px; left: 50%; width: 10px; height: 20px;
+    background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+    filter: blur(5px); opacity: 0; animation: steamUp 2s infinite ease-out;
+}
+@keyframes steamUp {
+    0% { transform: translate(-50%, 0) scale(0.5); opacity: 0.6; }
+    100% { transform: translate(-50%, -30px) scale(1.5); opacity: 0; }
 }
 
-/* MAGIC CURSOR TRAIL */
-.trail {
-    position: fixed;
-    width: 6px; height: 6px;
-    background: var(--primary);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 10000;
-    animation: fadeTrail 0.8s linear forwards;
+/* CURSOR SPLIT PARTICLES */
+.split-particle {
+    position: fixed; width: 4px; height: 4px; background: var(--primary);
+    border-radius: 50%; pointer-events: none; z-index: 10000;
+    animation: splitFade 0.6s ease-out forwards;
 }
-@keyframes fadeTrail {
-    0% { opacity: 1; transform: scale(1); }
-    100% { opacity: 0; transform: scale(3); }
+@keyframes splitFade {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: translate(var(--mx), var(--my)) scale(0); opacity: 0; }
 }
 
 /* LOADER & CURSOR */
@@ -66,22 +64,10 @@ body { background: var(--bg); color: var(--text); height: 100vh; overflow: hidde
 @keyframes pulse { 50% { opacity: 0.5; } }
 
 .cursor-dot { position: fixed; width: 8px; height: 8px; background: var(--primary); border-radius: 50%; pointer-events: none; z-index: 10001; transform: translate(-50%, -50%); box-shadow: 0 0 10px var(--primary); }
-.cursor-outline { position: fixed; width: 40px; height: 40px; border: 1px solid var(--primary); border-radius: 50%; pointer-events: none; z-index: 10000; transform: translate(-50%, -50%); transition: transform 0.15s ease-out; opacity: 0.6; }
+.cursor-outline { position: fixed; width: 40px; height: 40px; border: 1px solid var(--primary); border-radius: 50%; pointer-events: none; z-index: 10000; transform: translate(-50%, -50%); transition: transform 0.1s ease-out; opacity: 0.6; }
 
 .background-image { position: fixed; inset: 0; background: url('my-bg.jpg') center/cover; z-index: -2; }
 .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: -1; backdrop-filter: blur(5px); }
-
-/* APP DOWNLOAD BUTTON */
-.app-download-btn {
-    position: fixed; top: 20px; left: 20px;
-    background: rgba(255, 255, 255, 0.1); border: 1px solid var(--primary);
-    color: var(--primary); padding: 10px 15px; border-radius: 30px;
-    text-decoration: none; font-weight: bold; display: flex; align-items: center; gap: 8px;
-    z-index: 1000; backdrop-filter: blur(5px); transition: 0.3s;
-    animation: pulseBtn 2s infinite;
-}
-@keyframes pulseBtn { 0%, 100% { box-shadow: 0 0 10px var(--primary); } 50% { box-shadow: 0 0 20px var(--primary); } }
-.app-download-btn:hover { background: var(--primary); color: #000; }
 
 /* SIDEBAR */
 .container { display: flex; height: 100vh; }
@@ -90,7 +76,6 @@ body { background: var(--bg); color: var(--text); height: 100vh; overflow: hidde
 .nav-links { display: flex; flex-direction: column; width: 100%; align-items: center; gap: 20px; }
 .nav-item { font-size: 1.4rem; color: #888; transition: 0.3s; position: relative; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
 .nav-item.active, .nav-item:hover { color: #fff; background: var(--primary); transform: translateY(-3px) scale(1.1); box-shadow: 0 0 15px var(--primary); }
-.magic-hover:hover { text-shadow: 0 0 10px #fff; }
 .tooltip { position: absolute; left: 60px; background: var(--primary); color: #000; padding: 5px 10px; border-radius: 5px; opacity: 0; pointer-events: none; font-size: 0.7rem; font-weight: bold; transition: 0.3s; }
 .nav-item:hover .tooltip { opacity: 1; left: 55px; }
 .settings { width: 45px; height: 45px; border: 1px solid var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--primary); box-shadow: 0 0 10px var(--primary); cursor: pointer; }
@@ -101,8 +86,17 @@ body { background: var(--bg); color: var(--text); height: 100vh; overflow: hidde
 .page { display: none; height: 100%; animation: fadeUp 0.6s ease; }
 .page.active-page { display: block; }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-.glass-card { background: var(--glass); border: 1px solid var(--border); backdrop-filter: blur(15px); border-radius: 20px; padding: 40px; height: 100%; overflow-y: auto; transition: 0.3s; }
-.glass-card:hover { border-color: var(--primary); box-shadow: 0 0 20px rgba(14,165,233,0.1); }
+.glass-card { background: var(--glass); border: 1px solid var(--border); backdrop-filter: blur(15px); border-radius: 20px; padding: 40px; height: 100%; overflow-y: auto; }
+
+/* APP BUTTON */
+.app-download-btn {
+    position: fixed; top: 20px; left: 20px;
+    background: rgba(255, 255, 255, 0.1); border: 1px solid var(--primary);
+    color: var(--primary); padding: 10px 15px; border-radius: 30px;
+    text-decoration: none; font-weight: bold; display: flex; align-items: center; gap: 8px;
+    z-index: 1000; backdrop-filter: blur(5px); transition: 0.3s;
+}
+.app-download-btn:hover { background: var(--primary); color: #000; box-shadow: 0 0 15px var(--primary); }
 
 /* HERO */
 .hero-content { text-align: center; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
@@ -122,7 +116,7 @@ body { background: var(--bg); color: var(--text); height: 100vh; overflow: hidde
 /* GALLERY */
 .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 20px; }
 .gallery-item { height: 260px; border-radius: 15px; overflow: hidden; border: 1px solid var(--border); position: relative; cursor: pointer; transition: 0.3s; } 
-.gallery-item:hover { transform: scale(1.05); border-color: var(--primary); }
+.gallery-item:hover { transform: scale(1.05); }
 .gallery-item img { width: 100%; height: 100%; object-fit: cover; }
 .tag { position: absolute; bottom: 15px; left: 15px; background: var(--primary); color: #000; padding: 5px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: bold; }
 
