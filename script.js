@@ -33,15 +33,30 @@ window.addEventListener('mousemove', (e) => {
     outline.style.left = e.clientX + 'px'; outline.style.top = e.clientY + 'px';
 });
 
-// --- AUTH ---
+// --- AUTH & TAWK LINK ---
 window.selectAvatar = (url) => { selectedAvatarUrl = url; document.getElementById('userAvatar').src = url; };
 
 onAuthStateChanged(auth, async (user) => {
     const outUI = document.getElementById('loggedOutUI');
     const inUI = document.getElementById('loggedInUI');
     const topImg = document.getElementById('topProfileImg');
+    const lockIcon = document.getElementById('kasunLockIcon');
+
     if (user) {
-        currentUser = user; outUI.style.display = 'none'; inUI.style.display = 'block';
+        currentUser = user;
+        outUI.style.display = 'none';
+        inUI.style.display = 'block';
+        if(lockIcon) lockIcon.className = "fas fa-check-circle"; // Unlock icon
+        if(lockIcon) lockIcon.style.color = "#00ff00";
+
+        // LINK TO TAWA.TO
+        if(window.Tawk_API){
+            window.Tawk_API.visitor = {
+                name: user.displayName,
+                email: user.email
+            };
+        }
+        
         let userData = { name: user.displayName, photo: user.photoURL || "https://img.icons8.com/color/96/user.png", phone: "", city: "", country: "", gender: "Male", nickname: "" };
         try { const docSnap = await getDoc(doc(db, "users", user.uid)); if(docSnap.exists()) userData = { ...userData, ...docSnap.data() }; } catch(e) {}
         const finalPhoto = userData.customPhoto || userData.photo;
@@ -50,7 +65,12 @@ onAuthStateChanged(auth, async (user) => {
         document.getElementById('editPhone').value = userData.phone; document.getElementById('editCity').value = userData.city;
         document.getElementById('editCountry').value = userData.country; document.getElementById('editGender').value = userData.gender;
     } else {
-        currentUser = null; outUI.style.display = 'block'; inUI.style.display = 'none'; topImg.src = "https://img.icons8.com/color/96/user.png";
+        currentUser = null;
+        outUI.style.display = 'block';
+        inUI.style.display = 'none';
+        topImg.src = "https://img.icons8.com/color/96/user.png";
+        if(lockIcon) lockIcon.className = "fas fa-lock"; // Lock icon
+        if(lockIcon) lockIcon.style.color = "var(--primary)";
     }
 });
 
@@ -78,7 +98,11 @@ window.openChat = (mode) => {
     
     if (mode === 'kasun') { 
         headerName.innerText = "Chat with Kasun"; headerImg.src = "images/profile.jpg"; 
-        area.innerHTML = `<div class="msg received">Hi! I am available on Live Chat.<br><br><button class="btn-primary" onclick="window.Tawk_API.maximize()" style="padding:10px; font-size:0.9rem;">Open Live Chat Widget</button></div>`; 
+        if(currentUser) {
+            area.innerHTML = `<div class="msg received">Hello ${currentUser.displayName}! <br>I am online. Click below to chat live.<br><br><button class="btn-primary" onclick="window.Tawk_API.maximize()" style="padding:10px;">Open Live Chat</button></div>`;
+        } else {
+            area.innerHTML = `<div class="msg received" style="color:red;">Please Login to Chat with Kasun.</div>`;
+        }
     }
     else if (mode === 'ai') { headerName.innerText = "AI Assistant"; headerImg.src = "https://img.icons8.com/color/96/bot.png"; area.innerHTML = `<div class="msg received">Hello! Ask me anything.</div>`; }
     else if (mode === 'community') { headerName.innerText = "Global Community"; headerImg.src = "https://img.icons8.com/color/96/group.png"; loadCommunityMessages(); }
@@ -89,10 +113,17 @@ window.sendMessage = async () => {
     const text = input.value.trim();
     if (!text) return;
     const area = document.getElementById('chatMessagesArea');
+    
+    if (currentChatMode === 'kasun' && !currentUser) { alert("Please Login!"); return; }
+
     area.innerHTML += `<div class="msg sent">${text}</div>`;
     input.value = ''; area.scrollTop = area.scrollHeight;
 
-    if (currentChatMode === 'kasun') { setTimeout(() => { area.innerHTML += `<div class="msg received">Please use the Live Chat button above to contact me directly.</div>`; area.scrollTop = area.scrollHeight; }, 1000); }
+    if (currentChatMode === 'kasun') { 
+        if(window.Tawk_API) {
+            window.Tawk_API.maximize(); // Open real chat
+        }
+    }
     else if (currentChatMode === 'ai') { setTimeout(() => { let reply = "I am a bot. How can I help?"; area.innerHTML += `<div class="msg received">${reply}</div>`; area.scrollTop = area.scrollHeight; }, 800); }
     else if (currentChatMode === 'community' && currentUser) { await addDoc(collection(db, "community_messages"), { text: text, uid: currentUser.uid, name: currentUser.displayName, createdAt: new Date() }); }
 };
@@ -119,7 +150,7 @@ const categories = ['AI', 'Tech', 'Gaming', 'Men', 'Women', 'Design'];
 const newsData = [];
 for(let i=1; i<=60; i++) {
     const cat = categories[i % 6];
-    newsData.push({ id: i, cat: cat, img: `https://picsum.photos/400/600?random=${i}`, title: `${cat} Update #${i}`, desc: `Full details about ${cat} news item #${i}. This includes analysis, trends, and future predictions.` });
+    newsData.push({ id: i, cat: cat, img: `https://picsum.photos/400/600?random=${i}`, title: `${cat} Update #${i}`, desc: `Full details about ${cat} news item #${i}.` });
 }
 function renderNews(filter) {
     if(!newsGrid) return; newsGrid.innerHTML = '';
