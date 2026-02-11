@@ -6,10 +6,9 @@
     --glass: rgba(255, 255, 255, 0.03); 
     --border: rgba(255, 255, 255, 0.1);
     --text: #fff;
-    --input-bg: rgba(0,0,0,0.5); /* DARK BG FOR VISIBILITY */
+    --input-bg: rgba(255,255,255,0.1);
 }
 
-/* THEMES */
 body.theme-blue { --primary: #3b82f6; }
 body.theme-pink { --primary: #ff007f; }
 body.theme-white { --bg: #f3f4f6; --text: #111; --primary: #2563eb; --glass: rgba(255,255,255,0.8); --input-bg: #fff; }
@@ -98,17 +97,17 @@ body { background: var(--bg); color: var(--text); height: 100vh; overflow: hidde
 .travel-card { background: rgba(255,255,255,0.05); padding: 10px 20px; border-radius: 20px; text-align: center; border: 1px solid var(--border); font-weight: bold; font-size: 0.9rem; transition: 0.3s; }
 .travel-card:hover { border-color: var(--primary); color: var(--primary); background: rgba(14,165,233,0.1); }
 
-/* MODALS & INPUTS */
+/* MODALS & INPUTS (FIXED VISIBILITY) */
 .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
 .glass-card-simple { background: #0a0a0a; padding: 35px; border-radius: 20px; width: 450px; border: 1px solid var(--primary); position: relative; max-height: 90vh; overflow-y: auto; box-shadow: 0 0 30px rgba(14,165,233,0.2); }
 .settings-tabs-container { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
 .tab-box-btn { flex: 1; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: #ccc; font-weight: bold; cursor: pointer; transition: 0.3s; border-radius: 8px; }
 .tab-box-btn.active { background: var(--primary); color: #000; }
 
-.input-group { display: flex; align-items: center; background: var(--input-bg); border: 1px solid #444; padding: 0 15px; border-radius: 12px; margin-bottom: 15px; }
+.input-group { display: flex; align-items: center; background: var(--input-bg); border: 1px solid rgba(255,255,255,0.2); padding: 0 15px; border-radius: 12px; margin-bottom: 15px; }
 .input-group input, .input-group select { border: none; background: transparent; padding: 15px 0; color: white; width: 100%; outline: none; }
 .input-group select option { background: #000; color: white; }
-.textarea-group textarea { width: 100%; background: var(--input-bg); border: 1px solid #444; padding: 15px; color: white; outline: none; border-radius: 12px; }
+.textarea-group textarea { width: 100%; background: var(--input-bg); border: 1px solid rgba(255,255,255,0.2); padding: 15px; color: white; outline: none; border-radius: 12px; }
 
 .auth-toggle-box { display: flex; background: rgba(255,255,255,0.05); border-radius: 30px; padding: 5px; margin-bottom: 20px; }
 .auth-toggle-btn { flex: 1; text-align: center; padding: 10px; border-radius: 25px; cursor: pointer; color: #888; font-weight: bold; }
@@ -118,6 +117,13 @@ body { background: var(--bg); color: var(--text); height: 100vh; overflow: hidde
 .avatar-selector { display: flex; gap: 15px; justify-content: center; margin-top: 10px; }
 .avatar-selector img { width: 40px; height: 40px; cursor: pointer; border-radius: 50%; border: 2px solid transparent; transition: 0.3s; }
 .avatar-selector img:hover { border-color: var(--primary); transform: scale(1.1); }
+
+.social-login { display: flex; gap: 10px; margin-top: 20px; }
+.social-btn { flex: 1; padding: 10px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.3s; }
+.social-btn.google { background: white; color: #333; }
+.social-btn.facebook { background: #1877f2; color: white; }
+.social-btn:hover { transform: translateY(-2px); }
+.divider { text-align: center; margin: 15px 0; color: #888; font-size: 0.8rem; }
 
 .theme-grid-new { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
 .theme-box { padding: 15px; border: 1px solid var(--border); background: rgba(255,255,255,0.05); border-radius: 10px; display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer; font-weight: bold; font-size: 0.8rem; }
