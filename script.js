@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, orderBy, onSnapshot, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, orderBy, onSnapshot, limit, getCountFromServer } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAZton7bSKozxi8R3uUN3qZdrNwt09hKHs",
@@ -49,6 +49,11 @@ onAuthStateChanged(auth, async (user) => {
         document.getElementById('editName').value = userData.name; document.getElementById('editNick').value = userData.nickname || "";
         document.getElementById('editPhone').value = userData.phone; document.getElementById('editCity').value = userData.city;
         document.getElementById('editCountry').value = userData.country; document.getElementById('editGender').value = userData.gender;
+        
+        // AUTO UPDATE TAWK
+        if(window.Tawk_API) {
+            window.Tawk_API.visitor = { name: user.displayName, email: user.email };
+        }
     } else {
         currentUser = null; outUI.style.display = 'block'; inUI.style.display = 'none'; topImg.src = "https://img.icons8.com/color/96/user.png";
     }
@@ -152,7 +157,28 @@ window.toggleAuth = (t) => { document.getElementById('signInForm').style.display
 window.sendBookingToWhatsApp = () => { window.open(`https://wa.me/+94717647693?text=Hi, I am ${document.getElementById('clientName').value}. ${document.getElementById('clientMessage').value}`, '_blank'); };
 window.setTheme = (t) => document.body.className = 'theme-'+t;
 window.toggleTawkChat = () => { if(window.Tawk_API) window.Tawk_API.toggle(); };
-function startCounters() { document.querySelectorAll('.counter').forEach(c => { c.innerText = '0'; const target = +c.dataset.target; let count = 0; const update = () => { count += target/50; if(count<target) { c.innerText = Math.ceil(count)+"+"; setTimeout(update,30); } else c.innerText = target+"+"; }; update(); }); }
+
+// REAL CLIENT COUNTER
+async function startCounters() {
+    const clientCounter = document.getElementById('clientCounter');
+    let clientCount = 40; // Default fallback
+    
+    try {
+        const coll = collection(db, "users");
+        const snapshot = await getCountFromServer(coll);
+        clientCount = 40 + snapshot.data().count; // Base 40 + Real Users
+    } catch(e) { console.log(e); }
+
+    clientCounter.dataset.target = clientCount;
+
+    document.querySelectorAll('.counter').forEach(c => {
+        c.innerText = '0';
+        const target = +c.dataset.target;
+        let count = 0;
+        const update = () => { count += target/50; if(count<target) { c.innerText = Math.ceil(count)+"+"; setTimeout(update,30); } else c.innerText = target+"+"; };
+        update();
+    });
+}
 
 window.addEventListener("load", () => {
     setTimeout(() => { document.getElementById("preloader").style.display = "none"; startCounters(); }, 1000);
