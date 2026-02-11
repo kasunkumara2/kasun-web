@@ -9,7 +9,6 @@
     --input-bg: rgba(0,0,0,0.5);
 }
 
-/* THEMES */
 body.theme-blue { --primary: #3b82f6; }
 body.theme-pink { --primary: #ff007f; }
 body.theme-white { --bg: #f3f4f6; --text: #111; --primary: #2563eb; --glass: rgba(255,255,255,0.8); --input-bg: #fff; }
@@ -34,6 +33,27 @@ body { background: var(--bg); color: var(--text); height: 100vh; overflow: hidde
 
 .background-image { position: fixed; inset: 0; background: url('my-bg.jpg') center/cover; z-index: -2; }
 .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: -1; backdrop-filter: blur(5px); }
+
+/* APP DOWNLOAD BUTTON */
+.app-download-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    padding: 10px 15px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+    transition: 0.3s;
+}
+.app-download-btn:hover { background: var(--primary); color: #000; box-shadow: 0 0 15px var(--primary); }
 
 /* SIDEBAR */
 .container { display: flex; height: 100vh; }
@@ -121,7 +141,6 @@ body { background: var(--bg); color: var(--text); height: 100vh; overflow: hidde
 .avatar-selector img { width: 40px; height: 40px; cursor: pointer; border-radius: 50%; border: 2px solid transparent; transition: 0.3s; }
 .avatar-selector img:hover { border-color: var(--primary); transform: scale(1.1); }
 
-/* SOCIAL LOGIN (FIXED SIDE BY SIDE) */
 .social-login { display: flex; gap: 10px; margin-top: 20px; }
 .social-btn { flex: 1; padding: 10px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.3s; }
 .social-btn.google { background: white; color: #333; }
