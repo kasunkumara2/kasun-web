@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, orderBy, onSnapshot, limit, getCountFromServer } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -29,109 +29,162 @@ function createSnow() {
     const snow = document.createElement('div');
     snow.classList.add('snowflake');
     snow.style.left = Math.random() * 100 + 'vw';
-    snow.style.width = Math.random() * 4 + 2 + 'px';
+    snow.style.width = Math.random() * 5 + 2 + 'px';
     snow.style.height = snow.style.width;
-    snow.style.animationDuration = Math.random() * 3 + 4 + 's';
+    snow.style.animationDuration = Math.random() * 3 + 3 + 's'; 
     snowContainer.appendChild(snow);
-    setTimeout(() => snow.remove(), 7000);
+    setTimeout(() => { snow.remove(); }, 6000);
 }
 setInterval(createSnow, 150);
 
-// CURSOR SPLIT
+// CURSOR & GLOW
 const dot = document.querySelector('.cursor-dot');
 const outline = document.querySelector('.cursor-outline');
+const glow = document.querySelector('.cursor-glow');
+
 window.addEventListener('mousemove', (e) => {
     dot.style.left = e.clientX + 'px'; dot.style.top = e.clientY + 'px';
     outline.style.left = e.clientX + 'px'; outline.style.top = e.clientY + 'px';
-    for (let i = 0; i < 2; i++) {
-        const p = document.createElement('div');
-        p.classList.add('split-particle');
-        p.style.left = e.clientX + 'px'; p.style.top = e.clientY + 'px';
-        p.style.setProperty('--mx', (Math.random() - 0.5) * 60 + 'px');
-        p.style.setProperty('--my', (Math.random() - 0.5) * 60 + 'px');
-        document.body.appendChild(p);
-        setTimeout(() => p.remove(), 600);
-    }
+    glow.style.left = e.clientX + 'px'; glow.style.top = e.clientY + 'px';
 });
 
 // AUTH
+window.selectAvatar = (url) => { selectedAvatarUrl = url; document.getElementById('userAvatar').src = url; };
+
 onAuthStateChanged(auth, async (user) => {
     const outUI = document.getElementById('loggedOutUI');
     const inUI = document.getElementById('loggedInUI');
     const topImg = document.getElementById('topProfileImg');
     if (user) {
         currentUser = user; outUI.style.display = 'none'; inUI.style.display = 'block';
-        let userData = { name: user.displayName, photo: user.photoURL || "https://img.icons8.com/color/96/user.png" };
+        let userData = { name: user.displayName, photo: user.photoURL || "https://img.icons8.com/color/96/user.png", phone: "", city: "", country: "", gender: "Male", nickname: "" };
         try { const docSnap = await getDoc(doc(db, "users", user.uid)); if(docSnap.exists()) userData = { ...userData, ...docSnap.data() }; } catch(e) {}
-        document.getElementById('userAvatar').src = userData.customPhoto || userData.photo;
-        topImg.src = userData.customPhoto || userData.photo;
-        if(window.Tawk_API) window.Tawk_API.visitor = { name: user.displayName, email: user.email };
+        const finalPhoto = userData.customPhoto || userData.photo;
+        document.getElementById('userAvatar').src = finalPhoto; topImg.src = finalPhoto; selectedAvatarUrl = finalPhoto;
+        document.getElementById('editName').value = userData.name; document.getElementById('editNick').value = userData.nickname || "";
+        document.getElementById('editPhone').value = userData.phone; document.getElementById('editCity').value = userData.city;
+        document.getElementById('editCountry').value = userData.country; document.getElementById('editGender').value = userData.gender;
+        if(window.Tawk_API) { window.Tawk_API.visitor = { name: user.displayName, email: user.email }; }
     } else {
         currentUser = null; outUI.style.display = 'block'; inUI.style.display = 'none'; topImg.src = "https://img.icons8.com/color/96/user.png";
     }
 });
 
-// FUNCTIONS
-window.googleLogin = () => signInWithPopup(auth, googleProvider);
-window.facebookLogin = () => signInWithPopup(auth, facebookProvider);
-window.logoutUser = () => signOut(auth).then(() => location.reload());
-window.selectAvatar = (url) => { selectedAvatarUrl = url; document.getElementById('userAvatar').src = url; };
 window.saveUserProfile = async () => {
     if(!currentUser) return;
     const data = { name: document.getElementById('editName').value, nickname: document.getElementById('editNick').value, phone: document.getElementById('editPhone').value, city: document.getElementById('editCity').value, country: document.getElementById('editCountry').value, gender: document.getElementById('editGender').value, customPhoto: selectedAvatarUrl };
-    await setDoc(doc(db, "users", currentUser.uid), data, { merge: true }); location.reload();
+    try { await setDoc(doc(db, "users", currentUser.uid), data, { merge: true }); alert("Saved!"); location.reload(); } catch(e) { alert("Error: " + e.message); }
 };
+
+window.googleLogin = () => signInWithPopup(auth, googleProvider).catch(e => alert(e.message));
+window.facebookLogin = () => signInWithPopup(auth, facebookProvider).catch(e => alert(e.message));
+window.logoutUser = () => signOut(auth).then(() => location.reload());
+window.emailLogin = () => signInWithEmailAndPassword(auth, document.getElementById('loginEmail').value, document.getElementById('loginPass').value).catch(e => alert(e.message));
+window.emailRegister = () => createUserWithEmailAndPassword(auth, document.getElementById('regEmail').value, document.getElementById('regPass').value).catch(e => alert(e.message));
 
 // CHAT
 window.openChat = (mode) => {
     currentChatMode = mode;
     document.querySelectorAll('.chat-contact').forEach(c => c.classList.remove('active'));
     event.currentTarget.classList.add('active');
+    const headerName = document.getElementById('chatHeaderName');
+    const headerImg = document.getElementById('chatHeaderImg');
     const area = document.getElementById('chatMessagesArea');
     area.innerHTML = '';
-    if (mode === 'kasun') {
-        if(currentUser) area.innerHTML = `<div class="msg received">Hi ${currentUser.displayName}! <br><button class="btn-primary" onclick="window.Tawk_API.maximize()" style="padding:10px; margin-top:10px;">Live Chat</button></div>`;
-        else area.innerHTML = `<div class="msg received" style="color:red;">Login to Chat.</div>`;
+    
+    if (mode === 'kasun') { 
+        headerName.innerText = "Chat with Kasun"; headerImg.src = "images/profile.jpg"; 
+        if(currentUser) area.innerHTML = `<div class="msg received">Hello ${currentUser.displayName}! <br>I am online. Click below to chat.<br><br><button class="btn-primary" onclick="window.Tawk_API.maximize()" style="padding:10px;">Open Live Chat</button></div>`;
+        else area.innerHTML = `<div class="msg received" style="color:red;">Please Login to Chat with Kasun.</div>`;
     }
+    else if (mode === 'ai') { headerName.innerText = "AI Assistant"; headerImg.src = "https://img.icons8.com/color/96/bot.png"; area.innerHTML = `<div class="msg received">Hello! Ask me anything.</div>`; }
+    else if (mode === 'community') { headerName.innerText = "Global Community"; headerImg.src = "https://img.icons8.com/color/96/group.png"; loadCommunityMessages(); }
 };
 
 window.sendMessage = async () => {
     const input = document.getElementById('chatInput');
-    if (!input.value.trim()) return;
+    const text = input.value.trim();
+    if (!text) return;
     const area = document.getElementById('chatMessagesArea');
-    area.innerHTML += `<div class="msg sent">${input.value}</div>`;
+    if (currentChatMode === 'kasun' && !currentUser) { alert("Please Login!"); return; }
+    area.innerHTML += `<div class="msg sent">${text}</div>`;
     input.value = ''; area.scrollTop = area.scrollHeight;
+    if (currentChatMode === 'kasun') { if(window.Tawk_API) window.Tawk_API.maximize(); }
+    else if (currentChatMode === 'ai') { setTimeout(() => { let reply = "I am a bot. How can I help?"; area.innerHTML += `<div class="msg received">${reply}</div>`; area.scrollTop = area.scrollHeight; }, 800); }
+    else if (currentChatMode === 'community' && currentUser) { await addDoc(collection(db, "community_messages"), { text: text, uid: currentUser.uid, name: currentUser.displayName, createdAt: new Date() }); }
 };
 window.handleChatEnter = (e) => { if(e.key === 'Enter') window.sendMessage(); };
 
-// UI UTILS
-window.showPage = (id, el) => {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
-    document.getElementById(id).classList.add('active-page');
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    el.classList.add('active'); if(id === 'home') startCounters();
-};
+function loadCommunityMessages() {
+    const q = query(collection(db, "community_messages"), orderBy("createdAt", "asc"), limit(50));
+    onSnapshot(q, (snapshot) => {
+        if (currentChatMode !== 'community') return;
+        const area = document.getElementById('chatMessagesArea');
+        area.innerHTML = '';
+        snapshot.forEach((doc) => {
+            const msg = doc.data();
+            const type = (currentUser && msg.uid === currentUser.uid) ? 'sent' : 'received';
+            area.innerHTML += `<div class="msg ${type}"><small>${msg.name}</small><br>${msg.text}</div>`;
+        });
+        area.scrollTop = area.scrollHeight;
+    });
+}
+
+// NEWS (RESTORED 60 ITEMS)
+const newsGrid = document.getElementById('newsGrid');
+const categories = ['AI', 'Tech', 'Gaming', 'Men', 'Women', 'Design'];
+if (newsGrid) {
+    for(let i=1; i<=60; i++) {
+        const cat = categories[i % 6];
+        const el = document.createElement('div'); el.className = 'news-item tilt-element';
+        el.innerHTML = `<img src="https://picsum.photos/400/600?random=${i}" loading="lazy"><div class="news-info-box"><span class="news-tag">${cat}</span><h3 style="font-size:0.9rem; margin-top:5px; color:white;">${cat} Update #${i}</h3></div>`;
+        el.onclick = () => openNewsPopup({img: el.querySelector('img').src, title: `${cat} Update #${i}`, cat: cat});
+        newsGrid.appendChild(el);
+    }
+}
+
+function openNewsPopup(item) {
+    document.getElementById('popupImg').src = item.img; document.getElementById('popupTag').innerText = item.cat;
+    document.getElementById('popupTitle').innerText = item.title; document.getElementById('popupDesc').innerText = "Full details about this news item...";
+    document.getElementById('newsModal').style.display = 'flex';
+}
+window.closeNewsModal = () => document.getElementById('newsModal').style.display = 'none';
+
+// UI
+window.showPage = (id, el) => { document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page')); document.getElementById(id).classList.add('active-page'); document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); el.classList.add('active'); if(id === 'home') startCounters(); };
 window.openSettings = () => document.getElementById('settingsModal').style.display = 'flex';
 window.closeSettings = () => document.getElementById('settingsModal').style.display = 'none';
 window.openBooking = () => document.getElementById('bookingModal').style.display = 'flex';
 window.closeBooking = () => document.getElementById('bookingModal').style.display = 'none';
-window.switchTab = (t) => {
-    document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
-    document.getElementById(t+'Tab').style.display = 'block';
-    document.querySelectorAll('.tab-box-btn').forEach(b => b.classList.remove('active'));
-    event.target.classList.add('active');
-};
-window.toggleAuth = (t) => {
-    document.getElementById('signInForm').style.display = (t === 'signin') ? 'block' : 'none';
-    document.getElementById('signUpForm').style.display = (t === 'signup') ? 'block' : 'none';
-};
+window.switchTab = (t) => { document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none'); document.getElementById(t+'Tab').style.display = 'block'; document.querySelectorAll('.tab-box-btn').forEach(b => b.classList.remove('active')); event.target.classList.add('active'); };
+window.toggleAuth = (t) => { document.getElementById('signInForm').style.display = (t === 'signin') ? 'block' : 'none'; document.getElementById('signUpForm').style.display = (t === 'signup') ? 'block' : 'none'; document.getElementById('signInBtn').classList.toggle('active', t === 'signin'); document.getElementById('signUpBtn').classList.toggle('active', t === 'signup'); };
+window.sendBookingToWhatsApp = () => { window.open(`https://wa.me/+94717647693?text=Hi, I am ${document.getElementById('clientName').value}. ${document.getElementById('clientMessage').value}`, '_blank'); };
 window.setTheme = (t) => document.body.className = 'theme-'+t;
-window.sendBookingToWhatsApp = () => { window.open(`https://wa.me/+94717647693?text=Project Request`, '_blank'); };
+window.toggleTawkChat = () => { if(window.Tawk_API) window.Tawk_API.toggle(); };
 
-// COUNTERS
+// REAL CLIENT COUNTER
 async function startCounters() {
-    const snap = await getCountFromServer(collection(db, "users"));
-    document.getElementById('clientCounter').innerText = 40 + snap.data().count + "+";
+    const clientCounter = document.getElementById('clientCounter');
+    let clientCount = 40; 
+    try {
+        const coll = collection(db, "users");
+        const snapshot = await getCountFromServer(coll);
+        clientCount = 40 + snapshot.data().count;
+    } catch(e) { console.log(e); }
+    if(clientCounter) clientCounter.dataset.target = clientCount;
+
+    document.querySelectorAll('.counter').forEach(c => {
+        c.innerText = '0';
+        const target = +c.dataset.target;
+        let count = 0;
+        const update = () => { count += target/50; if(count<target) { c.innerText = Math.ceil(count)+"+"; setTimeout(update,30); } else c.innerText = target+"+"; };
+        update();
+    });
 }
 
-window.addEventListener("load", () => { setTimeout(() => { document.getElementById("preloader").style.display = "none"; startCounters(); }, 1000); });
+window.addEventListener("load", () => {
+    setTimeout(() => { document.getElementById("preloader").style.display = "none"; startCounters(); }, 1000);
+});
+
+const words = ["Video Editor", "Photographer", "AI Artist"]; let idx = 0;
+function type() { const el = document.querySelector('.typing-text'); if(el) { el.textContent = words[idx % words.length]; idx++; setTimeout(type, 2000); } } type();
