@@ -12,7 +12,7 @@
 
     <div id="preloader">
         <div class="loader-ring"></div>
-        <div class="loader-text">Loading...</div>
+        <div class="loader-text">Kasun...</div>
     </div>
 
     <div class="cursor-dot"></div>
@@ -20,6 +20,10 @@
 
     <div class="background-image"></div>
     <div class="overlay"></div>
+
+    <a href="app-release.apk" download class="app-download-btn">
+        <i class="fas fa-download"></i> <span>App</span>
+    </a>
 
     <div id="topProfileIcon" onclick="openSettings()">
         <img id="topProfileImg" src="https://img.icons8.com/color/96/user.png">
@@ -40,13 +44,12 @@
     </div>
 
     <div id="settingsModal" class="modal">
-        <div class="modal-content glass-card-simple settings-box tilt-element">
+        <div class="modal-content glass-card-simple settings-box">
             <span class="close-btn" onclick="closeSettings()">&times;</span>
             <div class="settings-tabs-container">
                 <button class="tab-box-btn active" onclick="switchTab('auth')">Account</button>
                 <button class="tab-box-btn" onclick="switchTab('theme')">Themes</button>
             </div>
-
             <div id="authTab" class="tab-content active">
                 <div id="loggedOutUI">
                     <div class="auth-toggle-box">
@@ -64,18 +67,11 @@
                         <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="regPass" placeholder="Password"></div>
                         <button type="button" class="btn-primary full-width" onclick="emailRegister()">Register</button>
                     </form>
-                    
-                    <div class="divider"><span>OR</span></div>
                     <div class="social-login">
-                        <button type="button" class="social-btn google" onclick="googleLogin()">
-                            <img src="https://img.icons8.com/color/48/google-logo.png"> Google
-                        </button>
-                        <button type="button" class="social-btn facebook" onclick="facebookLogin()">
-                            <img src="https://img.icons8.com/color/48/facebook-new.png"> Facebook
-                        </button>
+                        <button type="button" class="social-btn google" onclick="googleLogin()"><img src="https://img.icons8.com/color/48/google-logo.png"> Google</button>
+                        <button type="button" class="social-btn facebook" onclick="facebookLogin()"><img src="https://img.icons8.com/color/48/facebook-new.png"> Facebook</button>
                     </div>
                 </div>
-
                 <div id="loggedInUI" style="display: none;">
                     <div class="profile-header">
                         <img id="userAvatar" src="" class="profile-avatar">
@@ -90,7 +86,7 @@
                             <i class="fas fa-user"></i>
                             <div class="double-input">
                                 <input type="text" id="editName" placeholder="Full Name">
-                                <input type="text" id="editNick" placeholder="Nickname">
+                                <input type="text" id="editNick" placeholder="Nickname" style="font-size: 0.8rem; color: var(--primary);">
                             </div>
                         </div>
                         <div class="input-group"><i class="fas fa-phone"></i><input type="text" id="editPhone" placeholder="Phone"></div>
@@ -107,9 +103,7 @@
                     <button class="btn-logout full-width" onclick="logoutUser()">Logout</button>
                 </div>
             </div>
-
             <div id="themeTab" class="tab-content" style="display: none;">
-                <h3 style="margin-bottom:15px; color:white; text-align:center;">Choose Style</h3>
                 <div class="theme-grid-new">
                     <div class="theme-box dark" onclick="setTheme('dark')"><div class="dot" style="background:#000;"></div> Dark</div>
                     <div class="theme-box blue" onclick="setTheme('blue')"><div class="dot" style="background:#0ea5e9;"></div> Blue</div>
@@ -177,7 +171,7 @@
                         <h2 class="typing-container">I am a <span class="typing-text highlight-text"></span></h2>
                         <div class="stats-row" id="counterSection">
                             <div class="stat-item"><h3 class="counter" data-target="150">0</h3><p>Projects</p></div>
-                            <div class="stat-item"><h3 class="counter" data-target="40">0</h3><p>Clients</p></div>
+                            <div class="stat-item"><h3 class="counter" id="clientCounter" data-target="40">0</h3><p>Clients</p></div>
                             <div class="stat-item"><h3 class="counter" data-target="5">0</h3><p>Years</p></div>
                         </div>
                         <div class="btn-row">
