@@ -15,9 +15,11 @@
         <div class="loader-text">Kasun...</div>
     </div>
 
-    <div class="cursor-dot"></div>
+    <div class="cursor-glow"></div> <div class="cursor-dot"></div>
     <div class="cursor-outline"></div>
-    <div id="magic-snow-container"></div> <div class="background-image"></div>
+    <div id="magic-snow-container"></div>
+
+    <div class="background-image"></div>
     <div class="overlay"></div>
 
     <a href="app-release.apk" download class="app-download-btn">
@@ -77,7 +79,6 @@
                         </button>
                     </div>
                 </div>
-
                 <div id="loggedInUI" style="display: none;">
                     <div class="profile-header">
                         <img id="userAvatar" src="" class="profile-avatar">
@@ -88,22 +89,10 @@
                         </div>
                     </div>
                     <div class="profile-edit-grid">
-                        <div class="input-group">
-                            <i class="fas fa-user"></i>
-                            <div class="double-input">
-                                <input type="text" id="editName" placeholder="Full Name">
-                                <input type="text" id="editNick" placeholder="Nickname" style="font-size: 0.8rem; color: var(--primary);">
-                            </div>
-                        </div>
+                        <div class="input-group"><i class="fas fa-user"></i><div class="double-input"><input type="text" id="editName" placeholder="Full Name"><input type="text" id="editNick" placeholder="Nickname"></div></div>
                         <div class="input-group"><i class="fas fa-phone"></i><input type="text" id="editPhone" placeholder="Phone"></div>
-                        <div style="display:flex; gap:10px;">
-                            <div class="input-group"><i class="fas fa-city"></i><input type="text" id="editCity" placeholder="City"></div>
-                            <div class="input-group"><i class="fas fa-globe"></i><input type="text" id="editCountry" placeholder="Country"></div>
-                        </div>
-                        <div class="input-group">
-                            <i class="fas fa-venus-mars"></i>
-                            <select id="editGender"><option value="Male">Male</option><option value="Female">Female</option></select>
-                        </div>
+                        <div style="display:flex; gap:10px;"><div class="input-group"><input type="text" id="editCity" placeholder="City"></div><div class="input-group"><input type="text" id="editCountry" placeholder="Country"></div></div>
+                        <div class="input-group"><i class="fas fa-venus-mars"></i><select id="editGender"><option value="Male">Male</option><option value="Female">Female</option></select></div>
                     </div>
                     <button class="btn-primary full-width" onclick="saveUserProfile()">Save Profile <i class="fas fa-save"></i></button>
                     <button class="btn-logout full-width" onclick="logoutUser()">Logout</button>
@@ -158,15 +147,15 @@
             <div class="nav-line-container">
                 <div class="nav-line"></div>
                 <ul class="nav-links">
-                    <li class="nav-item active magic-hover steam-icon" onclick="showPage('home', this)"><i class="fas fa-home"></i><span class="tooltip">Home</span></li>
-                    <li class="nav-item magic-hover steam-icon" onclick="showPage('skills', this)"><i class="fas fa-code"></i><span class="tooltip">Skills</span></li>
-                    <li class="nav-item magic-hover steam-icon" onclick="showPage('portfolio', this)"><i class="fas fa-images"></i><span class="tooltip">Gallery</span></li>
-                    <li class="nav-item magic-hover steam-icon" onclick="showPage('news', this)"><i class="fas fa-globe"></i><span class="tooltip">News</span></li>
-                    <li class="nav-item magic-hover steam-icon" onclick="showPage('life', this)"><i class="fas fa-graduation-cap"></i><span class="tooltip">Journey</span></li>
-                    <li class="nav-item magic-hover steam-icon" onclick="showPage('chat', this)"><i class="fas fa-comment-dots"></i><span class="tooltip">Chat</span></li>
+                    <li class="nav-item active magic-hover fire-icon" onclick="showPage('home', this)"><i class="fas fa-home"></i><span class="tooltip">Home</span></li>
+                    <li class="nav-item magic-hover fire-icon" onclick="showPage('skills', this)"><i class="fas fa-code"></i><span class="tooltip">Skills</span></li>
+                    <li class="nav-item magic-hover fire-icon" onclick="showPage('portfolio', this)"><i class="fas fa-images"></i><span class="tooltip">Gallery</span></li>
+                    <li class="nav-item magic-hover fire-icon" onclick="showPage('news', this)"><i class="fas fa-globe"></i><span class="tooltip">News</span></li>
+                    <li class="nav-item magic-hover fire-icon" onclick="showPage('life', this)"><i class="fas fa-graduation-cap"></i><span class="tooltip">Journey</span></li>
+                    <li class="nav-item magic-hover fire-icon" onclick="showPage('chat', this)"><i class="fas fa-comment-dots"></i><span class="tooltip">Chat</span></li>
                 </ul>
             </div>
-            <div class="settings magic-hover" onclick="openSettings()"><i class="fas fa-cog fa-spin"></i></div>
+            <div class="settings magic-hover fa-spin-hover" onclick="openSettings()"><i class="fas fa-cog fa-spin"></i></div>
         </nav>
 
         <main class="content-area">
