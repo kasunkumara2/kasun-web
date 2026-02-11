@@ -12,14 +12,12 @@
 
     <div id="preloader">
         <div class="loader-ring"></div>
-        <div class="loader-text">Loading...</div>
+        <div class="loader-text">Kasun...</div>
     </div>
 
-    <div id="magic-snow-container"></div>
     <div class="cursor-dot"></div>
     <div class="cursor-outline"></div>
-
-    <div class="background-image"></div>
+    <div id="magic-snow-container"></div> <div class="background-image"></div>
     <div class="overlay"></div>
 
     <a href="app-release.apk" download class="app-download-btn">
@@ -69,12 +67,18 @@
                         <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="regPass" placeholder="Password"></div>
                         <button type="button" class="btn-primary full-width" onclick="emailRegister()">Register</button>
                     </form>
+                    
                     <div class="divider"><span>OR</span></div>
                     <div class="social-login">
-                        <button type="button" class="social-btn google" onclick="googleLogin()"><img src="https://img.icons8.com/color/48/google-logo.png"> Google</button>
-                        <button type="button" class="social-btn facebook" onclick="facebookLogin()"><img src="https://img.icons8.com/color/48/facebook-new.png"> Facebook</button>
+                        <button type="button" class="social-btn google" onclick="googleLogin()">
+                            <img src="https://img.icons8.com/color/48/google-logo.png"> Google
+                        </button>
+                        <button type="button" class="social-btn facebook" onclick="facebookLogin()">
+                            <img src="https://img.icons8.com/color/48/facebook-new.png"> Facebook
+                        </button>
                     </div>
                 </div>
+
                 <div id="loggedInUI" style="display: none;">
                     <div class="profile-header">
                         <img id="userAvatar" src="" class="profile-avatar">
@@ -85,10 +89,22 @@
                         </div>
                     </div>
                     <div class="profile-edit-grid">
-                        <div class="input-group"><i class="fas fa-user"></i><div class="double-input"><input type="text" id="editName" placeholder="Full Name"><input type="text" id="editNick" placeholder="Nickname"></div></div>
+                        <div class="input-group">
+                            <i class="fas fa-user"></i>
+                            <div class="double-input">
+                                <input type="text" id="editName" placeholder="Full Name">
+                                <input type="text" id="editNick" placeholder="Nickname">
+                            </div>
+                        </div>
                         <div class="input-group"><i class="fas fa-phone"></i><input type="text" id="editPhone" placeholder="Phone"></div>
-                        <div style="display:flex; gap:10px;"><div class="input-group"><input type="text" id="editCity" placeholder="City"></div><div class="input-group"><input type="text" id="editCountry" placeholder="Country"></div></div>
-                        <div class="input-group"><i class="fas fa-venus-mars"></i><select id="editGender"><option value="Male">Male</option><option value="Female">Female</option></select></div>
+                        <div style="display:flex; gap:10px;">
+                            <div class="input-group"><i class="fas fa-city"></i><input type="text" id="editCity" placeholder="City"></div>
+                            <div class="input-group"><i class="fas fa-globe"></i><input type="text" id="editCountry" placeholder="Country"></div>
+                        </div>
+                        <div class="input-group">
+                            <i class="fas fa-venus-mars"></i>
+                            <select id="editGender"><option value="Male">Male</option><option value="Female">Female</option></select>
+                        </div>
                     </div>
                     <button class="btn-primary full-width" onclick="saveUserProfile()">Save Profile <i class="fas fa-save"></i></button>
                     <button class="btn-logout full-width" onclick="logoutUser()">Logout</button>
@@ -143,15 +159,15 @@
             <div class="nav-line-container">
                 <div class="nav-line"></div>
                 <ul class="nav-links">
-                    <li class="nav-item active magic-hover steam-icon" onclick="showPage('home', this)"><i class="fas fa-home"></i><span class="tooltip">Home</span></li>
-                    <li class="nav-item magic-hover steam-icon" onclick="showPage('skills', this)"><i class="fas fa-code"></i><span class="tooltip">Skills</span></li>
-                    <li class="nav-item magic-hover steam-icon" onclick="showPage('portfolio', this)"><i class="fas fa-images"></i><span class="tooltip">Gallery</span></li>
-                    <li class="nav-item magic-hover steam-icon" onclick="showPage('news', this)"><i class="fas fa-globe"></i><span class="tooltip">News</span></li>
-                    <li class="nav-item magic-hover steam-icon" onclick="showPage('life', this)"><i class="fas fa-graduation-cap"></i><span class="tooltip">Journey</span></li>
-                    <li class="nav-item magic-hover steam-icon" onclick="showPage('chat', this)"><i class="fas fa-comment-dots"></i><span class="tooltip">Chat</span></li>
+                    <li class="nav-item active magic-hover" onclick="showPage('home', this)"><i class="fas fa-home"></i><span class="tooltip">Home</span></li>
+                    <li class="nav-item magic-hover" onclick="showPage('skills', this)"><i class="fas fa-code"></i><span class="tooltip">Skills</span></li>
+                    <li class="nav-item magic-hover" onclick="showPage('portfolio', this)"><i class="fas fa-images"></i><span class="tooltip">Gallery</span></li>
+                    <li class="nav-item magic-hover" onclick="showPage('news', this)"><i class="fas fa-globe"></i><span class="tooltip">News</span></li>
+                    <li class="nav-item magic-hover" onclick="showPage('life', this)"><i class="fas fa-graduation-cap"></i><span class="tooltip">Journey</span></li>
+                    <li class="nav-item magic-hover" onclick="showPage('chat', this)"><i class="fas fa-comment-dots"></i><span class="tooltip">Chat</span></li>
                 </ul>
             </div>
-            <div class="settings magic-hover fa-spin-hover" onclick="openSettings()"><i class="fas fa-cog fa-spin"></i></div>
+            <div class="settings magic-hover" onclick="openSettings()"><i class="fas fa-cog fa-spin"></i></div>
         </nav>
 
         <main class="content-area">
@@ -185,6 +201,7 @@
                         <div class="skill-box"><span>AI Art <small>80%</small></span><div class="bar"><div class="fill" style="width:80%"></div></div></div>
                         <div class="skill-box"><span>Graphic Design <small>90%</small></span><div class="bar"><div class="fill" style="width:90%"></div></div></div>
                         <div class="skill-box"><span>DJ Remixing <small>75%</small></span><div class="bar"><div class="fill" style="width:75%"></div></div></div>
+                        <div class="skill-box"><span>Social Media Mgt <small>88%</small></span><div class="bar"><div class="fill" style="width:88%"></div></div></div>
                     </div>
                 </div>
             </section>
@@ -209,15 +226,36 @@
                     <div class="chat-sidebar-area">
                         <div class="chat-sidebar-header"><h3>Chats</h3></div>
                         <div class="chat-list">
-                            <div class="chat-contact active" onclick="openChat('kasun')"><div class="chat-avatar"><img src="images/profile.jpg"></div><div class="chat-info"><h4>Chat with Kasun</h4><p>Live Support</p></div><div class="chat-icon"><i class="fas fa-comment-dots" style="color:#0f0;"></i></div></div>
-                            <div class="chat-contact" onclick="openChat('ai')"><div class="chat-avatar"><img src="https://img.icons8.com/color/96/bot.png"></div><div class="chat-info"><h4>AI Assistant</h4><p>Auto Helper Bot</p></div><div class="chat-icon"><i class="fas fa-robot"></i></div></div>
-                            <div class="chat-contact" onclick="openChat('community')"><div class="chat-avatar"><img src="https://img.icons8.com/color/96/group.png"></div><div class="chat-info"><h4>Global Community</h4><p>Public Room</p></div><div class="chat-icon"><i class="fas fa-users"></i></div></div>
+                            <div class="chat-contact active" onclick="openChat('kasun')">
+                                <div class="chat-avatar"><img src="images/profile.jpg"></div>
+                                <div class="chat-info"><h4>Chat with Kasun</h4><p>Live Support (Tawk.to)</p></div>
+                                <div class="chat-icon"><i class="fas fa-comment-dots" style="color:#0f0;"></i></div>
+                            </div>
+                            <div class="chat-contact" onclick="openChat('ai')">
+                                <div class="chat-avatar"><img src="https://img.icons8.com/color/96/bot.png"></div>
+                                <div class="chat-info"><h4>AI Assistant</h4><p>Auto Helper Bot</p></div>
+                                <div class="chat-icon"><i class="fas fa-robot"></i></div>
+                            </div>
+                            <div class="chat-contact" onclick="openChat('community')">
+                                <div class="chat-avatar"><img src="https://img.icons8.com/color/96/group.png"></div>
+                                <div class="chat-info"><h4>Global Community</h4><p>Public Room</p></div>
+                                <div class="chat-icon"><i class="fas fa-users"></i></div>
+                            </div>
                         </div>
                     </div>
                     <div class="chat-main-window">
-                        <div class="chat-header-top"><img id="chatHeaderImg" src="images/profile.jpg"><div class="chat-header-info"><h3 id="chatHeaderName">Chat with Kasun</h3><span id="chatHeaderStatus" style="color:#0f0;">● Online</span></div></div>
+                        <div class="chat-header-top">
+                            <img id="chatHeaderImg" src="images/profile.jpg">
+                            <div class="chat-header-info">
+                                <h3 id="chatHeaderName">Chat with Kasun</h3>
+                                <span id="chatHeaderStatus" style="color:#0f0;">● Online</span>
+                            </div>
+                        </div>
                         <div class="chat-messages-area" id="chatMessagesArea"></div>
-                        <div class="chat-input-bar"><input type="text" id="chatInput" placeholder="Type a message..." onkeypress="handleChatEnter(event)"><button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button></div>
+                        <div class="chat-input-bar">
+                            <input type="text" id="chatInput" placeholder="Type a message..." onkeypress="handleChatEnter(event)">
+                            <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -234,11 +272,15 @@
                                 <div class="res-row"><span>ICT</span><span class="res-box b-grade">B</span></div>
                                 <div class="res-row"><span>Mathematics</span><span class="res-box b-grade">B</span></div>
                                 <div class="res-row"><span>Science</span><span class="res-box c-grade">C</span></div>
+                                <div class="res-row"><span>English</span><span class="res-box s-grade">S</span></div>
+                                <div class="res-row"><span>Sinhala</span><span class="res-box s-grade">S</span></div>
+                                <div class="res-row"><span>History</span><span class="res-box w-grade">W</span></div>
                                 <div class="res-row"><span>Art</span><span class="res-box b-grade">B</span></div>
+                                <div class="res-row"><span>Buddhism</span><span class="res-box s-grade">S</span></div>
                                 <div class="res-row"><span>Geography</span><span class="res-box c-grade">C</span></div>
                             </div>
                         </div>
-                        <div class="timeline-item"><i class="fas fa-plane icon"></i><h3>Travel</h3><div class="travel-grid"><div class="travel-card">Nuwara Eliya</div><div class="travel-card">Anuradhapura</div><div class="travel-card">Polonnaruwa</div><div class="travel-card">Colombo</div></div></div>
+                        <div class="timeline-item"><i class="fas fa-plane icon"></i><h3>Travel</h3><div class="travel-grid"><div class="travel-card">Nuwara Eliya</div><div class="travel-card">Anuradhapura</div><div class="travel-card">Polonnaruwa</div><div class="travel-card">Colombo</div><div class="travel-card">Yapahuwa</div><div class="travel-card">Kataragama</div></div></div>
                     </div>
                 </div>
             </section>
