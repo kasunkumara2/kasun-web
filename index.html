@@ -40,7 +40,7 @@
     </div>
 
     <div id="settingsModal" class="modal">
-        <div class="modal-content glass-card-simple settings-box tilt-element">
+        <div class="modal-content glass-card-simple settings-box">
             <span class="close-btn" onclick="closeSettings()">&times;</span>
             <div class="settings-tabs-container">
                 <button class="tab-box-btn active" onclick="switchTab('auth')">Account</button>
@@ -214,12 +214,12 @@
                         <div class="chat-list">
                             <div class="chat-contact active" onclick="openChat('kasun')">
                                 <div class="chat-avatar"><img src="images/profile.jpg"></div>
-                                <div class="chat-info"><h4>Chat with Kasun</h4><p>Live Support (Tawk.to)</p></div>
-                                <div class="chat-icon"><i class="fas fa-comment-dots" style="color:#0f0;"></i></div>
+                                <div class="chat-info"><h4>Chat with Kasun</h4><p>Login to Message</p></div>
+                                <div class="chat-icon"><i class="fas fa-lock" id="kasunLockIcon"></i></div>
                             </div>
                             <div class="chat-contact" onclick="openChat('ai')">
                                 <div class="chat-avatar"><img src="https://img.icons8.com/color/96/bot.png"></div>
-                                <div class="chat-info"><h4>AI Assistant</h4><p>Auto Helper Bot</p></div>
+                                <div class="chat-info"><h4>AI Assistant</h4><p>Auto Helper</p></div>
                                 <div class="chat-icon"><i class="fas fa-robot"></i></div>
                             </div>
                             <div class="chat-contact" onclick="openChat('community')">
