@@ -22,6 +22,13 @@ let currentUser = null;
 let currentChatMode = 'kasun';
 let selectedAvatarUrl = "";
 
+// CLOSE MODAL ON CLICK OUTSIDE
+window.onclick = (e) => {
+    if (e.target.classList.contains('modal')) {
+        e.target.style.display = 'none';
+    }
+};
+
 // MAGIC SNOWFALL
 function createSnow() {
     const snowContainer = document.getElementById('magic-snow-container');
@@ -46,6 +53,15 @@ window.addEventListener('mousemove', (e) => {
     dot.style.left = e.clientX + 'px'; dot.style.top = e.clientY + 'px';
     outline.style.left = e.clientX + 'px'; outline.style.top = e.clientY + 'px';
     glow.style.left = e.clientX + 'px'; glow.style.top = e.clientY + 'px';
+    
+    // Split Particles (Subtle Trail)
+    const p = document.createElement('div');
+    p.classList.add('split-particle');
+    p.style.left = e.clientX + 'px'; p.style.top = e.clientY + 'px';
+    p.style.setProperty('--mx', (Math.random() - 0.5) * 40 + 'px');
+    p.style.setProperty('--my', (Math.random() - 0.5) * 40 + 'px');
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 500);
 });
 
 // AUTH
@@ -130,7 +146,7 @@ function loadCommunityMessages() {
     });
 }
 
-// NEWS (RESTORED 60 ITEMS)
+// NEWS (60 ITEMS + DETAILED POPUP)
 const newsGrid = document.getElementById('newsGrid');
 const categories = ['AI', 'Tech', 'Gaming', 'Men', 'Women', 'Design'];
 if (newsGrid) {
@@ -138,14 +154,20 @@ if (newsGrid) {
         const cat = categories[i % 6];
         const el = document.createElement('div'); el.className = 'news-item tilt-element';
         el.innerHTML = `<img src="https://picsum.photos/400/600?random=${i}" loading="lazy"><div class="news-info-box"><span class="news-tag">${cat}</span><h3 style="font-size:0.9rem; margin-top:5px; color:white;">${cat} Update #${i}</h3></div>`;
-        el.onclick = () => openNewsPopup({img: el.querySelector('img').src, title: `${cat} Update #${i}`, cat: cat});
+        
+        // LARGE DESCRIPTION LOGIC
+        const largeDesc = `This is the detailed description for ${cat} News Item #${i}. \n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. \n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`;
+        
+        el.onclick = () => openNewsPopup({img: el.querySelector('img').src, title: `${cat} Update #${i}`, cat: cat, desc: largeDesc});
         newsGrid.appendChild(el);
     }
 }
 
 function openNewsPopup(item) {
-    document.getElementById('popupImg').src = item.img; document.getElementById('popupTag').innerText = item.cat;
-    document.getElementById('popupTitle').innerText = item.title; document.getElementById('popupDesc').innerText = "Full details about this news item...";
+    document.getElementById('popupImg').src = item.img; 
+    document.getElementById('popupTag').innerText = item.cat;
+    document.getElementById('popupTitle').innerText = item.title; 
+    document.getElementById('popupDesc').innerText = item.desc;
     document.getElementById('newsModal').style.display = 'flex';
 }
 window.closeNewsModal = () => document.getElementById('newsModal').style.display = 'none';
@@ -162,7 +184,7 @@ window.sendBookingToWhatsApp = () => { window.open(`https://wa.me/+94717647693?t
 window.setTheme = (t) => document.body.className = 'theme-'+t;
 window.toggleTawkChat = () => { if(window.Tawk_API) window.Tawk_API.toggle(); };
 
-// REAL CLIENT COUNTER
+// REAL CLIENT COUNTER (FIXED)
 async function startCounters() {
     const clientCounter = document.getElementById('clientCounter');
     let clientCount = 40; 
