@@ -40,45 +40,33 @@
     </div>
 
     <div id="settingsModal" class="modal">
-        <div class="modal-content glass-card-simple settings-box tilt-element">
+        <div class="modal-content glass-card-simple settings-box">
             <span class="close-btn" onclick="closeSettings()">&times;</span>
-            
             <div class="settings-tabs-container">
                 <button class="tab-box-btn active" onclick="switchTab('auth')">Account</button>
                 <button class="tab-box-btn" onclick="switchTab('theme')">Themes</button>
             </div>
-
             <div id="authTab" class="tab-content active">
                 <div id="loggedOutUI">
                     <div class="auth-toggle-box">
                         <div class="auth-toggle-btn active" id="signInBtn" onclick="toggleAuth('signin')">Sign In</div>
                         <div class="auth-toggle-btn" id="signUpBtn" onclick="toggleAuth('signup')">Sign Up</div>
                     </div>
-                    
                     <form id="signInForm" class="auth-form">
                         <div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="loginEmail" placeholder="Email"></div>
                         <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="loginPass" placeholder="Password"></div>
                         <button type="button" class="btn-primary full-width" onclick="emailLogin()">Login</button>
                     </form>
-
                     <form id="signUpForm" class="auth-form" style="display: none;">
                         <div class="input-group"><i class="fas fa-user"></i><input type="text" id="regName" placeholder="Name"></div>
                         <div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="regEmail" placeholder="Email"></div>
                         <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="regPass" placeholder="Password"></div>
                         <button type="button" class="btn-primary full-width" onclick="emailRegister()">Register</button>
                     </form>
-
-                    <div class="divider"><span>OR</span></div>
                     <div class="social-login">
-                        <button type="button" class="social-btn google" onclick="googleLogin()">
-                            <img src="https://img.icons8.com/color/48/google-logo.png"> Google
-                        </button>
-                        <button type="button" class="social-btn facebook" onclick="facebookLogin()">
-                            <img src="https://img.icons8.com/color/48/facebook-new.png"> Facebook
-                        </button>
+                        <button type="button" class="social-btn google" onclick="googleLogin()"><img src="https://img.icons8.com/color/48/google-logo.png"> Google</button>
                     </div>
                 </div>
-
                 <div id="loggedInUI" style="display: none;">
                     <div class="profile-header">
                         <img id="userAvatar" src="" class="profile-avatar">
@@ -110,9 +98,7 @@
                     <button class="btn-logout full-width" onclick="logoutUser()">Logout</button>
                 </div>
             </div>
-
             <div id="themeTab" class="tab-content" style="display: none;">
-                <h3 style="margin-bottom:15px; color:white; text-align:center;">Choose Style</h3>
                 <div class="theme-grid-new">
                     <div class="theme-box dark" onclick="setTheme('dark')"><div class="dot" style="background:#000;"></div> Dark</div>
                     <div class="theme-box blue" onclick="setTheme('blue')"><div class="dot" style="background:#0ea5e9;"></div> Blue</div>
@@ -139,12 +125,11 @@
                         <option value="Videography">Videography</option>
                         <option value="Photography">Photography</option>
                         <option value="Video Editing">Video Editing</option>
-                        <option value="Video Ad">Video Ad</option>
-                        <option value="DJ Remix">DJ Remix</option>
                         <option value="AI Art">AI Art</option>
+                        <option value="DJ Remix">DJ Remix</option>
+                        <option value="Video Ad">Video Ad</option>
                         <option value="Social Media Mgt">Social Media Mgt</option>
-                        <option value="Banner">Banner Design</option>
-                        <option value="Post/Poster">Post / Poster Design</option>
+                        <option value="Banner/Poster">Banner / Poster</option>
                         <option value="Graphic Design">Graphic Design</option>
                     </select>
                 </div>
@@ -166,7 +151,7 @@
                     <li class="nav-item magic-hover" onclick="showPage('portfolio', this)"><i class="fas fa-images"></i><span class="tooltip">Gallery</span></li>
                     <li class="nav-item magic-hover" onclick="showPage('news', this)"><i class="fas fa-globe"></i><span class="tooltip">News</span></li>
                     <li class="nav-item magic-hover" onclick="showPage('life', this)"><i class="fas fa-graduation-cap"></i><span class="tooltip">Journey</span></li>
-                    <li class="nav-item magic-hover" onclick="toggleTawkChat()"><i class="fas fa-comment-dots"></i><span class="tooltip">Chat</span></li>
+                    <li class="nav-item magic-hover" onclick="showPage('chat', this)"><i class="fas fa-comment-dots"></i><span class="tooltip">Chat</span></li>
                 </ul>
             </div>
             <div class="settings magic-hover" onclick="openSettings()"><i class="fas fa-cog fa-spin"></i></div>
@@ -226,16 +211,16 @@
             <section id="chat" class="page">
                 <div class="glass-card chat-container">
                     <div class="chat-sidebar-area">
-                        <div class="chat-sidebar-header"><h3>Messages</h3></div>
+                        <div class="chat-sidebar-header"><h3>Chats</h3></div>
                         <div class="chat-list">
                             <div class="chat-contact active" onclick="openChat('kasun')">
                                 <div class="chat-avatar"><img src="images/profile.jpg"></div>
-                                <div class="chat-info"><h4>Chat with Kasun</h4><p>Live Support (Tawk.to)</p></div>
+                                <div class="chat-info"><h4>Chat with Kasun</h4><p>Live Support</p></div>
                                 <div class="chat-icon"><i class="fas fa-comment-dots" style="color:#0f0;"></i></div>
                             </div>
                             <div class="chat-contact" onclick="openChat('ai')">
                                 <div class="chat-avatar"><img src="https://img.icons8.com/color/96/bot.png"></div>
-                                <div class="chat-info"><h4>AI Assistant</h4><p>Auto Helper Bot</p></div>
+                                <div class="chat-info"><h4>AI Assistant</h4><p>Auto Helper</p></div>
                                 <div class="chat-icon"><i class="fas fa-robot"></i></div>
                             </div>
                             <div class="chat-contact" onclick="openChat('community')">
@@ -282,7 +267,7 @@
                                 <div class="res-row"><span>Geography</span><span class="res-box c-grade">C</span></div>
                             </div>
                         </div>
-                        <div class="timeline-item"><i class="fas fa-plane icon"></i><h3>Travel History</h3><div class="travel-grid"><div class="travel-card">Nuwara Eliya</div><div class="travel-card">Anuradhapura</div><div class="travel-card">Polonnaruwa</div><div class="travel-card">Colombo</div><div class="travel-card">Yapahuwa</div><div class="travel-card">Kataragama</div></div></div>
+                        <div class="timeline-item"><i class="fas fa-plane icon"></i><h3>Travel</h3><div class="travel-grid"><div class="travel-card">Nuwara Eliya</div><div class="travel-card">Anuradhapura</div><div class="travel-card">Polonnaruwa</div><div class="travel-card">Colombo</div><div class="travel-card">Yapahuwa</div><div class="travel-card">Kataragama</div></div></div>
                     </div>
                 </div>
             </section>
