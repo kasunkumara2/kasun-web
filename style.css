@@ -118,6 +118,7 @@ body { background: var(--bg); color: var(--text); height: 100vh; overflow: hidde
 .avatar-selector img { width: 40px; height: 40px; cursor: pointer; border-radius: 50%; border: 2px solid transparent; transition: 0.3s; }
 .avatar-selector img:hover { border-color: var(--primary); transform: scale(1.1); }
 
+/* SOCIAL LOGIN (SIDE BY SIDE) */
 .social-login { display: flex; gap: 10px; margin-top: 20px; }
 .social-btn { flex: 1; padding: 10px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.3s; }
 .social-btn.google { background: white; color: #333; }
@@ -162,7 +163,7 @@ body { background: var(--bg); color: var(--text); height: 100vh; overflow: hidde
 .chat-input-bar button { width: 50px; height: 50px; border-radius: 50%; border: none; background: var(--primary); color: white; cursor: pointer; font-size: 1.2rem; transition: 0.3s; }
 .chat-input-bar button:hover { transform: scale(1.1); box-shadow: 0 0 10px var(--primary); }
 
-/* --- MOBILE RESPONSIVE --- */
+/* --- MOBILE RESPONSIVE (FIXED) --- */
 @media (max-width: 768px) {
     .container { flex-direction: column; }
     
@@ -180,12 +181,11 @@ body { background: var(--bg); color: var(--text); height: 100vh; overflow: hidde
     .nav-item { width: auto; height: 100%; border-radius: 0; margin: 0; flex: 1; }
     .nav-item i { font-size: 1.2rem; }
     .nav-item .tooltip { display: none; }
-    .settings { display: none; } /* Hide settings gear on mobile, user top profile icon */
+    .settings { display: none; } 
 
     /* CONTENT ADJUSTMENTS */
-    .content-area { padding: 20px 15px 80px 15px; } /* Padding for bottom nav */
+    .content-area { padding: 20px 15px 80px 15px; } 
     
-    /* HERO */
     .hero-title { font-size: 2.5rem; }
     .typing-container { font-size: 1.2rem; }
     .stats-row { flex-wrap: wrap; justify-content: center; gap: 15px; }
@@ -194,20 +194,18 @@ body { background: var(--bg); color: var(--text); height: 100vh; overflow: hidde
     .btn-row { flex-direction: column; width: 100%; }
     .btn-primary, .btn-secondary { width: 100%; text-align: center; }
 
-    /* GRIDS */
     .gallery-grid { grid-template-columns: 1fr; }
     .magazine-grid { grid-template-columns: 1fr; }
     .results-list { max-width: 100%; }
     .theme-grid-new { grid-template-columns: 2, 1fr; }
 
-    /* MODALS */
     .glass-card-simple { width: 90%; padding: 25px; }
     
     /* CHAT MOBILE */
     .chat-container { flex-direction: column; }
     .chat-sidebar-area { 
         width: 100%; 
-        height: 40%; /* List on top */
+        height: 40%; 
         border-right: none; border-bottom: 1px solid var(--border);
     }
     .chat-main-window { height: 60%; }
