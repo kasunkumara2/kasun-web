@@ -67,7 +67,6 @@
                         <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="regPass" placeholder="Password"></div>
                         <button type="button" class="btn-primary full-width" onclick="emailRegister()">Register</button>
                     </form>
-                    
                     <div class="divider"><span>OR</span></div>
                     <div class="social-login">
                         <button type="button" class="social-btn google" onclick="googleLogin()">
@@ -93,7 +92,7 @@
                             <i class="fas fa-user"></i>
                             <div class="double-input">
                                 <input type="text" id="editName" placeholder="Full Name">
-                                <input type="text" id="editNick" placeholder="Nickname">
+                                <input type="text" id="editNick" placeholder="Nickname" style="font-size: 0.8rem; color: var(--primary);">
                             </div>
                         </div>
                         <div class="input-group"><i class="fas fa-phone"></i><input type="text" id="editPhone" placeholder="Phone"></div>
@@ -159,12 +158,12 @@
             <div class="nav-line-container">
                 <div class="nav-line"></div>
                 <ul class="nav-links">
-                    <li class="nav-item active magic-hover" onclick="showPage('home', this)"><i class="fas fa-home"></i><span class="tooltip">Home</span></li>
-                    <li class="nav-item magic-hover" onclick="showPage('skills', this)"><i class="fas fa-code"></i><span class="tooltip">Skills</span></li>
-                    <li class="nav-item magic-hover" onclick="showPage('portfolio', this)"><i class="fas fa-images"></i><span class="tooltip">Gallery</span></li>
-                    <li class="nav-item magic-hover" onclick="showPage('news', this)"><i class="fas fa-globe"></i><span class="tooltip">News</span></li>
-                    <li class="nav-item magic-hover" onclick="showPage('life', this)"><i class="fas fa-graduation-cap"></i><span class="tooltip">Journey</span></li>
-                    <li class="nav-item magic-hover" onclick="showPage('chat', this)"><i class="fas fa-comment-dots"></i><span class="tooltip">Chat</span></li>
+                    <li class="nav-item active magic-hover steam-icon" onclick="showPage('home', this)"><i class="fas fa-home"></i><span class="tooltip">Home</span></li>
+                    <li class="nav-item magic-hover steam-icon" onclick="showPage('skills', this)"><i class="fas fa-code"></i><span class="tooltip">Skills</span></li>
+                    <li class="nav-item magic-hover steam-icon" onclick="showPage('portfolio', this)"><i class="fas fa-images"></i><span class="tooltip">Gallery</span></li>
+                    <li class="nav-item magic-hover steam-icon" onclick="showPage('news', this)"><i class="fas fa-globe"></i><span class="tooltip">News</span></li>
+                    <li class="nav-item magic-hover steam-icon" onclick="showPage('life', this)"><i class="fas fa-graduation-cap"></i><span class="tooltip">Journey</span></li>
+                    <li class="nav-item magic-hover steam-icon" onclick="showPage('chat', this)"><i class="fas fa-comment-dots"></i><span class="tooltip">Chat</span></li>
                 </ul>
             </div>
             <div class="settings magic-hover" onclick="openSettings()"><i class="fas fa-cog fa-spin"></i></div>
