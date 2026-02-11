@@ -1,6 +1,6 @@
 {
   "name": "Kasun Padma Kumara | Creator Hub",
-  "short_name": "Kasun Hub",
+  "short_name": "Kasun",
   "description": "Portfolio of Digital Creator & Videographer Kasun Padma Kumara",
   "start_url": "/index.html",
   "display": "standalone",
@@ -19,4 +19,5 @@
       "type": "image/png"
     }
   ]
+
 }
