@@ -22,15 +22,39 @@ let currentUser = null;
 let currentChatMode = 'kasun';
 let selectedAvatarUrl = "";
 
-// CLICK OUTSIDE
-window.onclick = (e) => { if(e.target.classList.contains('modal')) e.target.style.display = 'none'; };
+// --- MAGIC SNOWFALL ---
+function createSnow() {
+    const snow = document.createElement('div');
+    snow.classList.add('snowflake');
+    snow.style.left = Math.random() * 100 + 'vw';
+    snow.style.width = Math.random() * 5 + 2 + 'px';
+    snow.style.height = snow.style.width;
+    snow.style.animationDuration = Math.random() * 3 + 3 + 's'; // 3-6s duration
+    document.getElementById('magic-snow-container').appendChild(snow);
+    
+    setTimeout(() => { snow.remove(); }, 6000);
+}
+setInterval(createSnow, 150); // Create snow every 150ms
 
-// CURSOR
+// --- CURSOR & MAGIC TRAIL ---
 const dot = document.querySelector('.cursor-dot');
 const outline = document.querySelector('.cursor-outline');
+
 window.addEventListener('mousemove', (e) => {
+    // Dot logic
     dot.style.left = e.clientX + 'px'; dot.style.top = e.clientY + 'px';
     outline.style.left = e.clientX + 'px'; outline.style.top = e.clientY + 'px';
+
+    // Trail Logic
+    const trail = document.createElement('div');
+    trail.classList.add('trail');
+    trail.style.left = e.clientX + 'px';
+    trail.style.top = e.clientY + 'px';
+    // Random Color for trail
+    const colors = ['#0ea5e9', '#ff007f', '#00ff00', '#ffd700'];
+    trail.style.background = colors[Math.floor(Math.random() * colors.length)];
+    document.body.appendChild(trail);
+    setTimeout(() => trail.remove(), 800);
 });
 
 // AUTH
@@ -49,11 +73,7 @@ onAuthStateChanged(auth, async (user) => {
         document.getElementById('editName').value = userData.name; document.getElementById('editNick').value = userData.nickname || "";
         document.getElementById('editPhone').value = userData.phone; document.getElementById('editCity').value = userData.city;
         document.getElementById('editCountry').value = userData.country; document.getElementById('editGender').value = userData.gender;
-        
-        // AUTO UPDATE TAWK
-        if(window.Tawk_API) {
-            window.Tawk_API.visitor = { name: user.displayName, email: user.email };
-        }
+        if(window.Tawk_API) { window.Tawk_API.visitor = { name: user.displayName, email: user.email }; }
     } else {
         currentUser = null; outUI.style.display = 'block'; inUI.style.display = 'none'; topImg.src = "https://img.icons8.com/color/96/user.png";
     }
@@ -161,15 +181,13 @@ window.toggleTawkChat = () => { if(window.Tawk_API) window.Tawk_API.toggle(); };
 // REAL CLIENT COUNTER
 async function startCounters() {
     const clientCounter = document.getElementById('clientCounter');
-    let clientCount = 40; // Default fallback
-    
+    let clientCount = 40; 
     try {
         const coll = collection(db, "users");
         const snapshot = await getCountFromServer(coll);
-        clientCount = 40 + snapshot.data().count; // Base 40 + Real Users
+        clientCount = 40 + snapshot.data().count;
     } catch(e) { console.log(e); }
-
-    clientCounter.dataset.target = clientCount;
+    if(clientCounter) clientCounter.dataset.target = clientCount;
 
     document.querySelectorAll('.counter').forEach(c => {
         c.innerText = '0';
@@ -183,6 +201,7 @@ async function startCounters() {
 window.addEventListener("load", () => {
     setTimeout(() => { document.getElementById("preloader").style.display = "none"; startCounters(); }, 1000);
 });
+window.onclick = (e) => { if(e.target.classList.contains('modal')) e.target.style.display = 'none'; };
 
 const words = ["Video Editor", "Photographer", "AI Artist"]; let idx = 0;
 function type() { const el = document.querySelector('.typing-text'); if(el) { el.textContent = words[idx % words.length]; idx++; setTimeout(type, 2000); } } type();
