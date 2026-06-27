@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kasun Padma Kumara | Creative Creator</title>
+<title>Kasun Padma Kumara | Creative Creator & AI Artist</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Space+Grotesk:wght@500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap');
 
 :root {
     --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -17,6 +17,7 @@
     --text-dark: #1a1a2e;
     --text-light: #6b7280;
     --bg-soft: #f8f7ff;
+    --shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
 }
 
 * {
@@ -67,7 +68,7 @@ body {
     backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--glass-border);
     z-index: 1000;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+    box-shadow: var(--shadow);
 }
 
 .logo {
@@ -139,7 +140,7 @@ body {
 }
 
 .icon-btn:hover {
-    transform: translateY(-3px);
+    transform: translateY(-3px) scale(1.1);
     box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
 }
 
@@ -157,6 +158,7 @@ body {
     justify-content: space-between;
     min-height: 80vh;
     gap: 60px;
+    margin-bottom: 100px;
 }
 
 .hero-content {
@@ -351,45 +353,531 @@ body {
     50% { transform: translateY(-15px); }
 }
 
-/* Bottom Navigation */
-.bottom-nav {
-    position: fixed;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(20px);
-    padding: 15px 40px;
-    border-radius: 50px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-    border: 1px solid var(--glass-border);
-    z-index: 1000;
+/* Sections */
+.section {
+    margin-bottom: 100px;
+    animation: fadeInUp 0.8s ease;
+}
+
+.section-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 50px;
+    text-align: center;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* About Section */
+.about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    align-items: center;
+}
+
+.about-card {
+    background: white;
+    padding: 40px;
+    border-radius: 30px;
+    box-shadow: var(--shadow);
+}
+
+.about-card h3 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    color: var(--text-dark);
+}
+
+.about-card p {
+    color: var(--text-light);
+    line-height: 1.8;
+    margin-bottom: 15px;
+}
+
+.info-list {
+    list-style: none;
+}
+
+.info-list li {
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     display: flex;
+    justify-content: space-between;
+}
+
+.info-list li strong {
+    color: var(--text-dark);
+}
+
+.info-list li span {
+    color: var(--text-light);
+}
+
+/* Skills Section */
+.skills-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 30px;
 }
 
-.bottom-nav a {
-    text-decoration: none;
-    color: var(--text-light);
+.skill-category {
+    background: white;
+    padding: 35px;
+    border-radius: 25px;
+    box-shadow: var(--shadow);
+    transition: all 0.3s;
+}
+
+.skill-category:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 50px rgba(102, 126, 234, 0.2);
+}
+
+.skill-category h3 {
+    font-size: 1.5rem;
+    margin-bottom: 25px;
+    color: var(--text-dark);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.skill-category h3 i {
+    color: #667eea;
+}
+
+.skill-item {
+    margin-bottom: 20px;
+}
+
+.skill-item .skill-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
     font-weight: 600;
+}
+
+.skill-bar {
+    height: 10px;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.skill-fill {
+    height: 100%;
+    background: var(--primary-gradient);
+    border-radius: 10px;
+    transition: width 1s ease;
+    box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+}
+
+/* Education & Experience Timeline */
+.timeline {
+    position: relative;
+    padding-left: 50px;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 20px;
+    top: 0;
+    height: 100%;
+    width: 3px;
+    background: var(--primary-gradient);
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 40px;
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    transition: all 0.3s;
+}
+
+.timeline-item:hover {
+    transform: translateX(10px);
+    box-shadow: 0 15px 40px rgba(102, 126, 234, 0.15);
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -38px;
+    top: 35px;
+    width: 15px;
+    height: 15px;
+    background: white;
+    border: 4px solid #667eea;
+    border-radius: 50%;
+}
+
+.timeline-item .date {
+    color: #667eea;
+    font-weight: 700;
     font-size: 0.9rem;
+    margin-bottom: 10px;
+}
+
+.timeline-item h3 {
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+    color: var(--text-dark);
+}
+
+.timeline-item h4 {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    margin-bottom: 15px;
+}
+
+.timeline-item p {
+    color: var(--text-light);
+    line-height: 1.6;
+}
+
+/* Gallery */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+}
+
+.gallery-item {
+    height: 300px;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.4s;
+    box-shadow: var(--shadow);
+}
+
+.gallery-item:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: all 0.4s;
+}
+
+.gallery-item:hover img {
+    transform: scale(1.1);
+}
+
+.gallery-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(102, 126, 234, 0.9), transparent);
+    padding: 30px 20px 20px;
+    color: white;
+    transform: translateY(100%);
+    transition: all 0.3s;
+}
+
+.gallery-item:hover .gallery-overlay {
+    transform: translateY(0);
+}
+
+/* News Section */
+.news-filters {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    padding: 12px 30px;
+    background: white;
+    border: 2px solid rgba(102, 126, 234, 0.3);
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.filter-btn.active,
+.filter-btn:hover {
+    background: var(--primary-gradient);
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+}
+
+.news-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+.news-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: all 0.3s;
+}
+
+.news-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+}
+
+.news-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.news-content {
+    padding: 25px;
+}
+
+.news-tag {
+    display: inline-block;
+    padding: 6px 15px;
+    background: var(--primary-gradient);
+    color: white;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.news-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: var(--text-dark);
+}
+
+.news-card p {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+/* Chat Section */
+.chat-container {
+    background: white;
+    border-radius: 30px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    height: 600px;
+    display: flex;
+}
+
+.chat-sidebar {
+    width: 350px;
+    background: rgba(102, 126, 234, 0.05);
+    border-right: 1px solid rgba(0, 0, 0, 0.05);
     display: flex;
     flex-direction: column;
+}
+
+.chat-header {
+    padding: 30px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.chat-header h3 {
+    font-size: 1.5rem;
+    color: var(--text-dark);
+}
+
+.chat-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.chat-contact {
+    display: flex;
     align-items: center;
-    gap: 5px;
-    transition: all 0.3s;
-    padding: 10px 20px;
+    gap: 15px;
+    padding: 15px;
     border-radius: 15px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: all 0.3s;
 }
 
-.bottom-nav a i {
-    font-size: 1.3rem;
+.chat-contact:hover,
+.chat-contact.active {
+    background: white;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
 }
 
-.bottom-nav a:hover,
-.bottom-nav a.active {
-    color: #667eea;
-    background: rgba(102, 126, 234, 0.1);
+.chat-contact img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.chat-contact-info h4 {
+    font-size: 1rem;
+    color: var(--text-dark);
+    margin-bottom: 3px;
+}
+
+.chat-contact-info p {
+    font-size: 0.85rem;
+    color: var(--text-light);
+}
+
+.chat-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 30px;
+    overflow-y: auto;
+    background: #f8f9fa;
+}
+
+.message {
+    margin-bottom: 20px;
+    max-width: 70%;
+}
+
+.message.received {
+    margin-right: auto;
+}
+
+.message.sent {
+    margin-left: auto;
+}
+
+.message-bubble {
+    padding: 15px 20px;
+    border-radius: 20px;
+    background: white;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.message.sent .message-bubble {
+    background: var(--primary-gradient);
+    color: white;
+}
+
+.chat-input-area {
+    padding: 25px;
+    background: white;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    display: flex;
+    gap: 15px;
+}
+
+.chat-input-area input {
+    flex: 1;
+    padding: 15px 25px;
+    border: 2px solid rgba(0, 0, 0, 0.05);
+    border-radius: 50px;
+    outline: none;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.chat-input-area input:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+}
+
+.chat-input-area button {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    border: none;
+    background: var(--primary-gradient);
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chat-input-area button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+}
+
+/* Modals */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background: white;
+    padding: 40px;
+    border-radius: 30px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: modalSlide 0.3s ease;
+}
+
+@keyframes modalSlide {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.modal-header h2 {
+    font-size: 1.8rem;
+    color: var(--text-dark);
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-light);
+    transition: all 0.3s;
+}
+
+.close-modal:hover {
+    color: var(--text-dark);
+    transform: rotate(90deg);
 }
 
 /* Animations */
@@ -437,6 +925,10 @@ body {
         height: 300px;
     }
     
+    .about-grid {
+        grid-template-columns: 1fr;
+    }
+    
     .top-nav {
         padding: 15px 30px;
     }
@@ -456,19 +948,16 @@ body {
         font-size: 2.5rem;
     }
     
-    .bottom-nav {
-        bottom: 20px;
-        padding: 12px 25px;
-        gap: 20px;
+    .chat-container {
+        flex-direction: column;
+        height: 500px;
     }
     
-    .bottom-nav a {
-        font-size: 0.8rem;
-        padding: 8px 15px;
-    }
-    
-    .bottom-nav a i {
-        font-size: 1.1rem;
+    .chat-sidebar {
+        width: 100%;
+        height: 200px;
+        border-right: none;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     }
 }
 </style>
@@ -483,17 +972,19 @@ body {
     <div class="logo">Kasun.</div>
     <ul class="nav-links">
         <li><a href="#home" class="active">Home</a></li>
+        <li><a href="#about">About</a></li>
         <li><a href="#skills">Skills</a></li>
+        <li><a href="#education">Education</a></li>
         <li><a href="#gallery">Gallery</a></li>
         <li><a href="#news">News</a></li>
-        <li><a href="#journey">Journey</a></li>
+        <li><a href="#chat">Chat</a></li>
     </ul>
     <div class="nav-actions">
-        <button class="icon-btn" onclick="toggleTheme()">
-            <i class="fas fa-moon"></i>
-        </button>
         <button class="icon-btn" onclick="openSettings()">
             <i class="fas fa-user"></i>
+        </button>
+        <button class="icon-btn" onclick="toggleTheme()">
+            <i class="fas fa-moon"></i>
         </button>
     </div>
 </nav>
@@ -558,35 +1049,329 @@ body {
             </div>
         </div>
     </section>
+
+    <!-- About Section -->
+    <section class="section" id="about">
+        <h2 class="section-title">About Me</h2>
+        <div class="about-grid">
+            <div class="about-card">
+                <h3>Who Am I?</h3>
+                <p>Creative and detail-oriented Video Editor and Graphic Designer with a passion for digital storytelling. Experienced in creating engaging social media content, designing marketing materials for educational institutions, and utilizing AI tools for efficiency.</p>
+                <p>I specialize in Videography, Photography, AI Art, and Social Media Management, bringing creative visions to life with cutting-edge technology.</p>
+            </div>
+            <div class="about-card">
+                <h3>Personal Info</h3>
+                <ul class="info-list">
+                    <li><strong>Name:</strong> <span>G. Kasun Padma Kumara</span></li>
+                    <li><strong>Age:</strong> <span>19 Years</span></li>
+                    <li><strong>Birthday:</strong> <span>January 4, 2007</span></li>
+                    <li><strong>Location:</strong> <span>Avissawella, Sri Lanka</span></li>
+                    <li><strong>Email:</strong> <span>kasunpadmakumara2007@gmail.com</span></li>
+                    <li><strong>Phone:</strong> <span>+94 71 764 7693</span></li>
+                    <li><strong>Language:</strong> <span>Sinhala, English</span></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section class="section" id="skills">
+        <h2 class="section-title">My Skills</h2>
+        <div class="skills-container">
+            <div class="skill-category">
+                <h3><i class="fas fa-video"></i> Video & Design</h3>
+                <div class="skill-item">
+                    <div class="skill-info">
+                        <span>Videography</span>
+                        <span>95%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-fill" style="width: 95%"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-info">
+                        <span>Video Editing</span>
+                        <span>90%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-fill" style="width: 90%"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-info">
+                        <span>Graphic Design</span>
+                        <span>90%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-fill" style="width: 90%"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-info">
+                        <span>Photography</span>
+                        <span>85%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-fill" style="width: 85%"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="skill-category">
+                <h3><i class="fas fa-robot"></i> AI & Technology</h3>
+                <div class="skill-item">
+                    <div class="skill-info">
+                        <span>AI Art Creation</span>
+                        <span>88%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-fill" style="width: 88%"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-info">
+                        <span>AI Integration</span>
+                        <span>85%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-fill" style="width: 85%"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-info">
+                        <span>Prompt Engineering</span>
+                        <span>82%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-fill" style="width: 82%"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-info">
+                        <span>Social Media Mgt</span>
+                        <span>88%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-fill" style="width: 88%"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="skill-category">
+                <h3><i class="fas fa-music"></i> Creative</h3>
+                <div class="skill-item">
+                    <div class="skill-info">
+                        <span>DJ Remixing</span>
+                        <span>75%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-fill" style="width: 75%"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-info">
+                        <span>Content Creation</span>
+                        <span>90%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-fill" style="width: 90%"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-info">
+                        <span>Photo Management</span>
+                        <span>85%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-fill" style="width: 85%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education & Experience Section -->
+    <section class="section" id="education">
+        <h2 class="section-title">Education & Experience</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="date">2024 - Present</div>
+                <h3>Freelance Creative Designer & Video Editor</h3>
+                <h4>Self-Employed</h4>
+                <p>• Edited engaging short-form videos (Reels/TikTok) using CapCut to increase viewer retention<br>
+                • Designed promotional posters, flyers, and YouTube thumbnails for tuition classes<br>
+                • Utilized AI tools (ChatGPT, Gemini) for creative scriptwriting and AI photo/video enhancement</p>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="date">2013 - 2025 (Expected)</div>
+                <h3>G.C.E. Advanced Level - Arts Stream</h3>
+                <h4>Ra/Anura Maha Vidyalaya, Gatahaththa, Avissawella</h4>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="date">2022</div>
+                <h3>G.C.E. Ordinary Level</h3>
+                <h4>Ra/Anura Maha Vidyalaya</h4>
+                <p>ICT: B | Mathematics: B | Science: C | English: S | Sinhala: S | History: W | Art: B | Buddhism: S | Geography: C</p>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="date">2024</div>
+                <h3>Professional Photographer</h3>
+                <p>Captured high-quality images for local events, functions, and outdoor portrait sessions, ensuring excellent composition and lighting. Provided professional post-processing, color correction, and retouching using Adobe Lightroom and AI enhancement tools.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Certifications -->
+    <section class="section">
+        <h2 class="section-title">Certifications</h2>
+        <div class="skills-container">
+            <div class="skill-category">
+                <h3><i class="fas fa-certificate"></i> Design & Media</h3>
+                <ul style="list-style: none; line-height: 2;">
+                    <li><i class="fas fa-check-circle" style="color: #667eea; margin-right: 10px;"></i> Certified Graphic Designer</li>
+                    <li><i class="fas fa-check-circle" style="color: #667eea; margin-right: 10px;"></i> Certified Photography</li>
+                    <li><i class="fas fa-check-circle" style="color: #667eea; margin-right: 10px;"></i> Video Editing Specialist</li>
+                    <li><i class="fas fa-check-circle" style="color: #667eea; margin-right: 10px;"></i> Social Media Management</li>
+                </ul>
+            </div>
+            <div class="skill-category">
+                <h3><i class="fas fa-certificate"></i> AI & Technology</h3>
+                <ul style="list-style: none; line-height: 2;">
+                    <li><i class="fas fa-check-circle" style="color: #667eea; margin-right: 10px;"></i> AI Integration Specialist</li>
+                    <li><i class="fas fa-check-circle" style="color: #667eea; margin-right: 10px;"></i> Content Creation Expert</li>
+                    <li><i class="fas fa-check-circle" style="color: #667eea; margin-right: 10px;"></i> AI & Prompt Engineering</li>
+                    <li><i class="fas fa-check-circle" style="color: #667eea; margin-right: 10px;"></i> AI Photo/Video Enhancement</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="section" id="gallery">
+        <h2 class="section-title">Creative Gallery</h2>
+        <div class="gallery-grid" id="galleryGrid">
+            <!-- Gallery items will be added by JavaScript -->
+        </div>
+    </section>
+
+    <!-- News Section -->
+    <section class="section" id="news">
+        <h2 class="section-title">AI Magazine 📰</h2>
+        <div class="news-filters">
+            <button class="filter-btn active">All</button>
+            <button class="filter-btn">AI</button>
+            <button class="filter-btn">Tech</button>
+            <button class="filter-btn">Gaming</button>
+            <button class="filter-btn">Design</button>
+        </div>
+        <div class="news-grid" id="newsGrid">
+            <!-- News items will be added by JavaScript -->
+        </div>
+    </section>
+
+    <!-- Chat Section -->
+    <section class="section" id="chat">
+        <h2 class="section-title">Let's Chat</h2>
+        <div class="chat-container">
+            <div class="chat-sidebar">
+                <div class="chat-header">
+                    <h3>Chats</h3>
+                </div>
+                <div class="chat-list">
+                    <div class="chat-contact active" onclick="openChat('kasun')">
+                        <img src="https://img.icons8.com/color/96/user.png" alt="Kasun">
+                        <div class="chat-contact-info">
+                            <h4>Chat with Kasun</h4>
+                            <p style="color: #22c55e;">● Online</p>
+                        </div>
+                    </div>
+                    <div class="chat-contact" onclick="openChat('ai')">
+                        <img src="https://img.icons8.com/color/96/bot.png" alt="AI">
+                        <div class="chat-contact-info">
+                            <h4>AI Assistant</h4>
+                            <p>Auto Helper Bot</p>
+                        </div>
+                    </div>
+                    <div class="chat-contact" onclick="openChat('community')">
+                        <img src="https://img.icons8.com/color/96/group.png" alt="Community">
+                        <div class="chat-contact-info">
+                            <h4>Global Community</h4>
+                            <p>Public Room</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="chat-main">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message received">
+                        <div class="message-bubble">
+                            Hello! I am online. How can I help you today?
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-input-area">
+                    <input type="text" id="chatInput" placeholder="Type a message...">
+                    <button onclick="sendMessage()">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
 </div>
 
-<!-- Bottom Navigation -->
-<nav class="bottom-nav">
-    <a href="#home" class="active">
-        <i class="fas fa-home"></i>
-        <span>Home</span>
-    </a>
-    <a href="#skills">
-        <i class="fas fa-chart-bar"></i>
-        <span>Skills</span>
-    </a>
-    <a href="#gallery">
-        <i class="fas fa-images"></i>
-        <span>Gallery</span>
-    </a>
-    <a href="#chat">
-        <i class="fas fa-comments"></i>
-        <span>Chat</span>
-    </a>
-    <a href="#settings">
-        <i class="fas fa-cog"></i>
-        <span>Settings</span>
-    </a>
-</nav>
+<!-- Settings Modal -->
+<div id="settingsModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Account Settings</h2>
+            <button class="close-modal" onclick="closeSettings()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div id="loginForm">
+            <p style="margin-bottom: 20px; color: var(--text-light);">Login to access your profile</p>
+            <button class="btn-primary" style="width: 100%; margin-bottom: 15px;" onclick="googleLogin()">
+                <i class="fab fa-google"></i> Login with Google
+            </button>
+            <button class="btn-secondary" style="width: 100%;">
+                <i class="fab fa-facebook"></i> Login with Facebook
+            </button>
+        </div>
+    </div>
+</div>
 
+<!-- Booking Modal -->
+<div id="bookingModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Start Project 🚀</h2>
+            <button class="close-modal" onclick="closeBooking()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <form onsubmit="sendBooking(event)">
+            <div style="margin-bottom: 20px;">
+                <input type="text" placeholder="Your Name" required style="width: 100%; padding: 15px; border: 2px solid rgba(0,0,0,0.1); border-radius: 10px; outline: none;">
+            </div>
+            <div style="margin-bottom: 20px;">
+                <textarea placeholder="Tell me about your project..." rows="4" required style="width: 100%; padding: 15px; border: 2px solid rgba(0,0,0,0.1); border-radius: 10px; outline: none; resize: none;"></textarea>
+            </div>
+            <button type="submit" class="btn-primary" style="width: 100%;">
+                <i class="fab fa-whatsapp"></i> Send via WhatsApp
+            </button>
+        </form>
+    </div>
+</div>
+
+<script src="script.js"></script>
 <script>
 // Typing Effect
-const words = ["Video Editor", "Photographer", "AI Artist", "Graphic Designer"];
+const words = ["Video Editor", "Photographer", "AI Artist", "Graphic Designer", "Content Creator"];
 let wordIndex = 0;
 let charIndex = 0;
 let isDeleting = false;
@@ -639,26 +1424,160 @@ function animateCounters() {
     });
 }
 
-// Run animations on load
-window.addEventListener('load', () => {
-    type();
-    setTimeout(animateCounters, 500);
-});
+// Gallery Generation
+function generateGallery() {
+    const galleryGrid = document.getElementById('galleryGrid');
+    const categories = ['Photo', 'Video', 'AI Art', 'Design'];
+    
+    for(let i = 1; i <= 12; i++) {
+        const cat = categories[(i-1) % 4];
+        const item = document.createElement('div');
+        item.className = 'gallery-item';
+        item.innerHTML = `
+            <img src="https://picsum.photos/600/400?random=${i}" alt="Gallery ${i}">
+            <div class="gallery-overlay">
+                <h3>${cat} Project ${i}</h3>
+                <p>Creative work showcase</p>
+            </div>
+        `;
+        galleryGrid.appendChild(item);
+    }
+}
 
-// Placeholder functions
+// News Generation
+function generateNews() {
+    const newsGrid = document.getElementById('newsGrid');
+    const categories = ['AI', 'Tech', 'Gaming', 'Design'];
+    
+    for(let i = 1; i <= 12; i++) {
+        const cat = categories[i % 4];
+        const item = document.createElement('div');
+        item.className = 'news-card';
+        item.innerHTML = `
+            <img src="https://picsum.photos/400/300?random=${i+100}" alt="News ${i}">
+            <div class="news-content">
+                <span class="news-tag">${cat}</span>
+                <h3>${cat} Update #${i}</h3>
+                <p>Latest trends and updates in ${cat.toLowerCase()} industry...</p>
+            </div>
+        `;
+        newsGrid.appendChild(item);
+    }
+}
+
+// Chat Functions
+let currentChat = 'kasun';
+
+function openChat(mode) {
+    currentChat = mode;
+    document.querySelectorAll('.chat-contact').forEach(c => c.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+    
+    const messagesDiv = document.getElementById('chatMessages');
+    messagesDiv.innerHTML = '';
+    
+    if(mode === 'kasun') {
+        messagesDiv.innerHTML = `
+            <div class="message received">
+                <div class="message-bubble">
+                    Hello! I am Kasun. How can I help you with your project?
+                </div>
+            </div>
+        `;
+    } else if(mode === 'ai') {
+        messagesDiv.innerHTML = `
+            <div class="message received">
+                <div class="message-bubble">
+                    Hi! I'm your AI assistant. Ask me anything!
+                </div>
+            </div>
+        `;
+    } else {
+        messagesDiv.innerHTML = `
+            <div class="message received">
+                <div class="message-bubble">
+                    Welcome to Global Community! Feel free to chat.
+                </div>
+            </div>
+        `;
+    }
+}
+
+function sendMessage() {
+    const input = document.getElementById('chatInput');
+    const text = input.value.trim();
+    
+    if(!text) return;
+    
+    const messagesDiv = document.getElementById('chatMessages');
+    
+    // Add user message
+    const userMsg = document.createElement('div');
+    userMsg.className = 'message sent';
+    userMsg.innerHTML = `<div class="message-bubble">${text}</div>`;
+    messagesDiv.appendChild(userMsg);
+    
+    input.value = '';
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    
+    // Auto reply
+    setTimeout(() => {
+        const reply = document.createElement('div');
+        reply.className = 'message received';
+        
+        if(currentChat === 'ai') {
+            reply.innerHTML = `<div class="message-bubble">Thanks for your message! This is an automated response.</div>`;
+        } else if(currentChat === 'kasun') {
+            reply.innerHTML = `<div class="message-bubble">Thanks! I'll get back to you soon. You can also reach me on WhatsApp.</div>`;
+        } else {
+            reply.innerHTML = `<div class="message-bubble">Great message! The community will respond soon.</div>`;
+        }
+        
+        messagesDiv.appendChild(reply);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }, 1000);
+}
+
+// Modal Functions
+function openSettings() {
+    document.getElementById('settingsModal').style.display = 'flex';
+}
+
+function closeSettings() {
+    document.getElementById('settingsModal').style.display = 'none';
+}
+
+function openBooking() {
+    document.getElementById('bookingModal').style.display = 'flex';
+}
+
+function closeBooking() {
+    document.getElementById('bookingModal').style.display = 'none';
+}
+
+function sendBooking(e) {
+    e.preventDefault();
+    window.open('https://wa.me/+94717647693?text=Hi Kasun, I want to start a project', '_blank');
+    closeBooking();
+}
+
 function toggleTheme() {
     alert('Theme toggle coming soon!');
 }
 
-function openSettings() {
-    alert('Settings modal coming soon!');
+function googleLogin() {
+    alert('Google login coming soon!');
 }
 
-function openBooking() {
-    window.open('https://wa.me/+94717647693?text=Hi Kasun, I want to start a project', '_blank');
-}
+// Initialize
+window.addEventListener('load', () => {
+    type();
+    setTimeout(animateCounters, 500);
+    generateGallery();
+    generateNews();
+});
 
-// Smooth scroll for navigation
+// Smooth scroll
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
@@ -668,6 +1587,13 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         }
     });
 });
+
+// Close modals on outside click
+window.onclick = function(event) {
+    if (event.target.classList.contains('modal')) {
+        event.target.style.display = 'none';
+    }
+}
 </script>
 
 </body>
