@@ -22,6 +22,91 @@ let currentUser = null;
 let currentChatMode = 'kasun';
 let selectedAvatarUrl = "";
 
+// SMOOTH SCROLL INITIALIZATION
+function initSmoothScroll() {
+    const contentArea = document.querySelector('.content-area');
+    if (!contentArea) return;
+    
+    // Smooth scroll behavior
+    contentArea.style.scrollBehavior = 'smooth';
+    
+    // Custom smooth scroll for nav items
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetPage = this.getAttribute('onclick').match(/'([^']+)'/)[1];
+            showPage(targetPage, this);
+        });
+    });
+}
+
+// SCROLL REVEAL ANIMATIONS
+function initScrollReveal() {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    });
+
+    // Observe all reveal elements
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(el => {
+        observer.observe(el);
+    });
+}
+
+// PARALLAX EFFECT
+function initParallax() {
+    const contentArea = document.querySelector('.content-area');
+    if (!contentArea) return;
+    
+    contentArea.addEventListener('scroll', () => {
+        const scrolled = contentArea.scrollTop;
+        
+        // Parallax for profile image
+        const profileImg = document.querySelector('.profile-glow img');
+        if (profileImg) {
+            profileImg.style.transform = `translateY(${scrolled * 0.3}px)`;
+        }
+        
+        // Parallax for stats
+        const stats = document.querySelectorAll('.stat-item');
+        stats.forEach((stat, index) => {
+            const speed = 0.1 + (index * 0.05);
+            stat.style.transform = `translateY(${scrolled * speed}px)`;
+        });
+    });
+}
+
+// 3D TILT EFFECT ON SCROLL
+function init3DTilt() {
+    const cards = document.querySelectorAll('.gallery-item, .news-item, .stat-item, .skill-box');
+    
+    cards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const rotateX = (y - centerY) / 10;
+            const rotateY = (centerX - x) / 10;
+            
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
+        });
+        
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
+        });
+    });
+}
+
 // MAGIC SNOWFALL
 function createSnow() {
     const snowContainer = document.getElementById('magic-snow-container');
@@ -225,7 +310,7 @@ if (newsGrid) {
     for(let i=1; i<=60; i++) {
         const cat = categories[i % 6];
         const el = document.createElement('div'); 
-        el.className = 'news-item tilt-element';
+        el.className = 'news-item reveal-scale';
         el.innerHTML = `<img src="https://picsum.photos/400/600?random=${i}" loading="lazy"><div class="news-info-box"><span class="news-tag">${cat}</span><h3 style="font-size:0.9rem; margin-top:5px; color:white;">${cat} Update #${i}</h3></div>`;
         
         const largeDesc = `This is the detailed description for ${cat} News Item #${i}.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.`;
@@ -256,7 +341,22 @@ window.showPage = (id, el) => {
     document.getElementById(id).classList.add('active-page'); 
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); 
     el.classList.add('active'); 
+    
+    // Smooth scroll to top
+    const contentArea = document.querySelector('.content-area');
+    if(contentArea) {
+        contentArea.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }
+    
     if(id === 'home') startCounters(); 
+    
+    // Re-trigger reveal animations
+    setTimeout(() => {
+        initScrollReveal();
+    }, 100);
 };
 
 window.openSettings = () => document.getElementById('settingsModal').style.display = 'flex';
@@ -317,17 +417,6 @@ async function startCounters() {
     });
 }
 
-window.addEventListener("load", () => {
-    setTimeout(() => { 
-        document.getElementById("preloader").style.display = "none"; 
-        startCounters(); 
-    }, 1000);
-});
-
-window.onclick = (e) => { 
-    if(e.target.classList.contains('modal')) e.target.style.display = 'none'; 
-};
-
 // TYPING EFFECT
 const words = ["Video Editor", "Photographer", "AI Artist"]; 
 let idx = 0;
@@ -341,4 +430,37 @@ function type() {
     } 
 }
 
-type();
+// INITIALIZATION
+window.addEventListener("load", () => {
+    setTimeout(() => { 
+        document.getElementById("preloader").style.display = "none"; 
+        startCounters(); 
+        type();
+        
+        // Initialize smooth scroll and animations
+        initSmoothScroll();
+        initScrollReveal();
+        initParallax();
+        init3DTilt();
+    }, 1000);
+});
+
+window.onclick = (e) => { 
+    if(e.target.classList.contains('modal')) e.target.style.display = 'none'; 
+};
+
+// SMOOTH SCROLL FOR INTERNAL LINKS
+document.addEventListener('click', function(e) {
+    if (e.target.tagName === 'A' && e.target.getAttribute('href') && e.target.getAttribute('href').startsWith('#')) {
+        e.preventDefault();
+        const targetId = e.target.getAttribute('href').substring(1);
+        const targetElement = document.getElementById(targetId);
+        
+        if (targetElement) {
+            targetElement.scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    }
+});
