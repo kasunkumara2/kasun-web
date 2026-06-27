@@ -5,19 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kasun Padma Kumara | Creative Creator & AI Artist</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap');
 
 :root {
-    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-    --glass-bg: rgba(255, 255, 255, 0.7);
-    --glass-border: rgba(255, 255, 255, 0.3);
+    --primary: #667eea;
+    --secondary: #764ba2;
+    --accent: #f093fb;
     --text-dark: #1a1a2e;
     --text-light: #6b7280;
-    --bg-soft: #f8f7ff;
-    --shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    --bg-gradient: linear-gradient(135deg, #e0e7ff 0%, #f5d0fe 50%, #fce7f3 100%);
+    --glass: rgba(255, 255, 255, 0.7);
+    --shadow: 0 20px 60px rgba(102, 126, 234, 0.15);
 }
 
 * {
@@ -28,31 +29,21 @@
 }
 
 body {
-    background: var(--bg-soft);
+    background: var(--bg-gradient);
     color: var(--text-dark);
     overflow-x: hidden;
+    min-height: 100vh;
 }
 
-/* Animated Background */
-.animated-bg {
+/* 3D Background Canvas */
+#canvas-container {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     z-index: -1;
-    background: 
-        radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
-        radial-gradient(circle at 40% 20%, rgba(120, 219, 255, 0.3) 0%, transparent 50%);
-    filter: blur(80px);
-    animation: bgMove 20s ease-in-out infinite;
-}
-
-@keyframes bgMove {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    33% { transform: translate(30px, -50px) scale(1.1); }
-    66% { transform: translate(-20px, 20px) scale(0.9); }
+    pointer-events: none;
 }
 
 /* Top Navigation */
@@ -66,7 +57,7 @@ body {
     align-items: center;
     background: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--glass-border);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
     z-index: 1000;
     box-shadow: var(--shadow);
 }
@@ -75,10 +66,9 @@ body {
     font-family: 'Space Grotesk', sans-serif;
     font-size: 1.8rem;
     font-weight: 700;
-    background: var(--primary-gradient);
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    background-clip: text;
 }
 
 .nav-links {
@@ -103,7 +93,7 @@ body {
     left: 0;
     width: 0;
     height: 3px;
-    background: var(--primary-gradient);
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
     border-radius: 10px;
     transition: width 0.3s;
 }
@@ -113,14 +103,9 @@ body {
     width: 100%;
 }
 
-.nav-links a:hover {
-    color: #667eea;
-}
-
 .nav-actions {
     display: flex;
     gap: 15px;
-    align-items: center;
 }
 
 .icon-btn {
@@ -136,7 +121,6 @@ body {
     justify-content: center;
     transition: all 0.3s;
     font-size: 1.1rem;
-    color: var(--text-dark);
 }
 
 .icon-btn:hover {
@@ -173,7 +157,7 @@ body {
     border-radius: 50px;
     font-size: 0.9rem;
     font-weight: 600;
-    color: #667eea;
+    color: var(--primary);
     margin-bottom: 25px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
     animation: fadeInUp 0.8s ease;
@@ -189,10 +173,9 @@ body {
 }
 
 .hero-title span {
-    background: var(--primary-gradient);
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    background-clip: text;
 }
 
 .hero-subtitle {
@@ -211,15 +194,20 @@ body {
 
 .stat-box {
     text-align: center;
+    transform-style: preserve-3d;
+    transition: transform 0.3s;
+}
+
+.stat-box:hover {
+    transform: translateY(-10px) rotateX(10deg);
 }
 
 .stat-number {
     font-size: 2.5rem;
     font-weight: 800;
-    background: var(--secondary-gradient);
+    background: linear-gradient(135deg, var(--accent), var(--primary));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    background-clip: text;
 }
 
 .stat-label {
@@ -236,7 +224,7 @@ body {
 
 .btn-primary {
     padding: 16px 40px;
-    background: var(--primary-gradient);
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
     color: white;
     border: none;
     border-radius: 50px;
@@ -272,11 +260,11 @@ body {
 
 .btn-secondary:hover {
     transform: translateY(-3px);
-    border-color: #667eea;
+    border-color: var(--primary);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
-/* Hero Image */
+/* Hero Visual - 3D Profile */
 .hero-visual {
     flex: 1;
     display: flex;
@@ -290,12 +278,19 @@ body {
     position: relative;
     width: 450px;
     height: 450px;
+    transform-style: preserve-3d;
+    animation: float3D 6s ease-in-out infinite;
+}
+
+@keyframes float3D {
+    0%, 100% { transform: translateY(0) rotateY(0deg); }
+    50% { transform: translateY(-20px) rotateY(5deg); }
 }
 
 .profile-glow {
     position: absolute;
     inset: -20px;
-    background: var(--primary-gradient);
+    background: linear-gradient(135deg, var(--primary), var(--accent));
     border-radius: 50%;
     filter: blur(40px);
     opacity: 0.6;
@@ -333,7 +328,7 @@ body {
     align-items: center;
     gap: 10px;
     font-weight: 600;
-    animation: float 3s ease-in-out infinite;
+    animation: floatCard 3s ease-in-out infinite;
 }
 
 .floating-card.card-1 {
@@ -348,7 +343,7 @@ body {
     animation-delay: 1.5s;
 }
 
-@keyframes float {
+@keyframes floatCard {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-15px); }
 }
@@ -357,6 +352,11 @@ body {
 .section {
     margin-bottom: 100px;
     animation: fadeInUp 0.8s ease;
+    display: none;
+}
+
+.section.active {
+    display: block;
 }
 
 .section-title {
@@ -365,10 +365,9 @@ body {
     font-weight: 700;
     margin-bottom: 50px;
     text-align: center;
-    background: var(--primary-gradient);
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    background-clip: text;
 }
 
 /* About Section */
@@ -380,10 +379,12 @@ body {
 }
 
 .about-card {
-    background: white;
+    background: var(--glass);
+    backdrop-filter: blur(20px);
     padding: 40px;
     border-radius: 30px;
     box-shadow: var(--shadow);
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .about-card h3 {
@@ -425,15 +426,18 @@ body {
 }
 
 .skill-category {
-    background: white;
+    background: var(--glass);
+    backdrop-filter: blur(20px);
     padding: 35px;
     border-radius: 25px;
     box-shadow: var(--shadow);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     transition: all 0.3s;
+    transform-style: preserve-3d;
 }
 
 .skill-category:hover {
-    transform: translateY(-10px);
+    transform: translateY(-10px) rotateX(5deg);
     box-shadow: 0 20px 50px rgba(102, 126, 234, 0.2);
 }
 
@@ -447,7 +451,7 @@ body {
 }
 
 .skill-category h3 i {
-    color: #667eea;
+    color: var(--primary);
 }
 
 .skill-item {
@@ -470,80 +474,13 @@ body {
 
 .skill-fill {
     height: 100%;
-    background: var(--primary-gradient);
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
     border-radius: 10px;
     transition: width 1s ease;
     box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
 }
 
-/* Education & Experience Timeline */
-.timeline {
-    position: relative;
-    padding-left: 50px;
-}
-
-.timeline::before {
-    content: '';
-    position: absolute;
-    left: 20px;
-    top: 0;
-    height: 100%;
-    width: 3px;
-    background: var(--primary-gradient);
-}
-
-.timeline-item {
-    position: relative;
-    margin-bottom: 40px;
-    background: white;
-    padding: 30px;
-    border-radius: 20px;
-    box-shadow: var(--shadow);
-    transition: all 0.3s;
-}
-
-.timeline-item:hover {
-    transform: translateX(10px);
-    box-shadow: 0 15px 40px rgba(102, 126, 234, 0.15);
-}
-
-.timeline-item::before {
-    content: '';
-    position: absolute;
-    left: -38px;
-    top: 35px;
-    width: 15px;
-    height: 15px;
-    background: white;
-    border: 4px solid #667eea;
-    border-radius: 50%;
-}
-
-.timeline-item .date {
-    color: #667eea;
-    font-weight: 700;
-    font-size: 0.9rem;
-    margin-bottom: 10px;
-}
-
-.timeline-item h3 {
-    font-size: 1.4rem;
-    margin-bottom: 8px;
-    color: var(--text-dark);
-}
-
-.timeline-item h4 {
-    font-size: 1.1rem;
-    color: var(--text-light);
-    margin-bottom: 15px;
-}
-
-.timeline-item p {
-    color: var(--text-light);
-    line-height: 1.6;
-}
-
-/* Gallery */
+/* Gallery Section */
 .gallery-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -558,10 +495,11 @@ body {
     cursor: pointer;
     transition: all 0.4s;
     box-shadow: var(--shadow);
+    transform-style: preserve-3d;
 }
 
 .gallery-item:hover {
-    transform: translateY(-10px) scale(1.02);
+    transform: translateY(-10px) scale(1.02) rotateY(5deg);
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
 }
 
@@ -592,98 +530,90 @@ body {
     transform: translateY(0);
 }
 
-/* News Section */
-.news-filters {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
+/* Journey Section */
+.timeline {
+    position: relative;
+    padding-left: 50px;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 20px;
+    top: 0;
+    height: 100%;
+    width: 3px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+}
+
+.timeline-item {
+    position: relative;
     margin-bottom: 40px;
-    flex-wrap: wrap;
-}
-
-.filter-btn {
-    padding: 12px 30px;
-    background: white;
-    border: 2px solid rgba(102, 126, 234, 0.3);
-    border-radius: 50px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-.filter-btn.active,
-.filter-btn:hover {
-    background: var(--primary-gradient);
-    color: white;
-    border-color: transparent;
-    box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
-}
-
-.news-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 25px;
-}
-
-.news-card {
-    background: white;
+    background: var(--glass);
+    backdrop-filter: blur(20px);
+    padding: 30px;
     border-radius: 20px;
-    overflow: hidden;
     box-shadow: var(--shadow);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     transition: all 0.3s;
 }
 
-.news-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+.timeline-item:hover {
+    transform: translateX(10px);
+    box-shadow: 0 15px 40px rgba(102, 126, 234, 0.15);
 }
 
-.news-card img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -38px;
+    top: 35px;
+    width: 15px;
+    height: 15px;
+    background: white;
+    border: 4px solid var(--primary);
+    border-radius: 50%;
 }
 
-.news-content {
-    padding: 25px;
-}
-
-.news-tag {
-    display: inline-block;
-    padding: 6px 15px;
-    background: var(--primary-gradient);
-    color: white;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    margin-bottom: 12px;
-}
-
-.news-card h3 {
-    font-size: 1.2rem;
+.timeline-item .date {
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 0.9rem;
     margin-bottom: 10px;
+}
+
+.timeline-item h3 {
+    font-size: 1.4rem;
+    margin-bottom: 8px;
     color: var(--text-dark);
 }
 
-.news-card p {
+.timeline-item h4 {
+    font-size: 1.1rem;
     color: var(--text-light);
-    font-size: 0.9rem;
+    margin-bottom: 15px;
+}
+
+.timeline-item p {
+    color: var(--text-light);
     line-height: 1.6;
 }
 
 /* Chat Section */
 .chat-container {
-    background: white;
+    background: var(--glass);
+    backdrop-filter: blur(20px);
     border-radius: 30px;
     box-shadow: var(--shadow);
     overflow: hidden;
     height: 600px;
     display: flex;
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .chat-sidebar {
     width: 350px;
-    background: rgba(102, 126, 234, 0.05);
+    background: rgba(255, 255, 255, 0.5);
     border-right: 1px solid rgba(0, 0, 0, 0.05);
     display: flex;
     flex-direction: column;
@@ -750,7 +680,7 @@ body {
     flex: 1;
     padding: 30px;
     overflow-y: auto;
-    background: #f8f9fa;
+    background: rgba(255, 255, 255, 0.3);
 }
 
 .message {
@@ -774,7 +704,7 @@ body {
 }
 
 .message.sent .message-bubble {
-    background: var(--primary-gradient);
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
     color: white;
 }
 
@@ -797,7 +727,7 @@ body {
 }
 
 .chat-input-area input:focus {
-    border-color: #667eea;
+    border-color: var(--primary);
     box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
 }
 
@@ -806,7 +736,7 @@ body {
     height: 55px;
     border-radius: 50%;
     border: none;
-    background: var(--primary-gradient);
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
     color: white;
     cursor: pointer;
     transition: all 0.3s;
@@ -820,64 +750,45 @@ body {
     box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
 }
 
-/* Modals */
-.modal {
-    display: none;
+/* Bottom Navigation */
+.bottom-nav {
     position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 2000;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(5px);
-}
-
-.modal-content {
-    background: white;
-    padding: 40px;
-    border-radius: 30px;
-    max-width: 500px;
-    width: 90%;
-    max-height: 90vh;
-    overflow-y: auto;
-    animation: modalSlide 0.3s ease;
-}
-
-@keyframes modalSlide {
-    from {
-        opacity: 0;
-        transform: translateY(-50px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.modal-header {
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--glass);
+    backdrop-filter: blur(20px);
+    padding: 15px 40px;
+    border-radius: 50px;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    z-index: 1000;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
+    gap: 30px;
 }
 
-.modal-header h2 {
-    font-size: 1.8rem;
-    color: var(--text-dark);
-}
-
-.close-modal {
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
+.bottom-nav a {
+    text-decoration: none;
     color: var(--text-light);
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
     transition: all 0.3s;
+    padding: 10px 20px;
+    border-radius: 15px;
 }
 
-.close-modal:hover {
-    color: var(--text-dark);
-    transform: rotate(90deg);
+.bottom-nav a i {
+    font-size: 1.3rem;
+}
+
+.bottom-nav a:hover,
+.bottom-nav a.active {
+    color: var(--primary);
+    background: rgba(102, 126, 234, 0.1);
 }
 
 /* Animations */
@@ -948,6 +859,12 @@ body {
         font-size: 2.5rem;
     }
     
+    .bottom-nav {
+        bottom: 20px;
+        padding: 12px 25px;
+        gap: 20px;
+    }
+    
     .chat-container {
         flex-direction: column;
         height: 500px;
@@ -964,8 +881,8 @@ body {
 </head>
 <body>
 
-<!-- Animated Background -->
-<div class="animated-bg"></div>
+<!-- 3D Background -->
+<div id="canvas-container"></div>
 
 <!-- Top Navigation -->
 <nav class="top-nav">
@@ -974,17 +891,13 @@ body {
         <li><a href="#home" class="active">Home</a></li>
         <li><a href="#about">About</a></li>
         <li><a href="#skills">Skills</a></li>
-        <li><a href="#education">Education</a></li>
         <li><a href="#gallery">Gallery</a></li>
-        <li><a href="#news">News</a></li>
+        <li><a href="#journey">Journey</a></li>
         <li><a href="#chat">Chat</a></li>
     </ul>
     <div class="nav-actions">
         <button class="icon-btn" onclick="openSettings()">
             <i class="fas fa-user"></i>
-        </button>
-        <button class="icon-btn" onclick="toggleTheme()">
-            <i class="fas fa-moon"></i>
         </button>
     </div>
 </nav>
@@ -1036,14 +949,14 @@ body {
             <div class="profile-container">
                 <div class="profile-glow"></div>
                 <div class="profile-img-wrapper">
-                    <img src="https://img.icons8.com/color/96/user.png" alt="Kasun">
+                    <img src="images/profile.jpg" alt="Kasun">
                 </div>
                 <div class="floating-card card-1">
                     <i class="fas fa-video" style="color: #667eea;"></i>
                     <span>Video Editor</span>
                 </div>
                 <div class="floating-card card-2">
-                    <i class="fas fa-camera" style="color: #f5576c;"></i>
+                    <i class="fas fa-camera" style="color: #f093fb;"></i>
                     <span>Photographer</span>
                 </div>
             </div>
@@ -1062,13 +975,13 @@ body {
             <div class="about-card">
                 <h3>Personal Info</h3>
                 <ul class="info-list">
-                    <li><strong>Name:</strong> <span>G. Kasun Padma Kumara</span></li>
+                    <li><strong>Full Name:</strong> <span>G. Kasun Padma Kumara</span></li>
                     <li><strong>Age:</strong> <span>19 Years</span></li>
                     <li><strong>Birthday:</strong> <span>January 4, 2007</span></li>
                     <li><strong>Location:</strong> <span>Avissawella, Sri Lanka</span></li>
                     <li><strong>Email:</strong> <span>kasunpadmakumara2007@gmail.com</span></li>
                     <li><strong>Phone:</strong> <span>+94 71 764 7693</span></li>
-                    <li><strong>Language:</strong> <span>Sinhala, English</span></li>
+                    <li><strong>Languages:</strong> <span>Sinhala, English</span></li>
                 </ul>
             </div>
         </div>
@@ -1191,23 +1104,101 @@ body {
         </div>
     </section>
 
-    <!-- Education & Experience Section -->
-    <section class="section" id="education">
-        <h2 class="section-title">Education & Experience</h2>
+    <!-- Gallery Section -->
+    <section class="section" id="gallery">
+        <h2 class="section-title">Creative Gallery</h2>
+        <div class="gallery-grid" id="galleryGrid">
+            <!-- Gallery items will be added here -->
+            <div class="gallery-item">
+                <img src="images/gallery1.jpg" alt="Project 1">
+                <div class="gallery-overlay">
+                    <h3>Video Project</h3>
+                    <p>Creative video editing work</p>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <img src="images/gallery2.jpg" alt="Project 2">
+                <div class="gallery-overlay">
+                    <h3>Photography</h3>
+                    <p>Professional photography</p>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <img src="images/gallery3.jpg" alt="Project 3">
+                <div class="gallery-overlay">
+                    <h3>AI Art</h3>
+                    <p>AI-generated artwork</p>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <img src="images/gallery4.jpg" alt="Project 4">
+                <div class="gallery-overlay">
+                    <h3>Graphic Design</h3>
+                    <p>Brand design project</p>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <img src="images/gallery5.jpg" alt="Project 5">
+                <div class="gallery-overlay">
+                    <h3>Social Media</h3>
+                    <p>Content creation</p>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <img src="images/gallery6.jpg" alt="Project 6">
+                <div class="gallery-overlay">
+                    <h3>Video Editing</h3>
+                    <p>Professional edit</p>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <img src="images/gallery7.jpg" alt="Project 7">
+                <div class="gallery-overlay">
+                    <h3>Photography</h3>
+                    <p>Event coverage</p>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <img src="images/gallery8.jpg" alt="Project 8">
+                <div class="gallery-overlay">
+                    <h3>AI Creation</h3>
+                    <p>Digital art</p>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <img src="images/gallery9.jpg" alt="Project 9">
+                <div class="gallery-overlay">
+                    <h3>Design Work</h3>
+                    <p>Creative design</p>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <img src="images/gallery10.jpg" alt="Project 10">
+                <div class="gallery-overlay">
+                    <h3>Portfolio</h3>
+                    <p>Best work showcase</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Journey Section -->
+    <section class="section" id="journey">
+        <h2 class="section-title">My Journey</h2>
         <div class="timeline">
             <div class="timeline-item">
                 <div class="date">2024 - Present</div>
                 <h3>Freelance Creative Designer & Video Editor</h3>
                 <h4>Self-Employed</h4>
-                <p>• Edited engaging short-form videos (Reels/TikTok) using CapCut to increase viewer retention<br>
-                • Designed promotional posters, flyers, and YouTube thumbnails for tuition classes<br>
-                • Utilized AI tools (ChatGPT, Gemini) for creative scriptwriting and AI photo/video enhancement</p>
+                <p>• Edited engaging short-form videos (Reels/TikTok) using CapCut<br>
+                • Designed promotional posters, flyers, and YouTube thumbnails<br>
+                • Utilized AI tools (ChatGPT, Gemini) for creative scriptwriting</p>
             </div>
             
             <div class="timeline-item">
                 <div class="date">2013 - 2025 (Expected)</div>
                 <h3>G.C.E. Advanced Level - Arts Stream</h3>
-                <h4>Ra/Anura Maha Vidyalaya, Gatahaththa, Avissawella</h4>
+                <h4>Ra/Anura Maha Vidyalaya, Gatahaththa</h4>
             </div>
             
             <div class="timeline-item">
@@ -1220,56 +1211,14 @@ body {
             <div class="timeline-item">
                 <div class="date">2024</div>
                 <h3>Professional Photographer</h3>
-                <p>Captured high-quality images for local events, functions, and outdoor portrait sessions, ensuring excellent composition and lighting. Provided professional post-processing, color correction, and retouching using Adobe Lightroom and AI enhancement tools.</p>
+                <p>Captured high-quality images for local events and functions. Provided professional post-processing and color correction.</p>
             </div>
-        </div>
-    </section>
 
-    <!-- Certifications -->
-    <section class="section">
-        <h2 class="section-title">Certifications</h2>
-        <div class="skills-container">
-            <div class="skill-category">
-                <h3><i class="fas fa-certificate"></i> Design & Media</h3>
-                <ul style="list-style: none; line-height: 2;">
-                    <li><i class="fas fa-check-circle" style="color: #667eea; margin-right: 10px;"></i> Certified Graphic Designer</li>
-                    <li><i class="fas fa-check-circle" style="color: #667eea; margin-right: 10px;"></i> Certified Photography</li>
-                    <li><i class="fas fa-check-circle" style="color: #667eea; margin-right: 10px;"></i> Video Editing Specialist</li>
-                    <li><i class="fas fa-check-circle" style="color: #667eea; margin-right: 10px;"></i> Social Media Management</li>
-                </ul>
+            <div class="timeline-item">
+                <div class="date">Location</div>
+                <h3>Avissawella, Sri Lanka 🇱🇰</h3>
+                <p>46/Amarambe, Gatahaththa, Avissawella</p>
             </div>
-            <div class="skill-category">
-                <h3><i class="fas fa-certificate"></i> AI & Technology</h3>
-                <ul style="list-style: none; line-height: 2;">
-                    <li><i class="fas fa-check-circle" style="color: #667eea; margin-right: 10px;"></i> AI Integration Specialist</li>
-                    <li><i class="fas fa-check-circle" style="color: #667eea; margin-right: 10px;"></i> Content Creation Expert</li>
-                    <li><i class="fas fa-check-circle" style="color: #667eea; margin-right: 10px;"></i> AI & Prompt Engineering</li>
-                    <li><i class="fas fa-check-circle" style="color: #667eea; margin-right: 10px;"></i> AI Photo/Video Enhancement</li>
-                </ul>
-            </div>
-        </div>
-    </section>
-
-    <!-- Gallery Section -->
-    <section class="section" id="gallery">
-        <h2 class="section-title">Creative Gallery</h2>
-        <div class="gallery-grid" id="galleryGrid">
-            <!-- Gallery items will be added by JavaScript -->
-        </div>
-    </section>
-
-    <!-- News Section -->
-    <section class="section" id="news">
-        <h2 class="section-title">AI Magazine 📰</h2>
-        <div class="news-filters">
-            <button class="filter-btn active">All</button>
-            <button class="filter-btn">AI</button>
-            <button class="filter-btn">Tech</button>
-            <button class="filter-btn">Gaming</button>
-            <button class="filter-btn">Design</button>
-        </div>
-        <div class="news-grid" id="newsGrid">
-            <!-- News items will be added by JavaScript -->
         </div>
     </section>
 
@@ -1283,7 +1232,7 @@ body {
                 </div>
                 <div class="chat-list">
                     <div class="chat-contact active" onclick="openChat('kasun')">
-                        <img src="https://img.icons8.com/color/96/user.png" alt="Kasun">
+                        <img src="images/profile.jpg" alt="Kasun">
                         <div class="chat-contact-info">
                             <h4>Chat with Kasun</h4>
                             <p style="color: #22c55e;">● Online</p>
@@ -1294,13 +1243,6 @@ body {
                         <div class="chat-contact-info">
                             <h4>AI Assistant</h4>
                             <p>Auto Helper Bot</p>
-                        </div>
-                    </div>
-                    <div class="chat-contact" onclick="openChat('community')">
-                        <img src="https://img.icons8.com/color/96/group.png" alt="Community">
-                        <div class="chat-contact-info">
-                            <h4>Global Community</h4>
-                            <p>Public Room</p>
                         </div>
                     </div>
                 </div>
@@ -1324,52 +1266,104 @@ body {
     </section>
 </div>
 
-<!-- Settings Modal -->
-<div id="settingsModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2>Account Settings</h2>
-            <button class="close-modal" onclick="closeSettings()">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div id="loginForm">
-            <p style="margin-bottom: 20px; color: var(--text-light);">Login to access your profile</p>
-            <button class="btn-primary" style="width: 100%; margin-bottom: 15px;" onclick="googleLogin()">
-                <i class="fab fa-google"></i> Login with Google
-            </button>
-            <button class="btn-secondary" style="width: 100%;">
-                <i class="fab fa-facebook"></i> Login with Facebook
-            </button>
-        </div>
-    </div>
-</div>
+<!-- Bottom Navigation -->
+<nav class="bottom-nav">
+    <a href="#home" class="active" onclick="showSection('home', this)">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+    </a>
+    <a href="#about" onclick="showSection('about', this)">
+        <i class="fas fa-user"></i>
+        <span>About</span>
+    </a>
+    <a href="#skills" onclick="showSection('skills', this)">
+        <i class="fas fa-chart-bar"></i>
+        <span>Skills</span>
+    </a>
+    <a href="#gallery" onclick="showSection('gallery', this)">
+        <i class="fas fa-images"></i>
+        <span>Gallery</span>
+    </a>
+    <a href="#journey" onclick="showSection('journey', this)">
+        <i class="fas fa-route"></i>
+        <span>Journey</span>
+    </a>
+    <a href="#chat" onclick="showSection('chat', this)">
+        <i class="fas fa-comments"></i>
+        <span>Chat</span>
+    </a>
+</nav>
 
-<!-- Booking Modal -->
-<div id="bookingModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2>Start Project 🚀</h2>
-            <button class="close-modal" onclick="closeBooking()">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <form onsubmit="sendBooking(event)">
-            <div style="margin-bottom: 20px;">
-                <input type="text" placeholder="Your Name" required style="width: 100%; padding: 15px; border: 2px solid rgba(0,0,0,0.1); border-radius: 10px; outline: none;">
-            </div>
-            <div style="margin-bottom: 20px;">
-                <textarea placeholder="Tell me about your project..." rows="4" required style="width: 100%; padding: 15px; border: 2px solid rgba(0,0,0,0.1); border-radius: 10px; outline: none; resize: none;"></textarea>
-            </div>
-            <button type="submit" class="btn-primary" style="width: 100%;">
-                <i class="fab fa-whatsapp"></i> Send via WhatsApp
-            </button>
-        </form>
-    </div>
-</div>
-
-<script src="script.js"></script>
 <script>
+// 3D Background with Three.js
+function init3DBackground() {
+    const container = document.getElementById('canvas-container');
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    container.appendChild(renderer.domElement);
+    
+    // Create floating particles
+    const geometry = new THREE.SphereGeometry(0.5, 32, 32);
+    const material = new THREE.MeshPhongMaterial({ 
+        color: 0x667eea, 
+        transparent: true, 
+        opacity: 0.6 
+    });
+    
+    const particles = [];
+    for(let i = 0; i < 50; i++) {
+        const mesh = new THREE.Mesh(geometry, material.clone());
+        mesh.position.set(
+            (Math.random() - 0.5) * 20,
+            (Math.random() - 0.5) * 20,
+            (Math.random() - 0.5) * 10 - 5
+        );
+        mesh.scale.setScalar(Math.random() * 0.5 + 0.5);
+        scene.add(mesh);
+        particles.push({
+            mesh: mesh,
+            speed: Math.random() * 0.01 + 0.005,
+            offset: Math.random() * Math.PI * 2
+        });
+    }
+    
+    // Add lights
+    const light = new THREE.DirectionalLight(0xffffff, 1);
+    light.position.set(5, 5, 5);
+    scene.add(light);
+    
+    const ambientLight = new THREE.AmbientLight(0x404040);
+    scene.add(ambientLight);
+    
+    camera.position.z = 5;
+    
+    // Animation loop
+    let time = 0;
+    function animate() {
+        requestAnimationFrame(animate);
+        time += 0.01;
+        
+        particles.forEach((particle) => {
+            particle.mesh.position.y += Math.sin(time + particle.offset) * 0.01;
+            particle.mesh.rotation.x += particle.speed;
+            particle.mesh.rotation.y += particle.speed;
+        });
+        
+        renderer.render(scene, camera);
+    }
+    
+    animate();
+    
+    // Handle resize
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+}
+
 // Typing Effect
 const words = ["Video Editor", "Photographer", "AI Artist", "Graphic Designer", "Content Creator"];
 let wordIndex = 0;
@@ -1424,45 +1418,33 @@ function animateCounters() {
     });
 }
 
-// Gallery Generation
-function generateGallery() {
-    const galleryGrid = document.getElementById('galleryGrid');
-    const categories = ['Photo', 'Video', 'AI Art', 'Design'];
+// Section Navigation
+function showSection(sectionId, element) {
+    // Hide all sections
+    document.querySelectorAll('.section').forEach(section => {
+        section.classList.remove('active');
+    });
     
-    for(let i = 1; i <= 12; i++) {
-        const cat = categories[(i-1) % 4];
-        const item = document.createElement('div');
-        item.className = 'gallery-item';
-        item.innerHTML = `
-            <img src="https://picsum.photos/600/400?random=${i}" alt="Gallery ${i}">
-            <div class="gallery-overlay">
-                <h3>${cat} Project ${i}</h3>
-                <p>Creative work showcase</p>
-            </div>
-        `;
-        galleryGrid.appendChild(item);
+    // Show target section
+    const targetSection = document.getElementById(sectionId);
+    if(targetSection) {
+        targetSection.classList.add('active');
+        targetSection.scrollIntoView({ behavior: 'smooth' });
     }
-}
-
-// News Generation
-function generateNews() {
-    const newsGrid = document.getElementById('newsGrid');
-    const categories = ['AI', 'Tech', 'Gaming', 'Design'];
     
-    for(let i = 1; i <= 12; i++) {
-        const cat = categories[i % 4];
-        const item = document.createElement('div');
-        item.className = 'news-card';
-        item.innerHTML = `
-            <img src="https://picsum.photos/400/300?random=${i+100}" alt="News ${i}">
-            <div class="news-content">
-                <span class="news-tag">${cat}</span>
-                <h3>${cat} Update #${i}</h3>
-                <p>Latest trends and updates in ${cat.toLowerCase()} industry...</p>
-            </div>
-        `;
-        newsGrid.appendChild(item);
-    }
+    // Update active nav
+    document.querySelectorAll('.bottom-nav a').forEach(nav => {
+        nav.classList.remove('active');
+    });
+    element.classList.add('active');
+    
+    // Update top nav
+    document.querySelectorAll('.top-nav a').forEach(nav => {
+        nav.classList.remove('active');
+        if(nav.getAttribute('href') === '#' + sectionId) {
+            nav.classList.add('active');
+        }
+    });
 }
 
 // Chat Functions
@@ -1489,14 +1471,6 @@ function openChat(mode) {
             <div class="message received">
                 <div class="message-bubble">
                     Hi! I'm your AI assistant. Ask me anything!
-                </div>
-            </div>
-        `;
-    } else {
-        messagesDiv.innerHTML = `
-            <div class="message received">
-                <div class="message-bubble">
-                    Welcome to Global Community! Feel free to chat.
                 </div>
             </div>
         `;
@@ -1527,10 +1501,8 @@ function sendMessage() {
         
         if(currentChat === 'ai') {
             reply.innerHTML = `<div class="message-bubble">Thanks for your message! This is an automated response.</div>`;
-        } else if(currentChat === 'kasun') {
-            reply.innerHTML = `<div class="message-bubble">Thanks! I'll get back to you soon. You can also reach me on WhatsApp.</div>`;
         } else {
-            reply.innerHTML = `<div class="message-bubble">Great message! The community will respond soon.</div>`;
+            reply.innerHTML = `<div class="message-bubble">Thanks! I'll get back to you soon. You can also reach me on WhatsApp.</div>`;
         }
         
         messagesDiv.appendChild(reply);
@@ -1540,60 +1512,24 @@ function sendMessage() {
 
 // Modal Functions
 function openSettings() {
-    document.getElementById('settingsModal').style.display = 'flex';
-}
-
-function closeSettings() {
-    document.getElementById('settingsModal').style.display = 'none';
+    alert('Settings feature coming soon!');
 }
 
 function openBooking() {
-    document.getElementById('bookingModal').style.display = 'flex';
-}
-
-function closeBooking() {
-    document.getElementById('bookingModal').style.display = 'none';
-}
-
-function sendBooking(e) {
-    e.preventDefault();
     window.open('https://wa.me/+94717647693?text=Hi Kasun, I want to start a project', '_blank');
-    closeBooking();
-}
-
-function toggleTheme() {
-    alert('Theme toggle coming soon!');
-}
-
-function googleLogin() {
-    alert('Google login coming soon!');
 }
 
 // Initialize
 window.addEventListener('load', () => {
+    init3DBackground();
     type();
     setTimeout(animateCounters, 500);
-    generateGallery();
-    generateNews();
 });
 
-// Smooth scroll
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({ behavior: 'smooth' });
-        }
-    });
+// Handle Enter key in chat
+document.getElementById('chatInput')?.addEventListener('keypress', (e) => {
+    if(e.key === 'Enter') sendMessage();
 });
-
-// Close modals on outside click
-window.onclick = function(event) {
-    if (event.target.classList.contains('modal')) {
-        event.target.style.display = 'none';
-    }
-}
 </script>
 
 </body>
