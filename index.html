@@ -1,1451 +1,1460 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kasun Padma Kumara | Creative Creator</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap');
-
-:root {
-    --primary: #667eea;
-    --secondary: #764ba2;
-    --accent: #f093fb;
-    --text-dark: #1a1a2e;
-    --text-light: #6b7280;
-    --bg-gradient: linear-gradient(135deg, #e0e7ff 0%, #f5d0fe 50%, #fce7f3 100%);
-    --glass: rgba(255, 255, 255, 0.7);
-    --shadow: 0 20px 60px rgba(102, 126, 234, 0.15);
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Inter', sans-serif;
-}
-
-html {
-    scroll-behavior: smooth;
-    scroll-snap-type: y mandatory;
-}
-
-body {
-    background: var(--bg-gradient);
-    color: var(--text-dark);
-    overflow-x: hidden;
-}
-
-/* 3D Background */
-#bg-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    pointer-events: none;
-}
-
-/* Sections - Full Viewport */
-.section {
-    min-height: 100vh;
-    scroll-snap-align: start;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 80px 50px;
-    position: relative;
-}
-
-.section-content {
-    max-width: 1400px;
-    width: 100%;
-    margin: 0 auto;
-}
-
-/* Hero Section */
-.hero-section {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 60px;
-}
-
-.hero-content {
-    flex: 1;
-    max-width: 600px;
-}
-
-.hero-badge {
-    display: inline-block;
-    padding: 12px 28px;
-    background: white;
-    border-radius: 50px;
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: var(--primary);
-    margin-bottom: 30px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-    animation: fadeInUp 0.8s ease;
-}
-
-.hero-title {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 5rem;
-    font-weight: 900;
-    line-height: 1.1;
-    margin-bottom: 25px;
-    animation: fadeInUp 0.8s ease 0.1s both;
-}
-
-.hero-title span {
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.hero-subtitle {
-    font-size: 1.5rem;
-    color: var(--text-light);
-    margin-bottom: 45px;
-    animation: fadeInUp 0.8s ease 0.2s both;
-}
-
-.hero-stats {
-    display: flex;
-    gap: 50px;
-    margin-bottom: 45px;
-    animation: fadeInUp 0.8s ease 0.3s both;
-}
-
-.stat-box {
-    text-align: center;
-    transform-style: preserve-3d;
-    transition: all 0.4s;
-}
-
-.stat-box:hover {
-    transform: translateY(-15px) rotateX(15deg) scale(1.1);
-}
-
-.stat-number {
-    font-size: 3rem;
-    font-weight: 900;
-    background: linear-gradient(135deg, var(--accent), var(--primary));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.stat-label {
-    font-size: 1rem;
-    color: var(--text-light);
-    margin-top: 8px;
-    font-weight: 500;
-}
-
-.hero-buttons {
-    display: flex;
-    gap: 20px;
-    animation: fadeInUp 0.8s ease 0.4s both;
-}
-
-.btn-primary {
-    padding: 18px 45px;
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    color: white;
-    border: none;
-    border-radius: 50px;
-    font-size: 1.05rem;
-    font-weight: 700;
-    cursor: pointer;
-    box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
-    transition: all 0.3s;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.btn-primary:hover {
-    transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 20px 45px rgba(102, 126, 234, 0.5);
-}
-
-.btn-secondary {
-    padding: 18px 45px;
-    background: white;
-    color: var(--text-dark);
-    border: 2px solid rgba(102, 126, 234, 0.3);
-    border-radius: 50px;
-    font-size: 1.05rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.3s;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.btn-secondary:hover {
-    transform: translateY(-5px);
-    border-color: var(--primary);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-}
-
-/* Hero Visual - 3D Profile */
-.hero-visual {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    animation: fadeIn 1s ease 0.5s both;
-}
-
-.profile-container {
-    position: relative;
-    width: 500px;
-    height: 500px;
-    transform-style: preserve-3d;
-    animation: float3D 6s ease-in-out infinite;
-}
-
-@keyframes float3D {
-    0%, 100% { transform: translateY(0) rotateY(0deg); }
-    50% { transform: translateY(-25px) rotateY(8deg); }
-}
-
-.profile-glow {
-    position: absolute;
-    inset: -30px;
-    background: linear-gradient(135deg, var(--primary), var(--accent));
-    border-radius: 50%;
-    filter: blur(50px);
-    opacity: 0.6;
-    animation: pulse 3s ease-in-out infinite;
-}
-
-@keyframes pulse {
-    0%, 100% { transform: scale(1); opacity: 0.6; }
-    50% { transform: scale(1.08); opacity: 0.8; }
-}
-
-.profile-img-wrapper {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    overflow: hidden;
-    border: 6px solid white;
-    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.2);
-}
-
-.profile-img-wrapper img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.floating-card {
-    position: absolute;
-    background: white;
-    padding: 18px 28px;
-    border-radius: 25px;
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-weight: 700;
-    font-size: 1rem;
-    animation: floatCard 3s ease-in-out infinite;
-}
-
-.floating-card.card-1 {
-    top: 60px;
-    right: -20px;
-    animation-delay: 0s;
-}
-
-.floating-card.card-2 {
-    bottom: 100px;
-    left: -40px;
-    animation-delay: 1.5s;
-}
-
-@keyframes floatCard {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-20px); }
-}
-
-/* Section Titles */
-.section-title {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 3.5rem;
-    font-weight: 900;
-    margin-bottom: 60px;
-    text-align: center;
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-/* About Section */
-.about-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 60px;
-    align-items: center;
-}
-
-.about-card {
-    background: var(--glass);
-    backdrop-filter: blur(20px);
-    padding: 50px;
-    border-radius: 35px;
-    box-shadow: var(--shadow);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    transition: all 0.4s;
-}
-
-.about-card:hover {
-    transform: translateY(-10px) rotateX(5deg);
-    box-shadow: 0 30px 70px rgba(102, 126, 234, 0.2);
-}
-
-.about-card h3 {
-    font-size: 2rem;
-    margin-bottom: 25px;
-    color: var(--text-dark);
-}
-
-.about-card p {
-    color: var(--text-light);
-    line-height: 1.9;
-    margin-bottom: 18px;
-    font-size: 1.05rem;
-}
-
-.info-list {
-    list-style: none;
-}
-
-.info-list li {
-    padding: 15px 0;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    display: flex;
-    justify-content: space-between;
-    font-size: 1.05rem;
-}
-
-.info-list li strong {
-    color: var(--text-dark);
-    font-weight: 700;
-}
-
-.info-list li span {
-    color: var(--text-light);
-}
-
-/* Skills Section */
-.skills-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 35px;
-}
-
-.skill-category {
-    background: var(--glass);
-    backdrop-filter: blur(20px);
-    padding: 45px;
-    border-radius: 30px;
-    box-shadow: var(--shadow);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    transition: all 0.4s;
-    transform-style: preserve-3d;
-}
-
-.skill-category:hover {
-    transform: translateY(-15px) rotateX(8deg);
-    box-shadow: 0 30px 60px rgba(102, 126, 234, 0.25);
-}
-
-.skill-category h3 {
-    font-size: 1.7rem;
-    margin-bottom: 30px;
-    color: var(--text-dark);
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.skill-category h3 i {
-    color: var(--primary);
-    font-size: 1.5rem;
-}
-
-.skill-item {
-    margin-bottom: 25px;
-}
-
-.skill-item .skill-info {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-    font-weight: 700;
-    font-size: 1.05rem;
-}
-
-.skill-bar {
-    height: 12px;
-    background: rgba(0, 0, 0, 0.05);
-    border-radius: 12px;
-    overflow: hidden;
-}
-
-.skill-fill {
-    height: 100%;
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    border-radius: 12px;
-    transition: width 1.5s ease;
-    box-shadow: 0 0 15px rgba(102, 126, 234, 0.4);
-}
-
-/* Gallery Section */
-.gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 30px;
-}
-
-.gallery-item {
-    height: 320px;
-    border-radius: 25px;
-    overflow: hidden;
-    position: relative;
-    cursor: pointer;
-    transition: all 0.5s;
-    box-shadow: var(--shadow);
-    transform-style: preserve-3d;
-}
-
-.gallery-item:hover {
-    transform: translateY(-15px) scale(1.03) rotateY(5deg);
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25);
-}
-
-.gallery-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: all 0.5s;
-}
-
-.gallery-item:hover img {
-    transform: scale(1.15);
-}
-
-.gallery-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(to top, rgba(102, 126, 234, 0.95), transparent);
-    padding: 35px 25px 25px;
-    color: white;
-    transform: translateY(100%);
-    transition: all 0.4s;
-}
-
-.gallery-item:hover .gallery-overlay {
-    transform: translateY(0);
-}
-
-.gallery-overlay h3 {
-    font-size: 1.3rem;
-    margin-bottom: 8px;
-}
-
-/* Journey Section */
-.timeline {
-    position: relative;
-    padding-left: 60px;
-}
-
-.timeline::before {
-    content: '';
-    position: absolute;
-    left: 25px;
-    top: 0;
-    height: 100%;
-    width: 4px;
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    border-radius: 10px;
-}
-
-.timeline-item {
-    position: relative;
-    margin-bottom: 50px;
-    background: var(--glass);
-    backdrop-filter: blur(20px);
-    padding: 40px;
-    border-radius: 25px;
-    box-shadow: var(--shadow);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    transition: all 0.4s;
-}
-
-.timeline-item:hover {
-    transform: translateX(15px) scale(1.02);
-    box-shadow: 0 20px 50px rgba(102, 126, 234, 0.2);
-}
-
-.timeline-item::before {
-    content: '';
-    position: absolute;
-    left: -43px;
-    top: 40px;
-    width: 18px;
-    height: 18px;
-    background: white;
-    border: 5px solid var(--primary);
-    border-radius: 50%;
-    box-shadow: 0 0 20px rgba(102, 126, 234, 0.4);
-}
-
-.timeline-item .date {
-    color: var(--primary);
-    font-weight: 800;
-    font-size: 1rem;
-    margin-bottom: 12px;
-}
-
-.timeline-item h3 {
-    font-size: 1.6rem;
-    margin-bottom: 10px;
-    color: var(--text-dark);
-}
-
-.timeline-item h4 {
-    font-size: 1.2rem;
-    color: var(--text-light);
-    margin-bottom: 18px;
-}
-
-.timeline-item p {
-    color: var(--text-light);
-    line-height: 1.8;
-    font-size: 1.05rem;
-}
-
-/* Chat Section */
-.chat-container {
-    background: var(--glass);
-    backdrop-filter: blur(20px);
-    border-radius: 35px;
-    box-shadow: var(--shadow);
-    overflow: hidden;
-    height: 650px;
-    display: flex;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-.chat-sidebar {
-    width: 380px;
-    background: rgba(255, 255, 255, 0.5);
-    border-right: 1px solid rgba(0, 0, 0, 0.05);
-    display: flex;
-    flex-direction: column;
-}
-
-.chat-header {
-    padding: 35px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-.chat-header h3 {
-    font-size: 1.7rem;
-    color: var(--text-dark);
-}
-
-.chat-list {
-    flex: 1;
-    overflow-y: auto;
-    padding: 25px;
-}
-
-.chat-contact {
-    display: flex;
-    align-items: center;
-    gap: 18px;
-    padding: 18px;
-    border-radius: 18px;
-    cursor: pointer;
-    margin-bottom: 12px;
-    transition: all 0.3s;
-}
-
-.chat-contact:hover,
-.chat-contact.active {
-    background: white;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    transform: translateX(5px);
-}
-
-.chat-contact img {
-    width: 55px;
-    height: 55px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.chat-contact-info h4 {
-    font-size: 1.1rem;
-    color: var(--text-dark);
-    margin-bottom: 4px;
-}
-
-.chat-contact-info p {
-    font-size: 0.9rem;
-    color: var(--text-light);
-}
-
-.chat-main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.chat-messages {
-    flex: 1;
-    padding: 35px;
-    overflow-y: auto;
-    background: rgba(255, 255, 255, 0.3);
-}
-
-.message {
-    margin-bottom: 25px;
-    max-width: 70%;
-}
-
-.message.received {
-    margin-right: auto;
-}
-
-.message.sent {
-    margin-left: auto;
-}
-
-.message-bubble {
-    padding: 18px 25px;
-    border-radius: 25px;
-    background: white;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-    font-size: 1.05rem;
-}
-
-.message.sent .message-bubble {
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    color: white;
-}
-
-.chat-input-area {
-    padding: 30px;
-    background: white;
-    border-top: 1px solid rgba(0, 0, 0, 0.05);
-    display: flex;
-    gap: 18px;
-}
-
-.chat-input-area input {
-    flex: 1;
-    padding: 18px 28px;
-    border: 2px solid rgba(0, 0, 0, 0.05);
-    border-radius: 50px;
-    outline: none;
-    font-size: 1.05rem;
-    transition: all 0.3s;
-}
-
-.chat-input-area input:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 5px rgba(102, 126, 234, 0.1);
-}
-
-.chat-input-area button {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    border: none;
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    color: white;
-    cursor: pointer;
-    transition: all 0.3s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-}
-
-.chat-input-area button:hover {
-    transform: scale(1.15);
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-}
-
-/* Bottom Navigation */
-.bottom-nav {
-    position: fixed;
-    bottom: 35px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--glass);
-    backdrop-filter: blur(20px);
-    padding: 18px 45px;
-    border-radius: 50px;
-    box-shadow: var(--shadow);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    z-index: 1000;
-    display: flex;
-    gap: 35px;
-}
-
-.bottom-nav a {
-    text-decoration: none;
-    color: var(--text-light);
-    font-weight: 700;
-    font-size: 0.95rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    transition: all 0.3s;
-    padding: 12px 22px;
-    border-radius: 18px;
-}
-
-.bottom-nav a i {
-    font-size: 1.4rem;
-}
-
-.bottom-nav a:hover,
-.bottom-nav a.active {
-    color: var(--primary);
-    background: rgba(102, 126, 234, 0.1);
-    transform: translateY(-5px);
-}
-
-/* Animations */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(40px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-/* Responsive */
-@media (max-width: 1024px) {
-    .hero-section {
-        flex-direction: column;
-        text-align: center;
-    }
-    
-    .hero-content {
-        max-width: 100%;
-    }
-    
-    .hero-title {
-        font-size: 3.5rem;
-    }
-    
-    .hero-stats {
-        justify-content: center;
-    }
-    
-    .hero-buttons {
-        justify-content: center;
-    }
-    
-    .profile-container {
-        width: 350px;
-        height: 350px;
-    }
-    
-    .about-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .section {
-        padding: 80px 30px;
-    }
-}
-
-@media (max-width: 768px) {
-    .hero-title {
-        font-size: 2.8rem;
-    }
-    
-    .section-title {
-        font-size: 2.5rem;
-    }
-    
-    .bottom-nav {
-        bottom: 20px;
-        padding: 15px 30px;
-        gap: 25px;
-    }
-    
-    .bottom-nav a {
-        font-size: 0.85rem;
-        padding: 10px 18px;
-    }
-    
-    .bottom-nav a i {
-        font-size: 1.2rem;
-    }
-    
-    .chat-container {
-        flex-direction: column;
-        height: 550px;
-    }
-    
-    .chat-sidebar {
-        width: 100%;
-        height: 220px;
-        border-right: none;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    }
-    
-    .hero-stats {
-        gap: 30px;
-    }
-    
-    .stat-number {
-        font-size: 2.2rem;
-    }
-}
-</style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kasun Padma Kumara | Water Creative</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <!-- Three.js from CDN -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
+            }
+        }
+    </script>
+
+    <style>
+        /* ---------- FONTS ---------- */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap');
+
+        /* ---------- ROOT ---------- */
+        :root {
+            --deep: #0b1a33;
+            --mid: #0f2847;
+            --surface: rgba(255, 255, 255, 0.06);
+            --glass: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.10);
+            --primary: #4fc3f7;
+            --secondary: #7c4dff;
+            --accent: #00e5ff;
+            --gold: #ffd54f;
+            --text-light: #e8f0fe;
+            --text-muted: rgba(255, 255, 255, 0.55);
+            --shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+            --radius: 28px;
+            --transition: 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        /* ---------- RESET ---------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-snap-type: y mandatory;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--deep);
+            color: var(--text-light);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* ---------- 3D CANVAS (water particles) ---------- */
+        #water-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+            /* mouse events pass through */;
+        }
+
+        /* ---------- SECTIONS ---------- */
+        .section {
+            min-height: 100vh;
+            scroll-snap-align: start;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 40px;
+            position: relative;
+            z-index: 1;
+            pointer-events: none;
+            /* allow clicks on children */;
+        }
+
+        .section>* {
+            pointer-events: auto;
+        }
+
+        .section-content {
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* ---------- GLASS CARD BASE ---------- */
+        .glass {
+            background: var(--glass);
+            backdrop-filter: blur(24px) saturate(1.4);
+            -webkit-backdrop-filter: blur(24px) saturate(1.4);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .glass:hover {
+            border-color: rgba(79, 195, 247, 0.25);
+            box-shadow: 0 30px 70px rgba(0, 229, 255, 0.08);
+        }
+
+        /* ---------- SECTION TITLES ---------- */
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.6rem;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--accent), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+            text-shadow: 0 0 60px rgba(79, 195, 247, 0.15);
+        }
+
+        /* ---------- HERO ---------- */
+        .hero-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 60px;
+        }
+
+        .hero-content {
+            flex: 1;
+            max-width: 620px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 28px;
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 60px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 30px;
+            letter-spacing: 0.3px;
+        }
+
+        .hero-badge i {
+            color: var(--gold);
+        }
+
+        .hero-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 5rem;
+            font-weight: 900;
+            line-height: 1.08;
+            margin-bottom: 20px;
+        }
+
+        .hero-title span {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.6rem;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            font-weight: 400;
+        }
+
+        .hero-subtitle #typingText {
+            color: var(--accent);
+            font-weight: 700;
+            border-right: 3px solid var(--accent);
+            padding-right: 6px;
+        }
+
+        /* Stats */
+        .hero-stats {
+            display: flex;
+            gap: 50px;
+            margin-bottom: 40px;
+        }
+
+        .stat-box {
+            text-align: center;
+            transition: var(--transition);
+            transform-style: preserve-3d;
+            cursor: default;
+        }
+
+        .stat-box:hover {
+            transform: translateY(-8px) scale(1.04);
+        }
+
+        .stat-number {
+            font-size: 3.2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--gold), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-top: 6px;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+
+        /* Buttons */
+        .hero-buttons {
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            padding: 18px 44px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #fff;
+            border: none;
+            border-radius: 60px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 12px 40px rgba(79, 195, 247, 0.25);
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-6px) scale(1.03);
+            box-shadow: 0 20px 50px rgba(79, 195, 247, 0.35);
+        }
+
+        .btn-secondary {
+            padding: 18px 44px;
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 60px;
+            color: var(--text-light);
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-6px);
+            border-color: var(--primary);
+            background: rgba(79, 195, 247, 0.08);
+        }
+
+        /* Hero Visual – 3D Profile */
+        .hero-visual {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .profile-container {
+            position: relative;
+            width: 460px;
+            height: 460px;
+            transform-style: preserve-3d;
+            animation: floatGlide 7s ease-in-out infinite;
+        }
+
+        @keyframes floatGlide {
+            0%,
+            100% {
+                transform: translateY(0) rotateY(0deg) rotateX(2deg);
+            }
+            50% {
+                transform: translateY(-30px) rotateY(6deg) rotateX(4deg);
+            }
+        }
+
+        .profile-glow {
+            position: absolute;
+            inset: -40px;
+            background: radial-gradient(circle at 30% 30%, var(--primary), var(--secondary), transparent 70%);
+            border-radius: 50%;
+            filter: blur(70px);
+            opacity: 0.5;
+            animation: pulseGlow 4s ease-in-out infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.4;
+            }
+            50% {
+                transform: scale(1.15);
+                opacity: 0.7;
+            }
+        }
+
+        .profile-img-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+            background: var(--mid);
+        }
+
+        .profile-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Floating cards */
+        .floating-card {
+            position: absolute;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            padding: 16px 26px;
+            border-radius: 30px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--text-light);
+            animation: bob 4s ease-in-out infinite;
+        }
+
+        .floating-card i {
+            font-size: 1.3rem;
+        }
+
+        .floating-card.card-1 {
+            top: 40px;
+            right: -20px;
+            animation-delay: 0s;
+        }
+        .floating-card.card-2 {
+            bottom: 80px;
+            left: -40px;
+            animation-delay: 2s;
+        }
+        .floating-card.card-3 {
+            top: 50%;
+            right: -70px;
+            animation-delay: 1s;
+        }
+
+        @keyframes bob {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-18px);
+            }
+        }
+
+        /* ---------- ABOUT ---------- */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .about-card {
+            padding: 48px;
+        }
+
+        .about-card h3 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            font-family: 'Space Grotesk', sans-serif;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .about-card p {
+            color: var(--text-muted);
+            line-height: 1.9;
+            font-size: 1.05rem;
+            margin-bottom: 16px;
+        }
+
+        .info-list {
+            list-style: none;
+        }
+
+        .info-list li {
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            display: flex;
+            justify-content: space-between;
+            font-size: 1rem;
+            color: var(--text-muted);
+        }
+
+        .info-list li strong {
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        .info-list li span {
+            color: var(--text-muted);
+        }
+
+        /* ---------- SKILLS ---------- */
+        .skills-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .skill-category {
+            padding: 40px 36px;
+        }
+
+        .skill-category h3 {
+            font-size: 1.5rem;
+            margin-bottom: 28px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--text-light);
+        }
+
+        .skill-category h3 i {
+            color: var(--primary);
+            font-size: 1.4rem;
+        }
+
+        .skill-item {
+            margin-bottom: 22px;
+        }
+
+        .skill-item .skill-info {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .skill-item .skill-info span:first-child {
+            color: var(--text-light);
+        }
+
+        .skill-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .skill-fill {
+            height: 100%;
+            border-radius: 12px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            box-shadow: 0 0 20px rgba(79, 195, 247, 0.2);
+            transition: width 1.6s ease;
+            width: 0%;
+        }
+
+        /* ---------- GALLERY ---------- */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            gap: 24px;
+        }
+
+        .gallery-item {
+            height: 280px;
+            border-radius: 24px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            transition: var(--transition);
+            transform-style: preserve-3d;
+            border: 1px solid var(--glass-border);
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-12px) scale(1.02) rotateY(3deg);
+            border-color: rgba(79, 195, 247, 0.3);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.10);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 30px 24px 20px;
+            background: linear-gradient(to top, rgba(11, 26, 51, 0.92), transparent);
+            color: #fff;
+            transform: translateY(100%);
+            transition: var(--transition);
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            transform: translateY(0);
+        }
+
+        .gallery-overlay h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .gallery-overlay p {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* ---------- JOURNEY (Timeline) ---------- */
+        .timeline {
+            position: relative;
+            padding-left: 50px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 18px;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background: linear-gradient(180deg, var(--primary), var(--secondary), var(--accent));
+            border-radius: 6px;
+            opacity: 0.5;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding: 32px 36px;
+            margin-bottom: 40px;
+            transition: var(--transition);
+        }
+
+        .timeline-item:hover {
+            transform: translateX(12px);
+            border-color: rgba(79, 195, 247, 0.2);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -41px;
+            top: 36px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 3px solid var(--deep);
+            box-shadow: 0 0 30px rgba(79, 195, 247, 0.3);
+            z-index: 2;
+        }
+
+        .timeline-item .date {
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .timeline-item h3 {
+            font-size: 1.5rem;
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--text-light);
+            margin-bottom: 4px;
+        }
+
+        .timeline-item h4 {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-bottom: 14px;
+        }
+
+        .timeline-item p {
+            color: var(--text-muted);
+            line-height: 1.8;
+            font-size: 1rem;
+        }
+
+        /* ---------- CHAT ---------- */
+        .chat-container {
+            border-radius: var(--radius);
+            overflow: hidden;
+            height: 600px;
+            display: flex;
+            border: 1px solid var(--glass-border);
+        }
+
+        .chat-sidebar {
+            width: 340px;
+            background: rgba(255, 255, 255, 0.03);
+            border-right: 1px solid var(--glass-border);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            padding: 28px 30px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .chat-header h3 {
+            font-size: 1.4rem;
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--text-light);
+        }
+
+        .chat-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 18px 20px;
+        }
+
+        .chat-contact {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 18px;
+            border-radius: 18px;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-bottom: 8px;
+        }
+
+        .chat-contact:hover,
+        .chat-contact.active {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--glass-border);
+        }
+
+        .chat-contact img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--glass-border);
+        }
+
+        .chat-contact-info h4 {
+            font-size: 1rem;
+            color: var(--text-light);
+            margin-bottom: 2px;
+        }
+
+        .chat-contact-info p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .chat-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 30px 34px;
+            overflow-y: auto;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .message {
+            margin-bottom: 20px;
+            max-width: 72%;
+        }
+
+        .message.received {
+            margin-right: auto;
+        }
+
+        .message.sent {
+            margin-left: auto;
+        }
+
+        .message-bubble {
+            padding: 16px 24px;
+            border-radius: 24px;
+            font-size: 1rem;
+            line-height: 1.6;
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            color: var(--text-light);
+        }
+
+        .message.sent .message-bubble {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-color: transparent;
+            color: #fff;
+        }
+
+        .chat-input-area {
+            padding: 24px 30px;
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            gap: 14px;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .chat-input-area input {
+            flex: 1;
+            padding: 16px 26px;
+            border: 1px solid var(--glass-border);
+            border-radius: 60px;
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            color: var(--text-light);
+            font-size: 1rem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .chat-input-area input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .chat-input-area input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(79, 195, 247, 0.08);
+        }
+
+        .chat-input-area button {
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #fff;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .chat-input-area button:hover {
+            transform: scale(1.10);
+            box-shadow: 0 8px 30px rgba(79, 195, 247, 0.3);
+        }
+
+        /* ---------- BOTTOM NAV ---------- */
+        .bottom-nav {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--glass);
+            backdrop-filter: blur(28px) saturate(1.6);
+            -webkit-backdrop-filter: blur(28px) saturate(1.6);
+            border: 1px solid var(--glass-border);
+            border-radius: 60px;
+            padding: 14px 28px;
+            z-index: 999;
+            display: flex;
+            gap: 18px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .bottom-nav a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.8rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 10px 18px;
+            border-radius: 30px;
+            transition: var(--transition);
+        }
+
+        .bottom-nav a i {
+            font-size: 1.2rem;
+        }
+
+        .bottom-nav a:hover,
+        .bottom-nav a.active {
+            color: var(--primary);
+            background: rgba(79, 195, 247, 0.08);
+            transform: translateY(-4px);
+        }
+
+        /* ---------- SCROLLBAR ---------- */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--deep);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        /* ---------- RESPONSIVE ---------- */
+        @media (max-width: 1024px) {
+            .hero-section {
+                flex-direction: column;
+                text-align: center;
+            }
+            .hero-content {
+                max-width: 100%;
+            }
+            .hero-title {
+                font-size: 3.8rem;
+            }
+            .hero-stats {
+                justify-content: center;
+            }
+            .hero-buttons {
+                justify-content: center;
+            }
+            .profile-container {
+                width: 340px;
+                height: 340px;
+            }
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+            .section {
+                padding: 60px 24px;
+            }
+            .floating-card.card-3 {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.8rem;
+            }
+            .section-title {
+                font-size: 2.4rem;
+            }
+            .bottom-nav {
+                padding: 12px 16px;
+                gap: 8px;
+                bottom: 16px;
+            }
+            .bottom-nav a {
+                font-size: 0.7rem;
+                padding: 8px 14px;
+            }
+            .bottom-nav a i {
+                font-size: 1rem;
+            }
+            .chat-container {
+                flex-direction: column;
+                height: 520px;
+            }
+            .chat-sidebar {
+                width: 100%;
+                height: 200px;
+                border-right: none;
+                border-bottom: 1px solid var(--glass-border);
+            }
+            .hero-stats {
+                gap: 28px;
+            }
+            .stat-number {
+                font-size: 2.4rem;
+            }
+            .profile-container {
+                width: 260px;
+                height: 260px;
+            }
+            .floating-card {
+                padding: 12px 18px;
+                font-size: 0.8rem;
+            }
+            .floating-card.card-1 {
+                top: 10px;
+                right: -10px;
+            }
+            .floating-card.card-2 {
+                bottom: 30px;
+                left: -20px;
+            }
+        }
+    </style>
 </head>
 <body>
 
-<!-- 3D Background Canvas -->
-<canvas id="bg-canvas"></canvas>
+    <!-- ===== 3D WATER CANVAS ===== -->
+    <canvas id="water-canvas"></canvas>
 
-<!-- Hero Section -->
-<section class="section" id="home">
-    <div class="section-content">
-        <div class="hero-section">
-            <div class="hero-content">
-                <div class="hero-badge">
-                    <i class="fas fa-sparkles"></i> Available for Projects
-                </div>
-                <h1 class="hero-title">
-                    I'm <span>Kasun</span><br>
-                    Creative Creator
-                </h1>
-                <p class="hero-subtitle">
-                    I am a <span id="typingText">Video Editor</span>
-                </p>
-                
-                <div class="hero-stats">
-                    <div class="stat-box">
-                        <div class="stat-number" data-target="150">0</div>
-                        <div class="stat-label">Projects</div>
+    <!-- ===== HERO ===== -->
+    <section class="section" id="home">
+        <div class="section-content">
+            <div class="hero-section">
+                <div class="hero-content">
+                    <div class="hero-badge">
+                        <i class="fas fa-droplet"></i>
+                        Available for Projects
                     </div>
-                    <div class="stat-box">
-                        <div class="stat-number" data-target="40">0</div>
-                        <div class="stat-label">Clients</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-number" data-target="5">0</div>
-                        <div class="stat-label">Years</div>
-                    </div>
-                </div>
-                
-                <div class="hero-buttons">
-                    <button class="btn-primary" onclick="openBooking()">
-                        <i class="fas fa-rocket"></i>
-                        Start Project
-                    </button>
-                    <a href="https://wa.me/+94717647693" class="btn-secondary">
-                        <i class="fab fa-whatsapp"></i>
-                        WhatsApp
-                    </a>
-                </div>
-            </div>
-            
-            <div class="hero-visual">
-                <div class="profile-container">
-                    <div class="profile-glow"></div>
-                    <div class="profile-img-wrapper">
-                        <img src="images/profile.jpg" alt="Kasun">
-                    </div>
-                    <div class="floating-card card-1">
-                        <i class="fas fa-video" style="color: #667eea;"></i>
-                        <span>Video Editor</span>
-                    </div>
-                    <div class="floating-card card-2">
-                        <i class="fas fa-camera" style="color: #f093fb;"></i>
-                        <span>Photographer</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- About Section -->
-<section class="section" id="about">
-    <div class="section-content">
-        <h2 class="section-title">About Me</h2>
-        <div class="about-grid">
-            <div class="about-card">
-                <h3>Who Am I?</h3>
-                <p>Creative and detail-oriented Video Editor and Graphic Designer with a passion for digital storytelling. Experienced in creating engaging social media content, designing marketing materials for educational institutions, and utilizing AI tools for efficiency.</p>
-                <p>I specialize in Videography, Photography, AI Art, and Social Media Management, bringing creative visions to life with cutting-edge technology.</p>
-            </div>
-            <div class="about-card">
-                <h3>Personal Info</h3>
-                <ul class="info-list">
-                    <li><strong>Full Name:</strong> <span>G. Kasun Padma Kumara</span></li>
-                    <li><strong>Age:</strong> <span>19 Years</span></li>
-                    <li><strong>Birthday:</strong> <span>January 4, 2007</span></li>
-                    <li><strong>Location:</strong> <span>Avissawella, Sri Lanka</span></li>
-                    <li><strong>Email:</strong> <span>kasunpadmakumara2007@gmail.com</span></li>
-                    <li><strong>Phone:</strong> <span>+94 71 764 7693</span></li>
-                    <li><strong>Languages:</strong> <span>Sinhala, English</span></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Skills Section -->
-<section class="section" id="skills">
-    <div class="section-content">
-        <h2 class="section-title">My Skills</h2>
-        <div class="skills-container">
-            <div class="skill-category">
-                <h3><i class="fas fa-video"></i> Video & Design</h3>
-                <div class="skill-item">
-                    <div class="skill-info">
-                        <span>Videography</span>
-                        <span>95%</span>
-                    </div>
-                    <div class="skill-bar">
-                        <div class="skill-fill" style="width: 95%"></div>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-info">
-                        <span>Video Editing</span>
-                        <span>90%</span>
-                    </div>
-                    <div class="skill-bar">
-                        <div class="skill-fill" style="width: 90%"></div>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-info">
-                        <span>Graphic Design</span>
-                        <span>90%</span>
-                    </div>
-                    <div class="skill-bar">
-                        <div class="skill-fill" style="width: 90%"></div>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-info">
-                        <span>Photography</span>
-                        <span>85%</span>
-                    </div>
-                    <div class="skill-bar">
-                        <div class="skill-fill" style="width: 85%"></div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="skill-category">
-                <h3><i class="fas fa-robot"></i> AI & Technology</h3>
-                <div class="skill-item">
-                    <div class="skill-info">
-                        <span>AI Art Creation</span>
-                        <span>88%</span>
-                    </div>
-                    <div class="skill-bar">
-                        <div class="skill-fill" style="width: 88%"></div>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-info">
-                        <span>AI Integration</span>
-                        <span>85%</span>
-                    </div>
-                    <div class="skill-bar">
-                        <div class="skill-fill" style="width: 85%"></div>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-info">
-                        <span>Prompt Engineering</span>
-                        <span>82%</span>
-                    </div>
-                    <div class="skill-bar">
-                        <div class="skill-fill" style="width: 82%"></div>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-info">
-                        <span>Social Media Mgt</span>
-                        <span>88%</span>
-                    </div>
-                    <div class="skill-bar">
-                        <div class="skill-fill" style="width: 88%"></div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="skill-category">
-                <h3><i class="fas fa-music"></i> Creative</h3>
-                <div class="skill-item">
-                    <div class="skill-info">
-                        <span>DJ Remixing</span>
-                        <span>75%</span>
-                    </div>
-                    <div class="skill-bar">
-                        <div class="skill-fill" style="width: 75%"></div>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-info">
-                        <span>Content Creation</span>
-                        <span>90%</span>
-                    </div>
-                    <div class="skill-bar">
-                        <div class="skill-fill" style="width: 90%"></div>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-info">
-                        <span>Photo Management</span>
-                        <span>85%</span>
-                    </div>
-                    <div class="skill-bar">
-                        <div class="skill-fill" style="width: 85%"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Gallery Section -->
-<section class="section" id="gallery">
-    <div class="section-content">
-        <h2 class="section-title">Creative Gallery</h2>
-        <div class="gallery-grid" id="galleryGrid">
-            <div class="gallery-item">
-                <img src="images/gallery1.jpg" alt="Project 1">
-                <div class="gallery-overlay">
-                    <h3>Video Project</h3>
-                    <p>Creative video editing work</p>
-                </div>
-            </div>
-            <div class="gallery-item">
-                <img src="images/gallery2.jpg" alt="Project 2">
-                <div class="gallery-overlay">
-                    <h3>Photography</h3>
-                    <p>Professional photography</p>
-                </div>
-            </div>
-            <div class="gallery-item">
-                <img src="images/gallery3.jpg" alt="Project 3">
-                <div class="gallery-overlay">
-                    <h3>AI Art</h3>
-                    <p>AI-generated artwork</p>
-                </div>
-            </div>
-            <div class="gallery-item">
-                <img src="images/gallery4.jpg" alt="Project 4">
-                <div class="gallery-overlay">
-                    <h3>Graphic Design</h3>
-                    <p>Brand design project</p>
-                </div>
-            </div>
-            <div class="gallery-item">
-                <img src="images/gallery5.jpg" alt="Project 5">
-                <div class="gallery-overlay">
-                    <h3>Social Media</h3>
-                    <p>Content creation</p>
-                </div>
-            </div>
-            <div class="gallery-item">
-                <img src="images/gallery6.jpg" alt="Project 6">
-                <div class="gallery-overlay">
-                    <h3>Video Editing</h3>
-                    <p>Professional edit</p>
-                </div>
-            </div>
-            <div class="gallery-item">
-                <img src="images/gallery7.jpg" alt="Project 7">
-                <div class="gallery-overlay">
-                    <h3>Photography</h3>
-                    <p>Event coverage</p>
-                </div>
-            </div>
-            <div class="gallery-item">
-                <img src="images/gallery8.jpg" alt="Project 8">
-                <div class="gallery-overlay">
-                    <h3>AI Creation</h3>
-                    <p>Digital art</p>
-                </div>
-            </div>
-            <div class="gallery-item">
-                <img src="images/gallery9.jpg" alt="Project 9">
-                <div class="gallery-overlay">
-                    <h3>Design Work</h3>
-                    <p>Creative design</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Journey Section -->
-<section class="section" id="journey">
-    <div class="section-content">
-        <h2 class="section-title">My Journey</h2>
-        <div class="timeline">
-            <div class="timeline-item">
-                <div class="date">2024 - Present</div>
-                <h3>Freelance Creative Designer & Video Editor</h3>
-                <h4>Self-Employed</h4>
-                <p>• Edited engaging short-form videos (Reels/TikTok) using CapCut<br>
-                • Designed promotional posters, flyers, and YouTube thumbnails<br>
-                • Utilized AI tools (ChatGPT, Gemini) for creative scriptwriting</p>
-            </div>
-            
-            <div class="timeline-item">
-                <div class="date">2013 - 2025 (Expected)</div>
-                <h3>G.C.E. Advanced Level - Arts Stream</h3>
-                <h4>Ra/Anura Maha Vidyalaya, Gatahaththa</h4>
-            </div>
-            
-            <div class="timeline-item">
-                <div class="date">2022</div>
-                <h3>G.C.E. Ordinary Level</h3>
-                <h4>Ra/Anura Maha Vidyalaya</h4>
-                <p>ICT: B | Mathematics: B | Science: C | English: S | Sinhala: S | History: W | Art: B | Buddhism: S | Geography: C</p>
-            </div>
-            
-            <div class="timeline-item">
-                <div class="date">2024</div>
-                <h3>Professional Photographer</h3>
-                <p>Captured high-quality images for local events and functions. Provided professional post-processing and color correction.</p>
-            </div>
-
-            <div class="timeline-item">
-                <div class="date">Location</div>
-                <h3>Avissawella, Sri Lanka 🇱🇰</h3>
-                <p>46/Amarambe, Gatahaththa, Avissawella</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Chat Section -->
-<section class="section" id="chat">
-    <div class="section-content">
-        <h2 class="section-title">Let's Chat</h2>
-        <div class="chat-container">
-            <div class="chat-sidebar">
-                <div class="chat-header">
-                    <h3>Chats</h3>
-                </div>
-                <div class="chat-list">
-                    <div class="chat-contact active" onclick="openChat('kasun')">
-                        <img src="images/profile.jpg" alt="Kasun">
-                        <div class="chat-contact-info">
-                            <h4>Chat with Kasun</h4>
-                            <p style="color: #22c55e;">● Online</p>
+                    <h1 class="hero-title">
+                        I'm <span>Kasun</span><br>
+                        Water Creative
+                    </h1>
+                    <p class="hero-subtitle">
+                        I am a <span id="typingText">Video Editor</span>
+                    </p>
+                    <div class="hero-stats">
+                        <div class="stat-box">
+                            <div class="stat-number" data-target="150">0</div>
+                            <div class="stat-label">Projects</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number" data-target="40">0</div>
+                            <div class="stat-label">Clients</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number" data-target="5">0</div>
+                            <div class="stat-label">Years</div>
                         </div>
                     </div>
-                    <div class="chat-contact" onclick="openChat('ai')">
-                        <img src="https://img.icons8.com/color/96/bot.png" alt="AI">
-                        <div class="chat-contact-info">
-                            <h4>AI Assistant</h4>
-                            <p>Auto Helper Bot</p>
+                    <div class="hero-buttons">
+                        <button class="btn-primary" onclick="openBooking()">
+                            <i class="fas fa-rocket"></i> Start Project
+                        </button>
+                        <a href="https://wa.me/+94717647693" target="_blank" class="btn-secondary">
+                            <i class="fab fa-whatsapp"></i> WhatsApp
+                        </a>
+                    </div>
+                </div>
+
+                <div class="hero-visual">
+                    <div class="profile-container">
+                        <div class="profile-glow"></div>
+                        <div class="profile-img-wrapper">
+                            <img src="images/profile.jpg" alt="Kasun Padma Kumara">
+                        </div>
+                        <div class="floating-card card-1">
+                            <i class="fas fa-video" style="color:var(--primary);"></i>
+                            <span>Video Editor</span>
+                        </div>
+                        <div class="floating-card card-2">
+                            <i class="fas fa-camera" style="color:var(--accent);"></i>
+                            <span>Photographer</span>
+                        </div>
+                        <div class="floating-card card-3">
+                            <i class="fas fa-water" style="color:var(--gold);"></i>
+                            <span>AI Artist</span>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="chat-main">
-                <div class="chat-messages" id="chatMessages">
-                    <div class="message received">
-                        <div class="message-bubble">
-                            Hello! I am online. How can I help you today?
-                        </div>
-                    </div>
+        </div>
+    </section>
+
+    <!-- ===== ABOUT ===== -->
+    <section class="section" id="about">
+        <div class="section-content">
+            <h2 class="section-title">About Me</h2>
+            <div class="about-grid">
+                <div class="about-card glass">
+                    <h3>Who Am I?</h3>
+                    <p>Creative and detail-oriented Video Editor and Graphic Designer with a passion for digital storytelling. Experienced in creating engaging social media content, designing marketing materials for educational institutions, and utilizing AI tools for efficiency.</p>
+                    <p>I specialize in Videography, Photography, AI Art, and Social Media Management, bringing creative visions to life with cutting-edge technology.</p>
                 </div>
-                <div class="chat-input-area">
-                    <input type="text" id="chatInput" placeholder="Type a message...">
-                    <button onclick="sendMessage()">
-                        <i class="fas fa-paper-plane"></i>
-                    </button>
+                <div class="about-card glass">
+                    <h3>Personal Info</h3>
+                    <ul class="info-list">
+                        <li><strong>Full Name:</strong> <span>G. Kasun Padma Kumara</span></li>
+                        <li><strong>Age:</strong> <span>19 Years</span></li>
+                        <li><strong>Birthday:</strong> <span>January 4, 2007</span></li>
+                        <li><strong>Location:</strong> <span>Avissawella, Sri Lanka</span></li>
+                        <li><strong>Email:</strong> <span>kasunpadmakumara2007@gmail.com</span></li>
+                        <li><strong>Phone:</strong> <span>+94 71 764 7693</span></li>
+                        <li><strong>Languages:</strong> <span>Sinhala, English</span></li>
+                    </ul>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- Bottom Navigation -->
-<nav class="bottom-nav">
-    <a href="#home" class="active">
-        <i class="fas fa-home"></i>
-        <span>Home</span>
-    </a>
-    <a href="#about">
-        <i class="fas fa-user"></i>
-        <span>About</span>
-    </a>
-    <a href="#skills">
-        <i class="fas fa-chart-bar"></i>
-        <span>Skills</span>
-    </a>
-    <a href="#gallery">
-        <i class="fas fa-images"></i>
-        <span>Gallery</span>
-    </a>
-    <a href="#journey">
-        <i class="fas fa-route"></i>
-        <span>Journey</span>
-    </a>
-    <a href="#chat">
-        <i class="fas fa-comments"></i>
-        <span>Chat</span>
-    </a>
-</nav>
+    <!-- ===== SKILLS ===== -->
+    <section class="section" id="skills">
+        <div class="section-content">
+            <h2 class="section-title">My Skills</h2>
+            <div class="skills-container">
+                <div class="skill-category glass">
+                    <h3><i class="fas fa-video"></i> Video &amp; Design</h3>
+                    <div class="skill-item"><div class="skill-info"><span>Videography</span><span>95%</span></div><div class="skill-bar"><div class="skill-fill" data-width="95"></div></div></div>
+                    <div class="skill-item"><div class="skill-info"><span>Video Editing</span><span>90%</span></div><div class="skill-bar"><div class="skill-fill" data-width="90"></div></div></div>
+                    <div class="skill-item"><div class="skill-info"><span>Graphic Design</span><span>90%</span></div><div class="skill-bar"><div class="skill-fill" data-width="90"></div></div></div>
+                    <div class="skill-item"><div class="skill-info"><span>Photography</span><span>85%</span></div><div class="skill-bar"><div class="skill-fill" data-width="85"></div></div></div>
+                </div>
+                <div class="skill-category glass">
+                    <h3><i class="fas fa-robot"></i> AI &amp; Technology</h3>
+                    <div class="skill-item"><div class="skill-info"><span>AI Art Creation</span><span>88%</span></div><div class="skill-bar"><div class="skill-fill" data-width="88"></div></div></div>
+                    <div class="skill-item"><div class="skill-info"><span>AI Integration</span><span>85%</span></div><div class="skill-bar"><div class="skill-fill" data-width="85"></div></div></div>
+                    <div class="skill-item"><div class="skill-info"><span>Prompt Engineering</span><span>82%</span></div><div class="skill-bar"><div class="skill-fill" data-width="82"></div></div></div>
+                    <div class="skill-item"><div class="skill-info"><span>Social Media Mgt</span><span>88%</span></div><div class="skill-bar"><div class="skill-fill" data-width="88"></div></div></div>
+                </div>
+                <div class="skill-category glass">
+                    <h3><i class="fas fa-music"></i> Creative</h3>
+                    <div class="skill-item"><div class="skill-info"><span>DJ Remixing</span><span>75%</span></div><div class="skill-bar"><div class="skill-fill" data-width="75"></div></div></div>
+                    <div class="skill-item"><div class="skill-info"><span>Content Creation</span><span>90%</span></div><div class="skill-bar"><div class="skill-fill" data-width="90"></div></div></div>
+                    <div class="skill-item"><div class="skill-info"><span>Photo Management</span><span>85%</span></div><div class="skill-bar"><div class="skill-fill" data-width="85"></div></div></div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<script>
-// 3D Background Animation
-const canvas = document.getElementById('bg-canvas');
-const ctx = canvas.getContext('2d');
+    <!-- ===== GALLERY ===== -->
+    <section class="section" id="gallery">
+        <div class="section-content">
+            <h2 class="section-title">Creative Gallery</h2>
+            <div class="gallery-grid" id="galleryGrid">
+                <div class="gallery-item"><img src="images/gallery1.jpg" alt="Project 1"><div class="gallery-overlay"><h3>Video Project</h3><p>Creative video editing work</p></div></div>
+                <div class="gallery-item"><img src="images/gallery2.jpg" alt="Project 2"><div class="gallery-overlay"><h3>Photography</h3><p>Professional photography</p></div></div>
+                <div class="gallery-item"><img src="images/gallery3.jpg" alt="Project 3"><div class="gallery-overlay"><h3>AI Art</h3><p>AI-generated artwork</p></div></div>
+                <div class="gallery-item"><img src="images/gallery4.jpg" alt="Project 4"><div class="gallery-overlay"><h3>Graphic Design</h3><p>Brand design project</p></div></div>
+                <div class="gallery-item"><img src="images/gallery5.jpg" alt="Project 5"><div class="gallery-overlay"><h3>Social Media</h3><p>Content creation</p></div></div>
+                <div class="gallery-item"><img src="images/gallery6.jpg" alt="Project 6"><div class="gallery-overlay"><h3>Video Editing</h3><p>Professional edit</p></div></div>
+                <div class="gallery-item"><img src="images/gallery7.jpg" alt="Project 7"><div class="gallery-overlay"><h3>Photography</h3><p>Event coverage</p></div></div>
+                <div class="gallery-item"><img src="images/gallery8.jpg" alt="Project 8"><div class="gallery-overlay"><h3>AI Creation</h3><p>Digital art</p></div></div>
+                <div class="gallery-item"><img src="images/gallery9.jpg" alt="Project 9"><div class="gallery-overlay"><h3>Design Work</h3><p>Creative design</p></div></div>
+            </div>
+        </div>
+    </section>
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+    <!-- ===== JOURNEY ===== -->
+    <section class="section" id="journey">
+        <div class="section-content">
+            <h2 class="section-title">My Journey</h2>
+            <div class="timeline">
+                <div class="timeline-item glass">
+                    <div class="date">2024 – Present</div>
+                    <h3>Freelance Creative Designer &amp; Video Editor</h3>
+                    <h4>Self-Employed</h4>
+                    <p>• Edited engaging short-form videos (Reels/TikTok) using CapCut<br>• Designed promotional posters, flyers, and YouTube thumbnails<br>• Utilized AI tools (ChatGPT, Gemini) for creative scriptwriting</p>
+                </div>
+                <div class="timeline-item glass">
+                    <div class="date">2013 – 2025 (Expected)</div>
+                    <h3>G.C.E. Advanced Level – Arts Stream</h3>
+                    <h4>Ra/Anura Maha Vidyalaya, Gatahaththa</h4>
+                </div>
+                <div class="timeline-item glass">
+                    <div class="date">2022</div>
+                    <h3>G.C.E. Ordinary Level</h3>
+                    <h4>Ra/Anura Maha Vidyalaya</h4>
+                    <p>ICT: B | Mathematics: B | Science: C | English: S | Sinhala: S | History: W | Art: B | Buddhism: S | Geography: C</p>
+                </div>
+                <div class="timeline-item glass">
+                    <div class="date">2024</div>
+                    <h3>Professional Photographer</h3>
+                    <p>Captured high-quality images for local events and functions. Provided professional post-processing and color correction.</p>
+                </div>
+                <div class="timeline-item glass">
+                    <div class="date">Location</div>
+                    <h3>Avissawella, Sri Lanka 🇱🇰</h3>
+                    <p>46/Amarambe, Gatahaththa, Avissawella</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-const particles = [];
-const particleCount = 80;
+    <!-- ===== CHAT ===== -->
+    <section class="section" id="chat">
+        <div class="section-content">
+            <h2 class="section-title">Let's Chat</h2>
+            <div class="chat-container glass">
+                <div class="chat-sidebar">
+                    <div class="chat-header"><h3>Chats</h3></div>
+                    <div class="chat-list">
+                        <div class="chat-contact active" onclick="openChat('kasun', this)">
+                            <img src="images/profile.jpg" alt="Kasun">
+                            <div class="chat-contact-info">
+                                <h4>Chat with Kasun</h4>
+                                <p style="color:#4fc3f7;">● Online</p>
+                            </div>
+                        </div>
+                        <div class="chat-contact" onclick="openChat('ai', this)">
+                            <img src="https://img.icons8.com/color/96/bot.png" alt="AI">
+                            <div class="chat-contact-info">
+                                <h4>AI Assistant</h4>
+                                <p>Auto Helper Bot</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-main">
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message received">
+                            <div class="message-bubble">Hello! I am online. How can I help you today?</div>
+                        </div>
+                    </div>
+                    <div class="chat-input-area">
+                        <input type="text" id="chatInput" placeholder="Type a message…">
+                        <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-class Particle {
-    constructor() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 20 + 10;
-        this.speedX = (Math.random() - 0.5) * 0.5;
-        this.speedY = (Math.random() - 0.5) * 0.5;
-        this.opacity = Math.random() * 0.3 + 0.1;
-    }
-    
-    update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-        
-        if (this.x > canvas.width) this.x = 0;
-        if (this.x < 0) this.x = canvas.width;
-        if (this.y > canvas.height) this.y = 0;
-        if (this.y < 0) this.y = canvas.height;
-    }
-    
-    draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(102, 126, 234, ${this.opacity})`;
-        ctx.fill();
-    }
-}
+    <!-- ===== BOTTOM NAV ===== -->
+    <nav class="bottom-nav">
+        <a href="#home" class="active"><i class="fas fa-home"></i><span>Home</span></a>
+        <a href="#about"><i class="fas fa-user"></i><span>About</span></a>
+        <a href="#skills"><i class="fas fa-chart-bar"></i><span>Skills</span></a>
+        <a href="#gallery"><i class="fas fa-images"></i><span>Gallery</span></a>
+        <a href="#journey"><i class="fas fa-route"></i><span>Journey</span></a>
+        <a href="#chat"><i class="fas fa-comments"></i><span>Chat</span></a>
+    </nav>
 
-for (let i = 0; i < particleCount; i++) {
-    particles.push(new Particle());
-}
+    <!-- ===== SCRIPTS ===== -->
 
-function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    particles.forEach(particle => {
-        particle.update();
-        particle.draw();
-    });
-    
-    requestAnimationFrame(animate);
-}
+    <!-- Three.js Water Particles -->
+    <script type="module">
+        import * as THREE from 'three';
 
-animate();
+        const canvas = document.getElementById('water-canvas');
+        const renderer = new THREE.WebGLRenderer({
+            canvas,
+            alpha: true,
+            antialias: true
+        });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setSize(window.innerWidth, window.innerHeight);
 
-window.addEventListener('resize', () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-});
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 30;
 
-// Typing Effect
-const words = ["Video Editor", "Photographer", "AI Artist", "Graphic Designer", "Content Creator"];
-let wordIndex = 0;
-let charIndex = 0;
-let isDeleting = false;
-const typingElement = document.getElementById('typingText');
+        // ---- Particles ----
+        const count = 3200;
+        const geometry = new THREE.BufferGeometry();
+        const positions = new Float32Array(count * 3);
+        const sizes = new Float32Array(count);
+        const speeds = new Float32Array(count);
+        const offsets = new Float32Array(count);
 
-function type() {
-    const currentWord = words[wordIndex];
-    
-    if (isDeleting) {
-        typingElement.textContent = currentWord.substring(0, charIndex - 1);
-        charIndex--;
-    } else {
-        typingElement.textContent = currentWord.substring(0, charIndex + 1);
-        charIndex++;
-    }
-    
-    let typeSpeed = isDeleting ? 50 : 100;
-    
-    if (!isDeleting && charIndex === currentWord.length) {
-        typeSpeed = 2000;
-        isDeleting = true;
-    } else if (isDeleting && charIndex === 0) {
-        isDeleting = false;
-        wordIndex = (wordIndex + 1) % words.length;
-        typeSpeed = 500;
-    }
-    
-    setTimeout(type, typeSpeed);
-}
+        const colors = [
+            new THREE.Color('#4fc3f7'),
+            new THREE.Color('#00e5ff'),
+            new THREE.Color('#7c4dff'),
+            new THREE.Color('#ffd54f'),
+            new THREE.Color('#b388ff'),
+        ];
 
-// Counter Animation
-function animateCounters() {
-    const counters = document.querySelectorAll('.stat-number');
-    counters.forEach(counter => {
-        const target = +counter.getAttribute('data-target');
-        const increment = target / 50;
-        let current = 0;
-        
-        const updateCounter = () => {
-            if (current < target) {
-                current += increment;
-                counter.textContent = Math.ceil(current);
-                setTimeout(updateCounter, 30);
-            } else {
-                counter.textContent = target + "+";
+        const colorArray = new Float32Array(count * 3);
+
+        for (let i = 0; i < count; i++) {
+            const i3 = i * 3;
+            const radius = 15 + Math.random() * 18;
+            const theta = Math.random() * Math.PI * 2;
+            const phi = Math.acos(2 * Math.random() - 1);
+            positions[i3] = radius * Math.sin(phi) * Math.cos(theta);
+            positions[i3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
+            positions[i3 + 2] = radius * Math.cos(phi);
+
+            sizes[i] = 0.12 + Math.random() * 0.35;
+            speeds[i] = 0.2 + Math.random() * 0.5;
+            offsets[i] = Math.random() * 100;
+
+            const c = colors[Math.floor(Math.random() * colors.length)];
+            colorArray[i3] = c.r;
+            colorArray[i3 + 1] = c.g;
+            colorArray[i3 + 2] = c.b;
+        }
+
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+        geometry.setAttribute('speed', new THREE.BufferAttribute(speeds, 1));
+        geometry.setAttribute('offset', new THREE.BufferAttribute(offsets, 1));
+        geometry.setAttribute('color', new THREE.BufferAttribute(colorArray, 3));
+
+        const textureCanvas = document.createElement('canvas');
+        textureCanvas.width = 64;
+        textureCanvas.height = 64;
+        const tCtx = textureCanvas.getContext('2d');
+        const gradient = tCtx.createRadialGradient(32, 32, 0, 32, 32, 32);
+        gradient.addColorStop(0, 'rgba(255,255,255,1)');
+        gradient.addColorStop(0.3, 'rgba(255,255,255,0.8)');
+        gradient.addColorStop(1, 'rgba(255,255,255,0)');
+        tCtx.fillStyle = gradient;
+        tCtx.fillRect(0, 0, 64, 64);
+        const particleTexture = new THREE.CanvasTexture(textureCanvas);
+
+        const material = new THREE.PointsMaterial({
+            size: 0.5,
+            map: particleTexture,
+            blending: THREE.AdditiveBlending,
+            depthWrite: false,
+            transparent: true,
+            vertexColors: true,
+            opacity: 0.7,
+        });
+
+        const particleSystem = new THREE.Points(geometry, material);
+        scene.add(particleSystem);
+
+        // ---- Mouse tracking ----
+        let mouseX = 0,
+            mouseY = 0;
+        document.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+            mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+        });
+
+        // ---- Animation ----
+        let time = 0;
+
+        function animate() {
+            requestAnimationFrame(animate);
+            time += 0.005;
+
+            const positions = geometry.attributes.position.array;
+            const speedsArr = geometry.attributes.speed.array;
+            const offsetsArr = geometry.attributes.offset.array;
+
+            // gentle wave + mouse influence
+            for (let i = 0; i < count; i++) {
+                const i3 = i * 3;
+                const baseX = positions[i3];
+                const baseY = positions[i3 + 1];
+                const baseZ = positions[i3 + 2];
+
+                const speed = speedsArr[i];
+                const offset = offsetsArr[i];
+
+                const waveX = Math.sin(time * speed + offset) * 0.04;
+                const waveY = Math.cos(time * speed * 0.7 + offset * 0.5) * 0.04;
+                const waveZ = Math.sin(time * speed * 0.9 + offset * 0.8) * 0.04;
+
+                // mouse pull
+                const pull = 0.02;
+                const dx = mouseX * 8 - baseX;
+                const dy = mouseY * 6 - baseY;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                const maxDist = 25;
+                const influence = Math.max(0, 1 - dist / maxDist);
+
+                positions[i3] = baseX + waveX + dx * pull * influence;
+                positions[i3 + 1] = baseY + waveY + dy * pull * influence;
+                positions[i3 + 2] = baseZ + waveZ;
             }
-        };
-        
-        updateCounter();
-    });
-}
 
-// Chat Functions
-let currentChat = 'kasun';
+            geometry.attributes.position.needsUpdate = true;
 
-function openChat(mode) {
-    currentChat = mode;
-    document.querySelectorAll('.chat-contact').forEach(c => c.classList.remove('active'));
-    event.currentTarget.classList.add('active');
-    
-    const messagesDiv = document.getElementById('chatMessages');
-    messagesDiv.innerHTML = '';
-    
-    if(mode === 'kasun') {
-        messagesDiv.innerHTML = `
-            <div class="message received">
-                <div class="message-bubble">
-                    Hello! I am Kasun. How can I help you with your project?
-                </div>
-            </div>
-        `;
-    } else if(mode === 'ai') {
-        messagesDiv.innerHTML = `
-            <div class="message received">
-                <div class="message-bubble">
-                    Hi! I'm your AI assistant. Ask me anything!
-                </div>
-            </div>
-        `;
-    }
-}
+            // rotate the whole system slowly
+            particleSystem.rotation.x = Math.sin(time * 0.04) * 0.06;
+            particleSystem.rotation.y += 0.0008;
+            particleSystem.rotation.z = Math.sin(time * 0.03) * 0.03;
 
-function sendMessage() {
-    const input = document.getElementById('chatInput');
-    const text = input.value.trim();
-    
-    if(!text) return;
-    
-    const messagesDiv = document.getElementById('chatMessages');
-    
-    const userMsg = document.createElement('div');
-    userMsg.className = 'message sent';
-    userMsg.innerHTML = `<div class="message-bubble">${text}</div>`;
-    messagesDiv.appendChild(userMsg);
-    
-    input.value = '';
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
-    
-    setTimeout(() => {
-        const reply = document.createElement('div');
-        reply.className = 'message received';
-        
-        if(currentChat === 'ai') {
-            reply.innerHTML = `<div class="message-bubble">Thanks for your message! This is an automated response.</div>`;
-        } else {
-            reply.innerHTML = `<div class="message-bubble">Thanks! I'll get back to you soon. You can also reach me on WhatsApp.</div>`;
+            renderer.render(scene, camera);
         }
-        
-        messagesDiv.appendChild(reply);
-        messagesDiv.scrollTop = messagesDiv.scrollHeight;
-    }, 1000);
-}
 
-function openBooking() {
-    window.open('https://wa.me/+94717647693?text=Hi Kasun, I want to start a project', '_blank');
-}
+        animate();
 
-// Initialize
-window.addEventListener('load', () => {
-    type();
-    setTimeout(animateCounters, 500);
-});
+        // ---- Resize ----
+        window.addEventListener('resize', () => {
+            const w = window.innerWidth;
+            const h = window.innerHeight;
+            renderer.setSize(w, h);
+            camera.aspect = w / h;
+            camera.updateProjectionMatrix();
+        });
 
-// Handle Enter key in chat
-document.getElementById('chatInput')?.addEventListener('keypress', (e) => {
-    if(e.key === 'Enter') sendMessage();
-});
+        // ---- expose to window for scroll interactions (optional) ----
+        window.__waterParticles = { scene, camera, renderer, particleSystem };
+    </script>
 
-// Active nav on scroll
-const sections = document.querySelectorAll('.section');
-const navLinks = document.querySelectorAll('.bottom-nav a');
+    <!-- Main JS -->
+    <script>
+        // ---- Typing Effect ----
+        const words = ["Video Editor", "Photographer", "AI Artist", "Graphic Designer", "Content Creator"];
+        let wordIndex = 0,
+            charIndex = 0,
+            isDeleting = false;
+        const typingElement = document.getElementById('typingText');
 
-window.addEventListener('scroll', () => {
-    let current = '';
-    sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        if (pageYOffset >= sectionTop - 300) {
-            current = section.getAttribute('id');
+        function type() {
+            const currentWord = words[wordIndex];
+            if (isDeleting) {
+                typingElement.textContent = currentWord.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                typingElement.textContent = currentWord.substring(0, charIndex + 1);
+                charIndex++;
+            }
+            let speed = isDeleting ? 40 : 90;
+            if (!isDeleting && charIndex === currentWord.length) { speed = 1800;
+                isDeleting = true; } else if (isDeleting && charIndex === 0) { isDeleting = false;
+                wordIndex = (wordIndex + 1) % words.length;
+                speed = 500; }
+            setTimeout(type, speed);
         }
-    });
-    
-    navLinks.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('href') === '#' + current) {
-            link.classList.add('active');
+
+        // ---- Counter Animation ----
+        function animateCounters() {
+            document.querySelectorAll('.stat-number').forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                const increment = target / 50;
+                let current = 0;
+                const update = () => {
+                    if (current < target) { current += increment;
+                        counter.textContent = Math.ceil(current);
+                        setTimeout(update, 28); } else counter.textContent = target + '+';
+                };
+                update();
+            });
         }
-    });
-});
-</script>
+
+        // ---- Skill Bars ----
+        function animateSkillBars() {
+            document.querySelectorAll('.skill-fill').forEach(bar => {
+                const w = bar.getAttribute('data-width');
+                setTimeout(() => { bar.style.width = w + '%'; }, 200);
+            });
+        }
+
+        // ---- Chat ----
+        let currentChat = 'kasun';
+        let chatContactEl = null;
+
+        function openChat(mode, el) {
+            currentChat = mode;
+            document.querySelectorAll('.chat-contact').forEach(c => c.classList.remove('active'));
+            if (el) el.classList.add('active');
+
+            const messagesDiv = document.getElementById('chatMessages');
+            messagesDiv.innerHTML = '';
+            if (mode === 'kasun') {
+                messagesDiv.innerHTML =
+                    `<div class="message received"><div class="message-bubble">Hello! I am Kasun. How can I help you with your project?</div></div>`;
+            } else {
+                messagesDiv.innerHTML =
+                    `<div class="message received"><div class="message-bubble">Hi! I'm your AI assistant. Ask me anything!</div></div>`;
+            }
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const text = input.value.trim();
+            if (!text) return;
+            const messagesDiv = document.getElementById('chatMessages');
+            const userMsg = document.createElement('div');
+            userMsg.className = 'message sent';
+            userMsg.innerHTML = `<div class="message-bubble">${text}</div>`;
+            messagesDiv.appendChild(userMsg);
+            input.value = '';
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+            setTimeout(() => {
+                const reply = document.createElement('div');
+                reply.className = 'message received';
+                reply.innerHTML = `<div class="message-bubble">${currentChat === 'ai' ? 'Thanks! This is an automated response.' : 'Thanks! I\'ll get back to you soon. You can also reach me on WhatsApp.'}</div>`;
+                messagesDiv.appendChild(reply);
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            }, 900);
+        }
+
+        document.getElementById('chatInput')?.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
+
+        function openBooking() { window.open('https://wa.me/+94717647693?text=Hi Kasun, I want to start a project',
+            '_blank'); }
+
+        // ---- Nav active on scroll ----
+        const sections = document.querySelectorAll('.section');
+        const navLinks = document.querySelectorAll('.bottom-nav a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const top = section.offsetTop;
+                if (window.pageYOffset >= top - 300) current = section.getAttribute('id');
+            });
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+            });
+        });
+
+        // ---- Init ----
+        window.addEventListener('load', () => {
+            type();
+            setTimeout(animateCounters, 400);
+            setTimeout(animateSkillBars, 500);
+        });
+
+        // ---- Re-animate skill bars when section becomes visible (Intersection Observer) ----
+        const skillSection = document.getElementById('skills');
+        let skillAnimated = false;
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !skillAnimated) {
+                    skillAnimated = true;
+                    animateSkillBars();
+                }
+            });
+        }, { threshold: 0.2 });
+
+        if (skillSection) observer.observe(skillSection);
+    </script>
 
 </body>
 </html>
